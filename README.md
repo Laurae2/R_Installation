@@ -4,14 +4,32 @@ R packages for installation.
 
 Works well for Windows and Clear Linux. Clear Linux can run programs significantly faster when compared to Ubuntu and co.
 
-Windows requires the following:
+Windows requires the following for this task:
 
-* R
+* Intel CPU, from Nehalem (iX-xxx / Xeon v1, early2011) to Coffee Lake / Scalable Processors series (iX-8xxx / Silver / Gold / Platinum, late2017/early2018)
+* R (R >= 3.4.0)
 * RStudio
 * MinGW (Rtools)
-* cmake
-* Rtools
-* Visual Studio 2015 or 2017
+* cmake (3.8)
+* Rtools (3.4)
+* Visual Studio 2017 with the appropriate SDK (use Windows 10 SDK if you are under Windows 10, Windows 8 SDK if you are under Windows 8 even though Windows 10 SDK is partially retrocompatible)
+
+For GPU:
+
+* CUDA 9.0
+* CuDNN 7.0
+* C++ Build Tools 2015 (choose the appropriate SDK to your Windows Operating System version at the custom installation part, otherwise you screw yourself)
+
+Non-GPU will activate the following:
+
+* Intel optimized Python
+* Intel optimized Tensorflow (usually 10x faster than regular Tensorflow)
+* xgboost with enhanced GLM
+
+GPU will activate the following:
+
+* GPU enabled Tensorflow
+* GPU enabled xgboost
 
 ## Install lot of packages
 
@@ -233,21 +251,94 @@ install.packages(packages, dependencies = TRUE)
 ## Extra packages
 
 ```r
-devtools:::install_github("Laurae2/Laurae")
-devtools:::install_github("Laurae2/LauraeDS")
-devtools:::install_github("Laurae2/LauraeCE")
-devtools:::install_github("Laurae2/LauraeParallel")
-devtools:::install_github("Laurae2/woe")
-devtools:::install_github("Laurae2/xgbdl")
-devtools:::install_github("Laurae2/lgbdl")
-devtools:::install_github("twitter/AnomalyDetection")
-
+devtools::install_github("Laurae2/woe")
+devtools::install_github("Laurae2/xgbdl")
+devtools::install_github("Laurae2/lgbdl")
+devtools::install_github("twitter/AnomalyDetection")
+devtools::install_github("rstudio/tensorflow@a73c8d6") // reinstall again
+devtools::install_github("rstudio/keras@bc775ac) // reinstall again
+install.packages("reticulate") // reinstall again
 ```
 
 ## Make sure to select the right parameters
 
+Run in RStudio, not Rgui (the last step will not work in Rgui).
+
+If CPU, you get xgboost enhanced GLM:
+
 ```r
-xgbdl::xgb.dl(compiler = "Visual Studio 15 2017 Win64", use_avx = TRUE)
-lgbdl::lgb.dl(commit = "master", compiler = "vs")
-keras::install_keras()
+xgbdl::xgb.dl(compiler = "Visual Studio 15 2017 Win64", commit = "a1b48af", use_avx = TRUE, use_gpu = FALSE)
+```
+
+If GPU, you get GPU enabled xgboost but no enhanced GLM:
+
+```r
+xgbdl::xgb.dl(compiler = "Visual Studio 14 2015 Win64", commit = "c414b00", use_avx = TRUE, use_gpu = TRUE)
+```
+
+Then run for a standard LightGBM installation along with some of my packages to make life easier:
+
+```r
+lgbdl::lgb.dl(commit = "b6db7e2", compiler = "vs")
+devtools::install_github("Laurae2/Laurae")
+devtools::install_github("Laurae2/LauraeParallel")
+devtools::install_github("Laurae2/LauraeDS")
+devtools::install_github("Laurae2/LauraeCE")
+```
+
+## Intel Python installation
+
+Supposes CUDA 9, CuDNN 7, Python 3.5 (Anaconda 4.2). Run using Anaconda shell:
+
+```py
+conda update conda
+conda config --add channels intel
+conda create -n idp intelpython3_full python=3
+activate idp
+```
+
+Depending on CPU or GPU, choose.
+
+CPU:
+
+```py
+conda install tensorflow==1.6.0 -c intel --no-update-deps
+```
+
+GPU:
+
+```py
+pip install --ignore-installed --upgrade tensorflow-gpu==1.6.0
+```
+
+Keras installation:
+
+```py
+
+pip install h5py requests pyyaml Pillow
+conda install scipy -c intel --no-update-deps
+pip install keras==2.1.5
+```
+
+## Confirm Tensorflow works
+
+```r
+library(reticulate)
+use_condaenv("idp")
+reticulate::py_module_available("tensorflow")
+library(tensorflow)
+sess <- tf$Session()
+hello <- tf$constant('Hello, TensorFlow!')
+sess$run(hello)
+```
+
+If not, the error lies here to run in Python:
+
+```py
+python
+import tensorflow as tf
+print(tf.__version__)
+okay = tf.constant("OKAY")
+sess = tf.Session()
+print(sess.run(okay))
 ```
