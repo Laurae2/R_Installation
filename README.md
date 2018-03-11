@@ -255,9 +255,9 @@ devtools::install_github("Laurae2/woe")
 devtools::install_github("Laurae2/xgbdl")
 devtools::install_github("Laurae2/lgbdl")
 devtools::install_github("twitter/AnomalyDetection")
-devtools::install_github("rstudio/tensorflow@a73c8d6") // reinstall again
-devtools::install_github("rstudio/keras@bc775ac) // reinstall again
-install.packages("reticulate") // reinstall again
+devtools::install_github("rstudio/tensorflow@a73c8d6") # reinstall again
+devtools::install_github("rstudio/keras@bc775ac") # reinstall again
+install.packages("reticulate") # reinstall again
 ```
 
 ## Make sure to select the right parameters
