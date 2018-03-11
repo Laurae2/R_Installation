@@ -23,7 +23,7 @@ For GPU:
 Non-GPU will activate the following:
 
 * Intel optimized Python
-* Intel optimized Tensorflow (usually 10x faster than regular Tensorflow)
+* Intel optimized Tensorflow (usually 2x faster than regular Tensorflow, requires Visual Studio 2017 C++ Build Tools)
 * xgboost with enhanced GLM
 
 GPU will activate the following:
@@ -302,7 +302,7 @@ Depending on CPU or GPU, choose.
 CPU:
 
 ```py
-conda install tensorflow==1.6.0 -c intel --no-update-deps
+pip install --ignore-installed --upgrade https://github.com/fo40225/tensorflow-windows-wheel/raw/master/1.6.0/py36/CPU/avx2/tensorflow-1.6.0-cp36-cp36m-win_amd64.whl
 ```
 
 GPU:
