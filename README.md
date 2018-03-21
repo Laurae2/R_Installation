@@ -229,7 +229,7 @@ packages <- c("abind", "acepack", "actuar", "ada", "adabag", "ade4", "ade4TkGUI"
 "tensor", "tensorA", "tensorflow", "tergm", "testit", "testthat", 
 "texreg", "tfestimators", "tfruns", "tgp", "TH.data", "threejs", 
 "tibble", "tidyr", "tidyselect", "tikzDevice", "timeDate", 
-"timereg", "timeSeries", "tis", "tkrplot", "tm", "TMB", "tmvtnorm", 
+"timereg", "timeSeries", "tis", "tkrplot", "tm", "tmap", "TMB", "tmvtnorm", 
 "tnam", "TransferEntropy", "tree", "trimcluster", 
 "tripack", "truncdist", "truncnorm", "truncreg", "trust", "TSA", 
 "tseries", "tseriesEntropy", "tsna", "TSP", "TTR", "tufte", "tuneR", 
