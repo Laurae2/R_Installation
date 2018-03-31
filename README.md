@@ -284,6 +284,7 @@ devtools::install_github("Laurae2/Laurae")
 devtools::install_github("Laurae2/LauraeParallel")
 devtools::install_github("Laurae2/LauraeDS")
 devtools::install_github("Laurae2/LauraeCE")
+install.packages("https://cran.r-project.org/src/contrib/Archive/tabplot/tabplot_1.1.tar.gz", repos=NULL, type="source") # Further versions are too bad / not reliable / generated unreadable plots
 ```
 
 ## Intel Python installation
