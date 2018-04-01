@@ -1,37 +1,43 @@
-# R_Installation
+# R Installation - Windows Version
 
-R packages for installation.
+**Last tested : 2018/04/01 (April 01, 2018)**
 
-Works well for Windows and Clear Linux. Clear Linux can run programs significantly faster when compared to Ubuntu and co.
+R packages for installation, the Windows version.
+
+Ubuntu and Debian version exists, it's just I didn't publish it yet.
+
+Works well for Windows.
 
 Windows requires the following for this task:
 
 * Intel CPU, from Nehalem (iX-xxx / Xeon v1, early2011) to Coffee Lake / Scalable Processors series (iX-8xxx / Silver / Gold / Platinum, late2017/early2018)
-* R (R >= 3.4.0)
-* RStudio
-* MinGW (Rtools)
-* cmake (3.8)
-* Rtools (3.4)
-* Visual Studio 2017 with the appropriate SDK (use Windows 10 SDK if you are under Windows 10, Windows 8 SDK if you are under Windows 8 even though Windows 10 SDK is partially retrocompatible)
+* R (R >= 3.4.0, 64-bit) : https://cran.r-project.org/bin/windows/base/
+* RStudio : https://www.rstudio.com/products/rstudio/download2/
+* MinGW (Rtools, 64-bit) : http://cran.us.r-project.org/bin/windows/Rtools/
+* cmake (3.8, 64-bit) : https://cmake.org/files/v3.8/
+* Visual Studio 2017 Community with the appropriate SDK (use Windows 10 SDK if you are under Windows 10, Windows 8 SDK if you are under Windows 8 even though Windows 10 SDK is partially retrocompatible) : https://www.visualstudio.com/downloads/
 
 For GPU:
 
-* CUDA 9.0
-* CuDNN 7.0
-* C++ Build Tools 2015 (choose the appropriate SDK to your Windows Operating System version at the custom installation part, otherwise you screw yourself)
+* CUDA 9.0 : https://developer.nvidia.com/cuda-90-download-archive
+* CuDNN 7.0 : https://developer.nvidia.com/cudnn (requires registration, use a throwaway email account)
+* C++ Build Tools 2015 Update 3 (choose the appropriate SDK to your Windows Operating System version at the custom installation part, otherwise you screw yourself) : https://www.visualstudio.com/vs/older-downloads/
 
 Non-GPU will activate the following:
 
-* Intel optimized Python
-* Intel optimized Tensorflow (usually 2x faster than regular Tensorflow, requires Visual Studio 2017 C++ Build Tools)
-* xgboost with enhanced GLM
+* Intel optimized Python (sometimes 1000x faster on very large servers than regular Python, tested using Dual Xeon E5-2697v3)
+* Intel optimized Tensorflow 1.6, VS 2017 + AVX wheel (usually 2x faster than regular Tensorflow, please download Visual Studio 2017 Community beforehand, tested using Dual Xeon E5-2697v3)
 
 GPU will activate the following:
 
-* GPU enabled Tensorflow
+* GPU enabled Tensorflow 1.6
 * GPU enabled xgboost
 
 ## Install lot of packages
+
+Write "y" for all required prompts. Use 0-Cloud when prompted if you have no idea what you are doing to download packages.
+
+Some packages might fail. Ignore.
 
 ```r
 packages <- c("abind", "acepack", "actuar", "ada", "adabag", "ade4", "ade4TkGUI", "adegraphics", 
@@ -262,18 +268,18 @@ install.packages("reticulate") # reinstall again
 
 ## Make sure to select the right parameters
 
-Run in RStudio, not Rgui (the last step will not work in Rgui).
+Run in RStudio, not Rgui (the xgboost step can fail in Rgui but not in RStudio).
 
-If CPU, you get xgboost enhanced GLM:
+If CPU, you get xgboost enhanced GLM and AVX instructions:
 
 ```r
-xgbdl::xgb.dl(compiler = "Visual Studio 15 2017 Win64", commit = "a1b48af", use_avx = TRUE, use_gpu = FALSE)
+xgbdl::xgb.dl(compiler = "Visual Studio 15 2017 Win64", commit = "017acf5", use_avx = TRUE, use_gpu = FALSE)
 ```
 
-If GPU, you get GPU enabled xgboost but no enhanced GLM:
+If GPU, you get GPU enabled xgboost and AVX instructions:
 
 ```r
-xgbdl::xgb.dl(compiler = "Visual Studio 14 2015 Win64", commit = "c414b00", use_avx = TRUE, use_gpu = TRUE)
+xgbdl::xgb.dl(compiler = "Visual Studio 14 2015 Win64", commit = "017acf5", use_avx = TRUE, use_gpu = TRUE)
 ```
 
 Then run for a standard LightGBM installation along with some of my packages to make life easier:
@@ -329,7 +335,7 @@ use_condaenv("idp")
 reticulate::py_module_available("tensorflow")
 library(tensorflow)
 sess <- tf$Session()
-hello <- tf$constant('Hello, TensorFlow!')
+hello <- tf$constant("OKAY")
 sess$run(hello)
 ```
 
