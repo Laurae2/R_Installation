@@ -276,7 +276,7 @@ If CPU, you get xgboost enhanced GLM and AVX instructions:
 xgbdl::xgb.dl(compiler = "Visual Studio 15 2017 Win64", commit = "017acf5", use_avx = TRUE, use_gpu = FALSE)
 ```
 
-If GPU, you get GPU enabled xgboost and AVX instructions:
+If GPU, you get GPU enabled xgboost, enhanced GLM, and AVX instructions:
 
 ```r
 xgbdl::xgb.dl(compiler = "Visual Studio 14 2015 Win64", commit = "017acf5", use_avx = TRUE, use_gpu = TRUE)
