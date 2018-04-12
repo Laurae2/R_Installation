@@ -11,13 +11,14 @@ Works well for Windows.
 Windows requires the following for this task:
 
 * Intel CPU, from Nehalem (iX-xxx / Xeon v1, early2011) to Coffee Lake / Scalable Processors series (iX-8xxx / Silver / Gold / Platinum, late2017/early2018)
-* R (R >= 3.4.0, 64-bit) : https://cran.r-project.org/bin/windows/base/
+* R (R >= 3.4.0, 64-bit **only**) : https://cran.r-project.org/bin/windows/base/
 * RStudio : https://www.rstudio.com/products/rstudio/download2/
-* MinGW (Rtools, 64-bit) : http://cran.us.r-project.org/bin/windows/Rtools/
+* MinGW (Rtools, 64-bit **only**) : http://cran.us.r-project.org/bin/windows/Rtools/
 * cmake (3.8, 64-bit) : https://cmake.org/files/v3.8/
+* Git Bash : https://gitforwindows.org/
 * Visual Studio 2017 Community with the appropriate SDK (use Windows 10 SDK if you are under Windows 10, Windows 8 SDK if you are under Windows 8 even though Windows 10 SDK is partially retrocompatible) : https://www.visualstudio.com/downloads/
 
-For GPU:
+If using with NVIDIA GPU:
 
 * CUDA 9.0 : https://developer.nvidia.com/cuda-90-download-archive
 * CuDNN 7.0 : https://developer.nvidia.com/cudnn (requires registration, use a throwaway email account)
