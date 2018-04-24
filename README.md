@@ -1,12 +1,14 @@
-# R Installation - Windows Version
+# R Installation - Windows / Debian / Ubuntu Version
 
-**Last tested : 2018/04/01 (April 01, 2018)**
+**Last tested : R 3.5.0, 2018/04/24 (April 24, 2018)**
 
-R packages for installation, the Windows version.
+R packages for installation, the Windows / Debian / Ubuntu version.
 
-Ubuntu and Debian version exists, it's just I didn't publish it yet.
+Works well for Windows. Works well for Linux (Debian/Ubuntu-like).
 
-Works well for Windows.
+This document helps you install over 1,000 packages.
+
+## Windows Pre-Requisites
 
 Windows requires the following for this task:
 
@@ -14,9 +16,9 @@ Windows requires the following for this task:
 * R (R >= 3.4.0, 64-bit **only**) : https://cran.r-project.org/bin/windows/base/
 * RStudio : https://www.rstudio.com/products/rstudio/download2/
 * MinGW (Rtools, 64-bit **only**) : http://cran.us.r-project.org/bin/windows/Rtools/
-* cmake (3.8, 64-bit) : https://cmake.org/files/v3.8/
-* Git Bash : https://gitforwindows.org/
-* Visual Studio 2017 Community with the appropriate SDK (use Windows 10 SDK if you are under Windows 10, Windows 8 SDK if you are under Windows 8 even though Windows 10 SDK is partially retrocompatible) : https://www.visualstudio.com/downloads/
+* cmake (3.8, 64-bit) : https://cmake.org/files/v3.8/ (required in PATH)
+* Git Bash : https://gitforwindows.org/ (required in PATH)
+* Visual Studio 2017 Community with the appropriate SDK (use Windows 10 SDK if you are under Windows 10, Windows 8 SDK if you are under Windows 8 even though Windows 10 SDK is partially retrocompatible) : https://www.visualstudio.com/downloads/ - not required if you don't want accelerated xgboost/LightGBM, nor GPU xgboost.
 
 If using with NVIDIA GPU:
 
@@ -34,7 +36,113 @@ GPU will activate the following:
 * GPU enabled Tensorflow 1.6
 * GPU enabled xgboost
 
+## Linux Pre-Requisites
+
+On Linux (Debian/Ubuntu-like), I don't support GPU installation but you can do it by yourself easily.
+
+Update Linux and install OpenJDK (or any Java SDK you wish).
+
+```r
+sudo apt update
+sudo apt upgrade
+sudo apt-get install openjdk-9-jre-headless
+```
+
+Add Ubuntu R repository for the latest R: 
+
+```r
+sudo add-apt-repository "deb http://cran.rstudio.com/bin/linux/ubuntu $(lsb_release -sc)/"
+```
+
+If using Ubuntu, it is stuborn and requires to bypass the security checks:
+
+```r
+gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys E084DAB9
+gpg -a --export E084DAB9 | sudo apt-key add -
+```
+
+We can now install R and RStudio Server:
+
+```r
+sudo apt-get update
+sudo apt-get install cmake libcurl4-gnutls-dev libcurl4-openssl-dev libxml2-dev git-core libssl-dev libssh2-1-dev gdebi-core openjdk-9-jre-headless libwebp-dev libprotobuf-dev libjq-dev libpoppler-cpp-dev libcairo2-dev librsvg2-dev libv8-3.14-dev libgtk2.0-dev default-jre default-jdk libgmp3-dev libgsl-dev jags libudunits2-dev protobuf-compiler mesa-common-dev libglu1-mesa-dev coinor-libsymphony-dev libtiff5-dev tcl-dev tk-dev libmpfr-dev ggobi libgdal-dev libglpk-dev libgeos-dev netcdf-bin libfftw3-dev libopenmpi-dev bwidget mpi-default-bin
+sudo apt-get install r-base
+sudo apt-get install r-cran-rmpi
+sudo R CMD javareconf
+wget https://download2.rstudio.org/rstudio-server-1.1.442-amd64.deb
+sudo gdebi rstudio-server-1.1.442-amd64.deb
+```
+
+## Install Python (Intel Distribution)
+
+For GPU, supposes CUDA 9, CuDNN 7, and Python 3.5 (Anaconda 5.1).
+
+Linux can download and install Anaconda using the following:
+
+```r
+curl -O https://repo.continuum.io/archive/Anaconda3-5.1.0-Linux-x86_64.sh
+bash Anaconda3-5.1.0-Linux-x86_64.sh
+```
+
+Run using Anaconda shell:
+
+```py
+conda update conda
+conda config --add channels intel
+conda create -n idp intelpython3_full python=3
+activate idp
+pip install --upgrade pip
+```
+
+If `activate idp` fails, run `source activate idp`.
+
+Depending on Linux, CPU or GPU, choose.
+
+Linux:
+
+```py
+pip install --ignore-installed --upgrade https://anaconda.org/intel/tensorflow/1.6.0/download/tensorflow-1.6.0-cp36-cp36m-linux_x86_64.whl
+```
+
+CPU:
+
+```py
+pip install --ignore-installed --upgrade https://github.com/fo40225/tensorflow-windows-wheel/raw/master/1.6.0/py36/CPU/avx2/tensorflow-1.6.0-cp36-cp36m-win_amd64.whl
+```
+
+GPU:
+
+```py
+pip install --ignore-installed --upgrade tensorflow-gpu==1.6.0
+```
+
+Keras installation:
+
+```py
+pip install h5py requests pyyaml Pillow
+conda install scipy -c intel --no-update-deps
+pip install keras==2.1.5
+```
+
+(Linux specific) Jupyter Notebook IP casting can be defined using the following in Linux:
+
+```py
+jupyter notebook --generate-config
+vi ./.jupyter/jupyter_notebook_config.py
+```
+
+(Linux specific) Then, modify c.NotebookApp.ip = '0.0.0.0' to allow accessing Jupyter Notebook from anywhere (not recommended in Internet).
+
+Esc + : + wq! + Enter can help a lot to quit vi.
+
 ## Install lot of packages
+
+Install two specific BioConductor packages:
+
+```r
+source("http://bioconductor.org/biocLite.R")
+biocLite(c("graph", "RBGL"))
+```
 
 Write "y" for all required prompts. Use 0-Cloud when prompted if you have no idea what you are doing to download packages.
 
@@ -252,7 +360,15 @@ packages <- c("abind", "acepack", "actuar", "ada", "adabag", "ade4", "ade4TkGUI"
 "xts", "YaleToolkit", "yaml", "yarrr", "zeallot", "Zelig", "zip", 
 "zipcode", "zoo", "ztable")
 
-install.packages(packages, dependencies = TRUE)
+# install.packages(packages, dependencies = TRUE)
+
+ret <- lapply(packages, function(x) {
+  if (!(x %in% rownames(installed.packages()))) {
+    install.packages(x)
+  } else {
+    cat("Skipping ", x, "\n", sep = "")
+  }
+})
 ```
 
 ## Extra packages
@@ -267,26 +383,40 @@ devtools::install_github("rstudio/keras@bc775ac") # reinstall again
 install.packages("reticulate") # reinstall again
 ```
 
-## Make sure to select the right parameters
+Get even more packages below (success rate not guaranteed for Linux systems, as RInno is Windows only for instance):
+
+```r
+devtools::install_github("cmpolis/datacomb", subdir = "pkg", ref = "1.1.2")
+install.packages(c("getPass", "lineprof", "mapmate", "miniCRAN", "NMOF", "odbc", "recosystem", "redpen", "rgeoapi", "rgp", "rgpui", "RSAP", "scrypt", "smooth", "stR"))
+install.pacakges(c("Boom", "BoomSpikeSlab", "bsts", "CausalImpact", "cli", "ClusterR", "emmeans", "FD", "fromo", "gdalUtils", "geojson", "geojsonio", "geojsonlint", "geometry", "getPass", "ggridges", "installr", "inum", "jqr", "jsonvalidate", "libcoin", "lineprof", "magic", "manipulateWidget", "mapmate", "mapview", "miniCRAN", "moments", "NADA", "NMOF", "OceanView", "odbc", "OpenImageR", "osmar", "pillar", "plot3Drgl", "protolite", "recosystem", "redpen", "ReporteRs", "ReporteRsjars", "rgeoapi", "rgp", "rgpui", "rmapshaper", "RSAP", "satellite", "scrypt", "sf", "smooth", "spData", "SQUAREM", "stR", "tiff", "tmaptools", "translations", "udunits2", "units", "uroot", "utf8", "xfun", "zCompositions"))
+devtools::install_github("ficonsulting/RInno", build_vignettes = TRUE)
+```
+
+## Windows: Make sure to select the right parameters
+
+Follow Linux instructions if using MinGW only.
 
 Run in RStudio, not Rgui (the xgboost step can fail in Rgui but not in RStudio).
 
-If CPU, you get xgboost enhanced GLM and AVX instructions:
+If CPU, you get xgboost enhanced GLM and AVX instructions (change the compiler, commit, and AVX if needed):
 
 ```r
 xgbdl::xgb.dl(compiler = "Visual Studio 15 2017 Win64", commit = "017acf5", use_avx = TRUE, use_gpu = FALSE)
 ```
 
-If GPU, you get GPU enabled xgboost, enhanced GLM, and AVX instructions:
+If GPU, you get GPU enabled xgboost, enhanced GLM, and AVX instructions (change the compiler, commit, and AVX if needed):
 
 ```r
 xgbdl::xgb.dl(compiler = "Visual Studio 14 2015 Win64", commit = "017acf5", use_avx = TRUE, use_gpu = TRUE)
 ```
 
-Then run for a standard LightGBM installation along with some of my packages to make life easier:
+Then run for a standard LightGBM installation along with some of my packages to make life easier (change the compiler and commit if needed):
 
 ```r
 lgbdl::lgb.dl(commit = "b6db7e2", compiler = "vs")
+```
+
+```r
 devtools::install_github("Laurae2/Laurae")
 devtools::install_github("Laurae2/LauraeParallel")
 devtools::install_github("Laurae2/LauraeDS")
@@ -294,38 +424,31 @@ devtools::install_github("Laurae2/LauraeCE")
 install.packages("https://cran.r-project.org/src/contrib/Archive/tabplot/tabplot_1.1.tar.gz", repos=NULL, type="source") # Further versions are too bad / not reliable / generated unreadable plots
 ```
 
-## Intel Python installation
+## Linux: Make sure to select the right parameters
 
-Supposes CUDA 9, CuDNN 7, Python 3.5 (Anaconda 4.2). Run using Anaconda shell:
+Run in RStudio, not Rgui (the xgboost step can fail in Rgui but not in RStudio).
 
-```py
-conda update conda
-conda config --add channels intel
-conda create -n idp intelpython3_full python=3
-activate idp
+If CPU, you get xgboost enhanced GLM and AVX instructions:
+
+```r
+xgbdl::xgb.dl(compiler = "gcc", commit = "017acf5", use_avx = TRUE, use_gpu = TRUE)
 ```
 
-Depending on CPU or GPU, choose.
+If GPU, you get GPU enabled xgboost, enhanced GLM, and AVX instructions:
 
-CPU:
-
-```py
-pip install --ignore-installed --upgrade https://github.com/fo40225/tensorflow-windows-wheel/raw/master/1.6.0/py36/CPU/avx2/tensorflow-1.6.0-cp36-cp36m-win_amd64.whl
+```r
+xgbdl::xgb.dl(compiler = "gcc", commit = "017acf5", use_avx = TRUE, use_gpu = TRUE)
 ```
 
-GPU:
+Then run for a standard LightGBM installation along with some of my packages to make life easier:
 
-```py
-pip install --ignore-installed --upgrade tensorflow-gpu==1.6.0
-```
-
-Keras installation:
-
-```py
-
-pip install h5py requests pyyaml Pillow
-conda install scipy -c intel --no-update-deps
-pip install keras==2.1.5
+```r
+lgbdl::lgb.dl(commit = "b6db7e2", compiler = "gcc")
+devtools::install_github("Laurae2/Laurae")
+devtools::install_github("Laurae2/LauraeParallel")
+devtools::install_github("Laurae2/LauraeDS")
+devtools::install_github("Laurae2/LauraeCE")
+install.packages("https://cran.r-project.org/src/contrib/Archive/tabplot/tabplot_1.1.tar.gz", repos=NULL, type="source") # Further versions are too bad / not reliable / generated unreadable plots
 ```
 
 ## Confirm Tensorflow works
