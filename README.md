@@ -36,6 +36,36 @@ GPU will activate the following:
 * GPU enabled Tensorflow 1.6
 * GPU enabled xgboost
 
+## Getting Maximum Performance in R
+
+To get the maximum performance in R (+0 to 10%, depending on the library), please change the following:
+
+```
+CFLAGS = -O2 -Wall $(DEBUGFLAG) -std=gnu99 -mtune=generic
+CXXFLAGS = -O2 -Wall $(DEBUGFLAG) -mtune=generic
+CXX98FLAGS = -O2 -Wall $(DEBUGFLAG) -mtune=generic
+CXX11FLAGS = -O2 -Wall $(DEBUGFLAG) -mtune=generic
+FCFLAGS = -O2 $(DEBUGFLAG) -mtune=generic
+FFLAGS = -O2 $(DEBUGFLAG) -mtune=generic
+```
+
+to the following:
+
+```
+CFLAGS = -O3 -Wall $(DEBUGFLAG) -std=gnu99 -mtune=native
+CXXFLAGS = -O3 -Wall $(DEBUGFLAG) -mtune=native
+CXX98FLAGS = -O3 -Wall $(DEBUGFLAG) -mtune=native
+CXX11FLAGS = -O3 -Wall $(DEBUGFLAG) -mtune=native
+FCFLAGS = -O3 $(DEBUGFLAG) -mtune=native
+FFLAGS = -O3 $(DEBUGFLAG) -mtune=native
+```
+
+If you are getting unexpected mathematical errors while working in R, reinstall R using the default flags. The known highest performance safest flags for R are the following, but please revert to the initial flags instead of these ones:
+
+```
+-O2 -msse2 -mfpmath=sse
+```
+
 ## Linux Pre-Requisites
 
 On Linux (Debian/Ubuntu-like), I don't support GPU installation but you can do it by yourself easily.
@@ -137,6 +167,8 @@ Esc + : + wq! + Enter can help a lot to quit vi.
 
 ## Install lot of packages
 
+DO NOT DO the following using RStudio. Please use a raw R session (RGui for Windows).
+
 Install two specific BioConductor packages:
 
 ```r
@@ -149,65 +181,64 @@ Write "y" for all required prompts. Use 0-Cloud when prompted if you have no ide
 Some packages might fail. Ignore.
 
 ```r
-packages <- c("abind", "acepack", "actuar", "ada", "adabag", "ade4", "ade4TkGUI", "adegraphics", 
-"adehabitatLT", "adehabitatMA", "ADGofTest", "AER", "AGD", "agricolae", 
-"AICcmodavg", "akima", "alabama", "AlgDesign", "alphahull", "alr3", 
-"alr4", "amap", "Amelia", "anchors", "animation", 
-"aod", "aods3", "ape", "aplpack", "argparse", "arm", 
-"arules", "arulesViz", "ascii", "assertthat", "AUC", "BaBooN", 
-"backports", "barcode", "bartMachine", "bartMachineJARs", 
-"base64", "base64enc", "BatchJobs", "BayesFactor", "bayesplot", 
-"BayesX", "BayesXsrc", "BB", "BBmisc", "bbmle", "BCA", "bcp", 
-"BDgraph", "bdsmatrix", "betareg", "BH", "BHH2", "BiasedUrn", 
-"bibtex", "biclust", "biganalytics", "biglm", "bigmemory", "bigmemory.sri", 
-"bigRR", "bigtabulate", "binda", "bindr", "bindrcpp", "binGroup", 
-"bisoreg", "bit", "bit64", "bitops", "blme", "blob", "BMA", "boot", 
-"bootstrap", "Boruta", "BradleyTerry2", "breakpoint", "brew", 
-"brglm", "brnn", "broom", "BsMD", "bst", "btergm", "C50", "ca", 
-"Cairo", "cairoDevice", "CALIBERrfimpute", "calibrator", "candisc", 
-"caper", "car", "CARBayes", "CARBayesdata", "carData", "care", 
-"caret", "caretEnsemble", "catdata", "caTools", "cba", "ccaPP", 
-"cclust", "CDM", "CDVine", "cellranger", "cem", "censReg", "CEoptim", 
-"changepoint", "checkmate", "checkpoint", "chemometrics", "chron", 
-"circlize", "CircStats", "citr", "Ckmeans.1d.dp", "class", "classInt", 
-"clue", "cluster", "clusterSim", "clustvarsel", "clv", "clValid", 
-"cmaes", "cmprsk", "coda", "codetools", "coin", "colorplaner", 
-"colorspace", "colourpicker", "combinat", "commonmark", 
-"CompQuadForm", "compute.es", "conf.design", "config", 
-"contfrac", "contrast", "copula", "CORElearn", "corpcor", "corrgram", 
-"corrplot", "covr", "cowplot", "CoxBoost", "coxme", "cplm", "crayon", 
-"crosstalk", "crossval", "crp.CSFP", "crrstep", "crs", "cshapes", 
-"cubature", "Cubist", "curl", "cvAUC", "CVST", "cvTools", "d3heatmap", 
-"d3Network", "DAAG", "dagitty", "data.table", "data.tree", "DatABEL",
-"dataframes2xls", "date", "dbConnect", 
+packages <- c("abind", "acepack", "actuar", "ada", "adabag", "ade4", "ade4TkGUI", 
+"adegraphics", "adehabitatLT", "adehabitatMA", "ADGofTest", "AER", 
+"AGD", "agricolae", "AICcmodavg", "akima", "alabama", "AlgDesign", 
+"alphahull", "alr3", "alr4", "amap", "Amelia", "anchors", "animation", 
+"aod", "aods3", "ape", "aplpack", "argparse", "arm", "arules", 
+"arulesViz", "ascii", "assertthat", "AUC", "BaBooN", "backports", 
+"barcode", "bartMachine", "bartMachineJARs", "base64", "base64enc", 
+"BatchJobs", "BayesFactor", "bayesplot", "BayesX", "BayesXsrc", 
+"BB", "BBmisc", "bbmle", "BCA", "bcp", "BDgraph", "bdsmatrix", 
+"betareg", "BH", "BHH2", "BiasedUrn", "bibtex", "biclust", "biganalytics", 
+"biglm", "bigmemory", "bigmemory.sri", "bigRR", "bigtabulate", 
+"binda", "bindr", "bindrcpp", "binGroup", "bisoreg", "bit", "bit64", 
+"bitops", "blme", "blob", "BMA", "boot", "bootstrap", "Boruta", 
+"BradleyTerry2", "breakpoint", "brew", "brglm", "brnn", "broom", 
+"BsMD", "bst", "btergm", "C50", "ca", "Cairo", "cairoDevice", 
+"CALIBERrfimpute", "calibrator", "candisc", "caper", "car", "CARBayes", 
+"CARBayesdata", "carData", "care", "caret", "caretEnsemble", 
+"catdata", "caTools", "cba", "ccaPP", "cclust", "CDM", "CDVine", 
+"cellranger", "cem", "censReg", "CEoptim", "changepoint", "checkmate", 
+"checkpoint", "chemometrics", "chron", "circlize", "CircStats", 
+"citr", "Ckmeans.1d.dp", "class", "classInt", "clue", "cluster", 
+"clusterSim", "clustvarsel", "clv", "clValid", "cmaes", "cmprsk", 
+"coda", "codetools", "coin", "colorplaner", "colorspace", "colourpicker", 
+"combinat", "commonmark", "CompQuadForm", "compute.es", "conf.design", 
+"config", "contfrac", "contrast", "copula", "CORElearn", "corpcor", 
+"corrgram", "corrplot", "covr", "cowplot", "CoxBoost", "coxme", 
+"cplm", "crayon", "crosstalk", "crossval", "crp.CSFP", "crrstep", 
+"crs", "cshapes", "cubature", "Cubist", "curl", "cvAUC", "CVST", 
+"cvTools", "d3heatmap", "d3Network", "DAAG", "dagitty", "data.table", 
+"data.tree", "DatABEL", "dataframes2xls", "date", "dbConnect", 
 "DBI", "dbscan", "ddalpha", "debugme", "Deducer", "DeducerExtras", 
 "deepnet", "degreenet", "deldir", "dendextend", "dendroextras", 
-"DendSer", "denstrip", "DEoptim", "DEoptimR", "depthTools", 
-"Deriv", "desc", "descr", "DescTools", "deSolve", "Devore7", 
-"devtools", "dfoptim", "diagram", "DiagrammeR", "DiagrammeRsvg", 
-"DiceDesign", "DiceKriging", "DiceOptim", "dichromat", "digest", 
-"dimRed", "diptest", "directlabels", "discretization", "DiscriMiner", 
-"distr", "distrEx", "DistributionUtils", "diveMove", "dlm", "DMwR", 
-"doBy", "DoE.base", "DoE.wrapper", "doMPI", "doParallel", "doRedis", 
+"DendSer", "denstrip", "DEoptim", "DEoptimR", "depthTools", "Deriv", 
+"desc", "descr", "DescTools", "deSolve", "Devore7", "devtools", 
+"dfoptim", "diagram", "DiagrammeR", "DiagrammeRsvg", "DiceDesign", 
+"DiceKriging", "DiceOptim", "dichromat", "digest", "dimRed", 
+"diptest", "directlabels", "discretization", "DiscriMiner", "distr", 
+"distrEx", "DistributionUtils", "diveMove", "dlm", "DMwR", "doBy", 
+"DoE.base", "DoE.wrapper", "doMPI", "doParallel", "doRedis", 
 "DoseFinding", "dotCall64", "downloader", "dplR", "dplyr", "drat", 
 "DRR", "DT", "dtplyr", "dtw", "dygraphs", "dynamicTreeCut", "dynlm", 
 "e1071", "eaf", "earth", "Ecdat", "Ecfun", "ecodist", "effects", 
 "eha", "elasticnet", "ElemStatLearn", "ellipse", "elliptic", 
-"elmNN", "emdbook", "emoa", "emulator", "energy", "ENmisc", 
-"entropy", "EntropyExplorer", "Epi", "EpiModel", "epitools", 
-"erer", "ergm", "ergm.count", "ergm.userterms", "eRm", "estimability", 
-"etm", "evaluate", "evd", "expint", "ExplainPrediction", "expm", 
-"extrafont", "extrafontdb", "extraTrees", "factoextra", "FactoMineR", 
-"Fahrmeir", "fail", "faraway", "fAssets", "fastcluster", "fastdigest", 
-"fastICA", "fastmatch", "fastR", "fBasics", "fCopulae", "fda", 
-"fdrtool", "FeaLect", "feather", "FeatureHashing", "fExoticOptions", 
-"fExtremes", "ff", "ffbase", "FFTrees", "fftw", "fGarch", "fields", 
-"filehash", "fImport", "findpython", "fit.models", "fitdistrplus", 
-"flare", "flashClust", "flexclust", "flexmix", "flexsurv", "FME", 
-"FMStable", "fMultivar", "FNN", "fNonlinear", "fontcm", "fOptions", 
-"forcats", "foreach", "forecast", "foreign", "formatR", "formattable", 
-"Formula", "fortunes", "forward", "fpc", "fPortfolio", "fracdiff", 
-"FRB", "frbs", "fRegression", "FrF2", "FrF2.catlg128", "FSelector", 
+"elmNN", "emdbook", "emoa", "emulator", "energy", "ENmisc", "entropy", 
+"EntropyExplorer", "Epi", "EpiModel", "epitools", "erer", "ergm", 
+"ergm.count", "ergm.userterms", "eRm", "estimability", "etm", 
+"evaluate", "evd", "expint", "ExplainPrediction", "expm", "extrafont", 
+"extrafontdb", "extraTrees", "factoextra", "FactoMineR", "Fahrmeir", 
+"fail", "faraway", "fAssets", "fastcluster", "fastdigest", "fastICA", 
+"fastmatch", "fastR", "fBasics", "fCopulae", "fda", "fdrtool", 
+"FeaLect", "feather", "FeatureHashing", "fExoticOptions", "fExtremes", 
+"ff", "ffbase", "FFTrees", "fftw", "fGarch", "fields", "filehash", 
+"fImport", "findpython", "fit.models", "fitdistrplus", "flare", 
+"flashClust", "flexclust", "flexmix", "flexsurv", "FME", "FMStable", 
+"fMultivar", "FNN", "fNonlinear", "fontcm", "fOptions", "forcats", 
+"foreach", "forecast", "foreign", "formatR", "formattable", "Formula", 
+"fortunes", "forward", "fpc", "fPortfolio", "fracdiff", "FRB", 
+"frbs", "fRegression", "FrF2", "FrF2.catlg128", "FSelector", 
 "fst", "fTrading", "fts", "futile.logger", "futile.options", 
 "future", "GA", "gam", "gamair", "GAMBoost", "gamboostLSS", "gamlss", 
 "gamlss.data", "gamlss.dist", "gamm4", "gapminder", "gbm", "gclus", 
@@ -220,62 +251,61 @@ packages <- c("abind", "acepack", "actuar", "ada", "adabag", "ade4", "ade4TkGUI"
 "gitgadget", "glasso", "glmmML", "glmmTMB", "glmnet", "glmulti", 
 "GlobalOptions", "globals", "glue", "gmailr", "Gmedian", "gmm", 
 "gmodels", "gmp", "gnm", "gof", "goftest", "googleVis", "gower", 
-"gpairs", "GPArotation", "GPfit", "gplots", "gRbase", 
-"GREA", "gridBase", "gridExtra", "grouped", 
-"gsl", "gss", "gstat", "gsubfn", "gtable", "gtools", "Guerry", 
-"gWidgets", "gWidgetsRGtk2", "gWidgetstcltk", "h2o", "haplo.stats", 
-"haven", "hdi", "heatmaply", "heplots", "hergm", "hexbin", "hglm", 
-"hglm.data", "HH", "HiClimR", "highlight", "highr", "hmeasure", 
-"Hmisc", "hms", "hrbrthemes", "HSAUR", "HSAUR2", "HSAUR3", "htmlTable", 
-"htmltools", "htmlwidgets", "httpuv", "httr", "huge", "hunspell", 
-"hwriter", "hypergeo", "ibdreg", "ic.infer", "ICS", "ICSNP", 
-"igraph", "igraphdata", "import", "imputeTS", "ineq", "influenceR", 
-"Information", "infotheo", "inline", "inlinedocs", "intergraph", 
-"intervals", "intsvy", "iplots", "ipred", "irace", "irlba", "irr", 
-"isa2", "Iso", "ISOcodes", "isotone", "ISwR", "iterators", "itertools", 
-"JavaGD", "JGR", "jomo", "jpeg", "jsonlite", "kappalab", "kdecopula", 
-"Kendall", "keras", "kernlab", "KernSmooth", "KFAS", "kinship2", 
-"kknn", "klaR", "kmi", "knitcitations", "knitr", "kohonen", "koRpus", 
-"ks", "labeling", "labelled", "laeken", "LaF", 
-"laGP", "Lahman", "lambda.r", "largeVis", "lars", "lasso2", "latentnet", 
-"lattice", "latticeExtra", "lava", "lava.tobit", "lavaan", "lavaan.survey", 
+"gpairs", "GPArotation", "GPfit", "gplots", "gRbase", "GREA", 
+"gridBase", "gridExtra", "grouped", "gsl", "gss", "gstat", "gsubfn", 
+"gtable", "gtools", "Guerry", "gWidgets", "gWidgetsRGtk2", "gWidgetstcltk", 
+"h2o", "haplo.stats", "haven", "hdi", "heatmaply", "heplots", 
+"hergm", "hexbin", "hglm", "hglm.data", "HH", "HiClimR", "highlight", 
+"highr", "hmeasure", "Hmisc", "hms", "hrbrthemes", "HSAUR", "HSAUR2", 
+"HSAUR3", "htmlTable", "htmltools", "htmlwidgets", "httpuv", 
+"httr", "huge", "hunspell", "hwriter", "hypergeo", "ibdreg", 
+"ic.infer", "ICS", "ICSNP", "igraph", "igraphdata", "import", 
+"imputeTS", "ineq", "influenceR", "Information", "infotheo", 
+"inline", "inlinedocs", "intergraph", "intervals", "intsvy", 
+"iplots", "ipred", "irace", "irlba", "irr", "isa2", "Iso", "ISOcodes", 
+"isotone", "ISwR", "iterators", "itertools", "JavaGD", "JGR", 
+"jomo", "jpeg", "jsonlite", "kappalab", "kdecopula", "Kendall", 
+"keras", "kernlab", "KernSmooth", "KFAS", "kinship2", "kknn", 
+"klaR", "kmi", "knitcitations", "knitr", "kohonen", "koRpus", 
+"ks", "labeling", "labelled", "laeken", "LaF", "laGP", "Lahman", 
+"lambda.r", "largeVis", "lars", "lasso2", "latentnet", "lattice", 
+"latticeExtra", "lava", "lava.tobit", "lavaan", "lavaan.survey", 
 "lawstat", "lazyeval", "LCA", "lcopula", "leaflet", "leaps", 
-"LearnBayes", "lfda", "lfe", "lhs", "LiblineaR", 
-"likert", "linprog", "lintr", "lisrelToR", "listenv", 
-"littleboxes", "lme4", "lmerTest", "lmodel2", "lmtest", "loa", 
-"locfit", "logcondens", "LogicReg", "logistf", "logspline", "lokern", 
-"longmemo", "loo", "lpSolve", "lpSolveAPI", "lqa", "lqmm", "lsmeans", 
-"lubridate", "MAc", "MAd", "magrittr", "mail", "manipulate", 
-"mapdata", "mapproj", "maps", "maptools", "maptree", "markdown", 
-"MASS", "Matching", "MatchIt", "mathgraph", "matlab", "Matrix", 
-"matrixcalc", "MatrixModels", "matrixStats", "maxLik", "maxlike", 
-"MBA", "MBESS", "mboost", "mc2d", "mcclust", "mcgibbsit", "mclust", 
-"mcmc", "MCMCglmm", "MCMCpack", "mco", "mda", "MDSGUI", "mediation", 
-"memisc", "memoise", "MEMSS", "merTools", "MetABEL", "metafor", 
-"Metrics", "mets", "mgcv", "mi", "mice", "miceadds", 
-"microbenchmark", "microplot", "mime", "minerva", "miniUI", "minpack.lm", 
-"minqa", "mirt", "mirtCAT", "misc3d", "miscTools", "missForest", 
-"missMDA", "mitml", "mitools", "mix", "mlbench", "MLmetrics", 
-"mlmRev", "mlogit", "mlr", "mlrMBO", "mnlogit", "mnormt", "modeest", 
-"ModelMetrics", "modelr", "modeltools", "mondate", "monreg", 
-"moonBook", "mosaic", "mosaicCalc", "mosaicCore", "mosaicData", 
-"movMF", "MplusAutomation", "mpmi", "MPV", "mratios", "mRMRe", 
-"msm", "mstate", "MSwM", "muhaz", "multcomp", "multcompView", 
+"LearnBayes", "lfda", "lfe", "lhs", "LiblineaR", "likert", "linprog", 
+"lintr", "lisrelToR", "listenv", "littleboxes", "lme4", "lmerTest", 
+"lmodel2", "lmtest", "loa", "locfit", "logcondens", "LogicReg", 
+"logistf", "logspline", "lokern", "longmemo", "loo", "lpSolve", 
+"lpSolveAPI", "lqa", "lqmm", "lsmeans", "lubridate", "MAc", "MAd", 
+"magrittr", "mail", "manipulate", "mapdata", "mapproj", "maps", 
+"maptools", "maptree", "markdown", "MASS", "Matching", "MatchIt", 
+"mathgraph", "matlab", "Matrix", "matrixcalc", "MatrixModels", 
+"matrixStats", "maxLik", "maxlike", "MBA", "MBESS", "mboost", 
+"mc2d", "mcclust", "mcgibbsit", "mclust", "mcmc", "MCMCglmm", 
+"MCMCpack", "mco", "mda", "MDSGUI", "mediation", "memisc", "memoise", 
+"MEMSS", "merTools", "MetABEL", "metafor", "Metrics", "mets", 
+"mgcv", "mi", "mice", "miceadds", "microbenchmark", "microplot", 
+"mime", "minerva", "miniUI", "minpack.lm", "minqa", "mirt", "mirtCAT", 
+"misc3d", "miscTools", "missForest", "missMDA", "mitml", "mitools", 
+"mix", "mlbench", "MLmetrics", "mlmRev", "mlogit", "mlr", "mlrMBO", 
+"mnlogit", "mnormt", "modeest", "ModelMetrics", "modelr", "modeltools", 
+"mondate", "monreg", "moonBook", "mosaic", "mosaicCalc", "mosaicCore", 
+"mosaicData", "movMF", "MplusAutomation", "mpmi", "MPV", "mratios", 
+"mRMRe", "msm", "mstate", "MSwM", "muhaz", "multcomp", "multcompView", 
 "multicool", "multiwayvcov", "MuMIn", "munsell", "mvinfluence", 
-"mvnormtest", "mvoutlier", "mvtnorm", "NbClust", 
-"ncdf4", "ncvreg", "ndtv", "network", "networkD3", "networkDynamic", 
-"networkDynamicData", "networksis", "neuralnet", "NeuralNetTools", 
-"NHANES", "nlme", "nloptr", "NLP", "NMF", "nnet", "nnls", "nodeHarvest", 
-"nor1mix", "norm", "nortest", "np", "numbers", "numDeriv", "nws", 
-"nycflights13", "obliqueRF", "odfWeave", "officer", "OpenMx", 
-"openssl", "openxlsx", "optextras", "optimx", "optmatch", "orcutt", 
-"ordinal", "ore", "orloca", "orloca.es", "orthopolynom", "outliers", 
-"oz", "packrat", "pageviews", "pamr", "pan", "pander", 
-"parallelMap", "ParamHelpers", "partitions", "party", "partykit", 
-"pastecs", "pbapply", "pbivnorm", "pbkrtest", "pbmcapply", "PBSmapping", 
-"PBSmodelling", "pcalg", "pcaPP", "pec", "penalized", "PerformanceAnalytics", 
-"permute", "pgirmess", "pixmap", "pkgconfig", "pkgKitten", "pkgmaker", 
-"PKI", "PKPDmodels", "playwith", "plm", "plogr", "plot3D", "plotly", 
+"mvnormtest", "mvoutlier", "mvtnorm", "NbClust", "ncdf4", "ncvreg", 
+"ndtv", "network", "networkD3", "networkDynamic", "networkDynamicData", 
+"networksis", "neuralnet", "NeuralNetTools", "NHANES", "nlme", 
+"nloptr", "NLP", "NMF", "nnet", "nnls", "nodeHarvest", "nor1mix", 
+"norm", "nortest", "np", "numbers", "numDeriv", "nws", "nycflights13", 
+"obliqueRF", "odfWeave", "officer", "OpenMx", "openssl", "openxlsx", 
+"optextras", "optimx", "optmatch", "orcutt", "ordinal", "ore", 
+"orloca", "orloca.es", "orthopolynom", "outliers", "oz", "packrat", 
+"pageviews", "pamr", "pan", "pander", "parallelMap", "ParamHelpers", 
+"partitions", "party", "partykit", "pastecs", "pbapply", "pbivnorm", 
+"pbkrtest", "pbmcapply", "PBSmapping", "PBSmodelling", "pcalg", 
+"pcaPP", "pec", "penalized", "PerformanceAnalytics", "permute", 
+"pgirmess", "pixmap", "pkgconfig", "pkgKitten", "pkgmaker", "PKI", 
+"PKPDmodels", "playwith", "plm", "plogr", "plot3D", "plotly", 
 "plotmo", "plotrix", "pls", "plyr", "PMCMR", "pmml", "pmmlTransformations", 
 "png", "poistweedie", "poLCA", "polspline", "polyclip", "polycor", 
 "polynom", "prabclus", "pracma", "praise", "PredictABEL", "prediction", 
@@ -306,62 +336,73 @@ packages <- c("abind", "acepack", "actuar", "ada", "adabag", "ade4", "ade4TkGUI"
 "relaimpo", "relations", "relax", "relevent", "reliaR", "relimp", 
 "rem", "rematch", "reportr", "repr", "reshape", "reshape2", "reticulate", 
 "rex", "rFerns", "rgdal", "rgenoud", "rgeos", "rgexf", "rggobi", 
-"rgl", "Rglpk", "rglwidget", "RgoogleMaps", "RGtk2", 
-"RGtk2Extras", "RH2", "rio", "riskRegression", "RItools", "rjags", 
-"rJava", "RJDBC", "rjson", "RJSONIO", "rknn", "rlang", "rlecuyer", 
-"rmarkdown", "rmeta", "Rmpfr", "Rmpi", "rms", "RMySQL", "rneos", 
-"rngtools", "rngWELL", "robCompositions", "robust", "robustbase", 
-"rockchalk", "ROCR", "RODBC", "Rook", "rootSolve", "rotationForest", 
-"roxygen2", "rpanel", "rpart", "rpart.plot", "rpf", 
-"rpivotTable", "RPostgreSQL", "rprojroot", "rrcov", "rredis", 
-"RRF", "rrlda", "RSclient", "rsconnect", "Rserve", "RSiena", 
-"RSKC", "rsm", "RSNNS", "Rsolnp", "RSpectra", "RSQLite", "rstan", 
-"rstanarm", "rstantools", "rsvg", 
-"Rsymphony", "rtiff", "Rtsne", "Rttf2pt1", "rugarch", "RUnit", 
-"Runuran", "rversions", "rvest", "rvg", "Rvmmin", "RWeka", "RWekajars", 
+"rgl", "Rglpk", "rglwidget", "RgoogleMaps", "RGtk2", "RGtk2Extras", 
+"RH2", "rio", "riskRegression", "RItools", "rjags", "rJava", 
+"RJDBC", "rjson", "RJSONIO", "rknn", "rlang", "rlecuyer", "rmarkdown", 
+"rmeta", "Rmpfr", "Rmpi", "rms", "RMySQL", "rneos", "rngtools", 
+"rngWELL", "robCompositions", "robust", "robustbase", "rockchalk", 
+"ROCR", "RODBC", "Rook", "rootSolve", "rotationForest", "roxygen2", 
+"rpanel", "rpart", "rpart.plot", "rpf", "rpivotTable", "RPostgreSQL", 
+"rprojroot", "rrcov", "rredis", "RRF", "rrlda", "RSclient", "rsconnect", 
+"Rserve", "RSiena", "RSKC", "rsm", "RSNNS", "Rsolnp", "RSpectra", 
+"RSQLite", "rstan", "rstanarm", "rstantools", "rsvg", "Rsymphony", 
+"rtiff", "Rtsne", "Rttf2pt1", "rugarch", "RUnit", "Runuran", 
+"rversions", "rvest", "rvg", "Rvmmin", "RWeka", "RWekajars", 
 "Ryacas", "sampleSelection", "sampling", "sandwich", "scagnostics", 
-"scales", "scalreg", "scatterplot3d", "sda", "SEL", 
-"selectr", "sem", "semiArtificial", "semPlot", "semTools", "sendmailR", 
+"scales", "scalreg", "scatterplot3d", "sda", "SEL", "selectr", 
+"sem", "semiArtificial", "semPlot", "semTools", "sendmailR", 
 "sendplot", "SensoMineR", "seriation", "setRNG", "sets", "sfsmisc", 
 "sgeostat", "shape", "shapefiles", "shapes", "shiny", "shinyAce", 
-"shinyjs", "shinystan", "shinythemes", "signal", 
-"SimComp", "SimDesign", "simecol", "simex", "simsem", "sirt", 
-"SIS", "sjlabelled", "sjmisc", "sjPlot", "sjstats", "SkewHyperbolic", 
-"skmeans", "slackr", "slam", "SLC", "Sleuth2", "sm", "smbinning", 
-"smoof", "sn", "sna", "snakecase", "snow", "SnowballC", "snowfall", 
-"snowFT", "som", "soma", "sos", "sourcetools", "sp", "spacetime", 
-"spam", "sparcl", "SparseGrid", "sparseLDA", "SparseM", "sparsio", 
-"spatial", "spatstat", "spatstat.data", "spatstat.utils", "spc", 
-"spd", "spdep", "speedglm", "sphet", "splancs", "splm", 
-"spls", "sqldf", "sROC", "stabledist", "stabs", "StanHeaders", 
-"startupmsg", "StatMatch", "statmod", "statnet", "statnet.common", 
-"steepness", "stepPlr", "stinepack", 
-"stringdist", "stringi", "stringr", "strucchange", "subselect", 
-"subsemble", "sudoku", "SuperLearner", "superpc", "SuppDists", 
-"survey", "survival", "svd", "svglite", "svGUI", "svUnit", "svyPVpack", 
-"SwarmSVM", "SweaveListingUtils", "systemfit", "tables", "tabplot", 
-"tabplotd3", "TAM", "tcltk2", "tclust", "TeachingDemos", 
-"tensor", "tensorA", "tensorflow", "tergm", "testit", "testthat", 
-"texreg", "tfestimators", "tfruns", "tgp", "TH.data", "threejs", 
-"tibble", "tidyr", "tidyselect", "tikzDevice", "timeDate", 
-"timereg", "timeSeries", "tis", "tkrplot", "tm", "tmap", "TMB", "tmvtnorm", 
-"tnam", "TransferEntropy", "tree", "trimcluster", 
-"tripack", "truncdist", "truncnorm", "truncreg", "trust", "TSA", 
-"tseries", "tseriesEntropy", "tsna", "TSP", "TTR", "tufte", "tuneR", 
-"tweedie", "ucminf", "uniReg", "unmarked", "urca", "uuid", 
-"V8", "VarianceGamma", "vars", "vcd", "vcdExtra", 
+"shinyjs", "shinystan", "shinythemes", "signal", "SimComp", "SimDesign", 
+"simecol", "simex", "simsem", "sirt", "SIS", "sjlabelled", "sjmisc", 
+"sjPlot", "sjstats", "SkewHyperbolic", "skmeans", "slackr", "slam", 
+"SLC", "Sleuth2", "sm", "smbinning", "smoof", "sn", "sna", "snakecase", 
+"snow", "SnowballC", "snowfall", "snowFT", "som", "soma", "sos", 
+"sourcetools", "sp", "spacetime", "spam", "sparcl", "SparseGrid", 
+"sparseLDA", "SparseM", "sparsio", "spatial", "spatstat", "spatstat.data", 
+"spatstat.utils", "spc", "spd", "spdep", "speedglm", "sphet", 
+"splancs", "splm", "spls", "sqldf", "sROC", "stabledist", "stabs", 
+"StanHeaders", "startupmsg", "StatMatch", "statmod", "statnet", 
+"statnet.common", "steepness", "stepPlr", "stinepack", "stringdist", 
+"stringi", "stringr", "strucchange", "subselect", "subsemble", 
+"sudoku", "SuperLearner", "superpc", "SuppDists", "survey", "survival", 
+"svd", "svglite", "svGUI", "svUnit", "svyPVpack", "SwarmSVM", 
+"SweaveListingUtils", "systemfit", "tables", "tabplot", "tabplotd3", 
+"TAM", "tcltk2", "tclust", "TeachingDemos", "tensor", "tensorA", 
+"tensorflow", "tergm", "testit", "testthat", "texreg", "tfestimators", 
+"tfruns", "tgp", "TH.data", "threejs", "tibble", "tidyr", "tidyselect", 
+"tikzDevice", "timeDate", "timereg", "timeSeries", "tis", "tkrplot", 
+"tm", "tmap", "TMB", "tmvtnorm", "tnam", "TransferEntropy", "tree", 
+"trimcluster", "tripack", "truncdist", "truncnorm", "truncreg", 
+"trust", "TSA", "tseries", "tseriesEntropy", "tsna", "TSP", "TTR", 
+"tufte", "tuneR", "tweedie", "ucminf", "uniReg", "unmarked", 
+"urca", "uuid", "V8", "VarianceGamma", "vars", "vcd", "vcdExtra", 
 "Vdgraph", "vegan", "verification", "VGAM", "VGAMdata", "VIM", 
 "VIMGUI", "VineCopula", "vioplot", "viridis", "viridisLite", 
 "visNetwork", "vtreat", "wavelets", "waveslim", "wbstats", "webp", 
 "webshot", "WGCNA", "WhatIf", "whisker", "whoami", "withr", "woe", 
-"wordcloud", "WrightMap", "WriteXLS", 
-"wskm", "wsrf", "xergm", "xergm.common", 
-"xkcd", "XLConnect", "XLConnectJars", "XML", "xml2", "xtable", 
-"xts", "YaleToolkit", "yaml", "yarrr", "zeallot", "Zelig", "zip", 
-"zipcode", "zoo", "ztable")
+"wordcloud", "WrightMap", "WriteXLS", "wskm", "wsrf", "xergm", 
+"xergm.common", "xkcd", "XLConnect", "XLConnectJars", "XML", 
+"xml2", "xtable", "xts", "YaleToolkit", "yaml", "yarrr", "zeallot", 
+"Zelig", "zip", "zipcode", "zoo", "ztable", "getPass", "lineprof", 
+"mapmate", "miniCRAN", "NMOF", "odbc", "recosystem", "redpen", 
+"rgeoapi", "rgp", "rgpui", "RSAP", "scrypt", "smooth", "stR", 
+"Boom", "BoomSpikeSlab", "bsts", "CausalImpact", "cli", "ClusterR", 
+"emmeans", "FD", "fromo", "gdalUtils", "geojson", "geojsonio", 
+"geojsonlint", "geometry", "ggridges", "installr", "inum", "jqr", 
+"jsonvalidate", "libcoin", "magic", "manipulateWidget", "mapview", 
+"moments", "NADA", "OceanView", "OpenImageR", "osmar", "pillar", 
+"plot3Drgl", "protolite", "ReporteRs", "ReporteRsjars", "rmapshaper", 
+"satellite", "sf", "spData", "SQUAREM", "tiff", "tmaptools", 
+"translations", "udunits2", "units", "uroot", "utf8", "xfun", 
+"zCompositions")
+```
 
-# install.packages(packages, dependencies = TRUE)
+Choose the method below suiting you the best to install the packages.
 
+Failsafe loop:
+
+```r
 ret <- lapply(packages, function(x) {
   if (!(x %in% rownames(installed.packages()))) {
     install.packages(x)
@@ -369,6 +410,78 @@ ret <- lapply(packages, function(x) {
     cat("Skipping ", x, "\n", sep = "")
   }
 })
+dput(packages[which(!(packages %in% rownames(installed.packages())))]) # Prints failed packages
+```
+
+Install all packages from binaries, Windows:
+
+```r
+# install.packages(packages, dependencies = TRUE)
+dput(packages[which(!(packages %in% rownames(installed.packages())))]) # Prints failed packages
+```
+
+Install all packages from source, Windows or Linux, please specify number of cores because it could take several hours and/or might end up in an endless loop:
+
+```r
+# install.packages(packages, dependencies = TRUE, type = "source", Ncpus = 8)
+dput(packages[which(!(packages %in% rownames(installed.packages())))]) # Prints failed packages
+```
+
+Suicidal failsafe loop which attempts to install packages one by one:
+
+```r
+ret <- lapply(packages, function(x) {
+  if (!(x %in% rownames(installed.packages()))) {
+    install.packages(x)
+  } else {
+    cat("Skipping ", x, "\n", sep = "")
+  }
+})
+dput(packages[which(!(packages %in% rownames(installed.packages())))]) # Prints failed packages
+```
+
+## Attempt Again to Install Packages
+
+This section applies only if you really need to install the failed packages. To attempt to reinstall again the failed packages, you can choose one of the following:
+
+Failsafe loop:
+
+```r
+ret <- lapply(packages[which(!(packages %in% rownames(installed.packages())))], function(x) {
+  if (!(x %in% rownames(installed.packages()))) {
+    install.packages(x)
+  } else {
+    cat("Skipping ", x, "\n", sep = "")
+  }
+})
+dput(packages[which(!(packages %in% rownames(installed.packages())))]) # Prints failed packages
+```
+
+Install all packages from binaries, Windows:
+
+```r
+# install.packages(packages[which(!(packages %in% rownames(installed.packages())))], dependencies = TRUE)
+dput(packages[which(!(packages %in% rownames(installed.packages())))]) # Prints failed packages
+```
+
+Install all packages from source, Windows or Linux, please specify number of cores because it could take several hours and/or might end up in an endless loop:
+
+```r
+# install.packages(packages[which(!(packages %in% rownames(installed.packages())))], dependencies = TRUE, type = "source", Ncpus = 8)
+dput(packages[which(!(packages %in% rownames(installed.packages())))]) # Prints failed packages
+```
+
+Suicidal failsafe loop which attempts to install packages one by one:
+
+```r
+ret <- lapply(packages[which(!(packages %in% rownames(installed.packages())))], function(x) {
+  if (!(x %in% rownames(installed.packages()))) {
+    install.packages(x)
+  } else {
+    cat("Skipping ", x, "\n", sep = "")
+  }
+})
+dput(packages[which(!(packages %in% rownames(installed.packages())))]) # Prints failed packages
 ```
 
 ## Extra packages
@@ -387,8 +500,6 @@ Get even more packages below (success rate not guaranteed for Linux systems, as 
 
 ```r
 devtools::install_github("cmpolis/datacomb", subdir = "pkg", ref = "1.1.2")
-install.packages(c("getPass", "lineprof", "mapmate", "miniCRAN", "NMOF", "odbc", "recosystem", "redpen", "rgeoapi", "rgp", "rgpui", "RSAP", "scrypt", "smooth", "stR"))
-install.packages(c("Boom", "BoomSpikeSlab", "bsts", "CausalImpact", "cli", "ClusterR", "emmeans", "FD", "fromo", "gdalUtils", "geojson", "geojsonio", "geojsonlint", "geometry", "getPass", "ggridges", "installr", "inum", "jqr", "jsonvalidate", "libcoin", "lineprof", "magic", "manipulateWidget", "mapmate", "mapview", "miniCRAN", "moments", "NADA", "NMOF", "OceanView", "odbc", "OpenImageR", "osmar", "pillar", "plot3Drgl", "protolite", "recosystem", "redpen", "ReporteRs", "ReporteRsjars", "rgeoapi", "rgp", "rgpui", "rmapshaper", "RSAP", "satellite", "scrypt", "sf", "smooth", "spData", "SQUAREM", "stR", "tiff", "tmaptools", "translations", "udunits2", "units", "uroot", "utf8", "xfun", "zCompositions"))
 devtools::install_github("ficonsulting/RInno", build_vignettes = TRUE)
 ```
 
