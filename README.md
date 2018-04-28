@@ -38,7 +38,7 @@ GPU will activate the following:
 
 ## Getting Maximum Performance in R
 
-To get the maximum performance in R (+0 to 10%, depending on the library), please change the following:
+To get the maximum performance in R (+0 to 10%, depending on the library), please change the following in the file `/etc/x64/Makeconf`:
 
 ```
 CFLAGS = -O2 -Wall $(DEBUGFLAG) -std=gnu99 -mtune=generic
