@@ -416,18 +416,18 @@ dput(packages[which(!(packages %in% rownames(installed.packages())))]) # Prints 
 Install all packages from binaries, Windows:
 
 ```r
-# install.packages(packages, dependencies = TRUE)
+install.packages(packages, dependencies = TRUE, Ncpus = 8) # Change Ncpus to your number of threads
 dput(packages[which(!(packages %in% rownames(installed.packages())))]) # Prints failed packages
 ```
 
-Install all packages from source, Windows or Linux, please specify number of cores because it could take several hours and/or might end up in an endless loop:
+Install all packages from source, Windows or Linux, please specify number of cores because it could take several hours and/or might end up in an endless loop (it will be an endless loop in Windows in most cases):
 
 ```r
-# install.packages(packages, dependencies = TRUE, type = "source", Ncpus = 8) # Change Ncpus to your number of threads
+install.packages(packages, dependencies = TRUE, type = "source", Ncpus = 8) # Change Ncpus to your number of threads
 dput(packages[which(!(packages %in% rownames(installed.packages())))]) # Prints failed packages
 ```
 
-Suicidal failsafe loop which attempts to install packages one by one:
+This might endlessly loop when attempting to install packages one by one:
 
 ```r
 ret <- lapply(packages, function(x) {
@@ -460,14 +460,14 @@ dput(packages[which(!(packages %in% rownames(installed.packages())))]) # Prints 
 Install all packages from binaries, Windows:
 
 ```r
-# install.packages(packages[which(!(packages %in% rownames(installed.packages())))], dependencies = TRUE)
+install.packages(packages[which(!(packages %in% rownames(installed.packages())))], dependencies = TRUE, Ncpus = 8) # Change Ncpus to your number of threads
 dput(packages[which(!(packages %in% rownames(installed.packages())))]) # Prints failed packages
 ```
 
 Install all packages from source, Windows or Linux, please specify number of cores because it could take several hours and/or might end up in an endless loop:
 
 ```r
-# install.packages(packages[which(!(packages %in% rownames(installed.packages())))], dependencies = TRUE, type = "source", Ncpus = 8) # Change Ncpus to your number of threads
+install.packages(packages[which(!(packages %in% rownames(installed.packages())))], dependencies = TRUE, type = "source", Ncpus = 8) # Change Ncpus to your number of threads
 dput(packages[which(!(packages %in% rownames(installed.packages())))]) # Prints failed packages
 ```
 
