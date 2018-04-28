@@ -443,7 +443,7 @@ xgbdl::xgb.dl(compiler = "gcc", commit = "017acf5", use_avx = TRUE, use_gpu = TR
 Then run for a standard LightGBM installation along with some of my packages to make life easier:
 
 ```r
-lgbdl::lgb.dl(commit = "b6db7e2", compiler = "gcc")
+lgbdl::lgb.dl(commit = "4967709", compiler = "gcc")
 devtools::install_github("Laurae2/Laurae")
 devtools::install_github("Laurae2/LauraeParallel")
 devtools::install_github("Laurae2/LauraeDS")
