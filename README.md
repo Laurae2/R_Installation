@@ -524,7 +524,7 @@ xgbdl::xgb.dl(compiler = "Visual Studio 14 2015 Win64", commit = "017acf5", use_
 Then run for a standard LightGBM installation along with some of my packages to make life easier (change the compiler and commit if needed):
 
 ```r
-lgbdl::lgb.dl(commit = "b6db7e2", compiler = "vs")
+lgbdl::lgb.dl(commit = "4967709", compiler = "vs")
 ```
 
 ```r
