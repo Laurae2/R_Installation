@@ -1,6 +1,6 @@
 # R Installation - Windows / Debian / Ubuntu Version
 
-**Last tested : R 3.5.0, 2018/04/28 (April 28, 2018)**
+**Last tested : R 3.5.0, 2018/05/02 (May 02, 2018)**
 
 R packages for installation, the Windows / Debian / Ubuntu version.
 
@@ -10,41 +10,41 @@ This document helps you install over 1,000 packages.
 
 Validation on Windows operating systems:
 
-| Operating System | Success |
-| --- | :--- |
-| Windows 10 (1803) | :interrobang: Unknown... |
-| Windows 10 (1709) | :heavy_check_mark: Pass! |
-| Windows 10 (1703) | :heavy_check_mark: Pass! |
-| Windows 10 (1607) | :heavy_check_mark: Pass! |
-| Windows 10 (1511) | :heavy_check_mark: Pass! |
-| Windows 10 (1507) | :heavy_check_mark: Pass! |
-| Windows Server 2016 | :heavy_check_mark: Pass! |
-| Windows Server 2012 R2 | :heavy_check_mark: Pass! |
-| Windows 8.1 | :heavy_check_mark: Pass! |
-| Windows Server 2012 | :heavy_check_mark: Pass! |
-| Windows 7 | :heavy_check_mark: Pass! |
-| Windows Server 2008 R2 | :heavy_check_mark: Pass! |
-| Windows Vista | :heavy_exclamation_mark: Not fully passing! |
-| Windows XP | :heavy_exclamation_mark: Not fully passing! |
+| Operating System | Success | R Version |
+| --- | --- | --- |
+| Windows 10 (1803) | :interrobang: Unknown... | :trident: None yet! |
+| Windows 10 (1709) | :heavy_check_mark: Pass! | :100: R 3.5.0, R 3.4.4 |
+| Windows 10 (1703) | :heavy_check_mark: Pass! | :100: R 3.5.0, R 3.4.4 |
+| Windows 10 (1607) | :heavy_check_mark: Pass! | :100: R 3.5.0, R 3.4.4 |
+| Windows 10 (1511) | :heavy_check_mark: Pass! | :100: R 3.5.0, R 3.4.4 |
+| Windows 10 (1507) | :heavy_check_mark: Pass! | :100: R 3.5.0, R 3.4.4 |
+| Windows Server 2016 | :heavy_check_mark: Pass! | :100: R 3.5.0, R 3.4.4 |
+| Windows Server 2012 R2 | :heavy_check_mark: Pass! | :100: R 3.5.0, R 3.4.4 |
+| Windows 8.1 | :heavy_check_mark: Pass! | :100: R 3.5.0, R 3.4.4 |
+| Windows Server 2012 | :heavy_check_mark: Pass! | :100: R 3.5.0, R 3.4.4 |
+| Windows 7 | :heavy_check_mark: Pass! | :100: R 3.5.0, R 3.4.4 |
+| Windows Server 2008 R2 | :heavy_check_mark: Pass! | :100: R 3.5.0, R 3.4.4 |
+| Windows Vista | :heavy_exclamation_mark: Not fully passing! | :100: R 3.5.0, R 3.4.4 |
+| Windows XP | :heavy_exclamation_mark: Not fully passing! | :100: R 3.5.0, R 3.4.4 |
 
 Validation on Ubuntu operating systems:
 
-| Operating System | Success |
-| --- | :--- |
-| Ubuntu 18.04 | :interrobang: Unknown... |
-| Ubuntu 17.10 | :heavy_check_mark: Pass! |
-| Ubuntu 17.04 | :heavy_check_mark: Pass! |
-| Ubuntu 16.10 | :heavy_check_mark: Pass! |
-| Ubuntu 16.04 | :heavy_check_mark: Pass! |
-| Ubuntu 15.10 | :interrobang: Unknown... |
-| Ubuntu 14.10 | :interrobang: Unknown... |
-| Ubuntu 14.04 | :interrobang: Unknown... |
+| Operating System | Success | R Version |
+| --- | --- | --- |
+| Ubuntu 18.04 | :interrobang: Unknown... | :trident: None yet! |
+| Ubuntu 17.10 | :heavy_check_mark: Pass! | :100: R 3.5.0, R 3.4.4 |
+| Ubuntu 17.04 | :heavy_check_mark: Pass! | :100: R 3.5.0, R 3.4.4 |
+| Ubuntu 16.10 | :heavy_check_mark: Pass! | :100: R 3.5.0, R 3.4.4 |
+| Ubuntu 16.04 | :heavy_check_mark: Pass! | :100: R 3.5.0, R 3.4.4 |
+| Ubuntu 15.10 | :interrobang: Unknown... | :trident: None yet! |
+| Ubuntu 14.10 | :interrobang: Unknown... | :trident: None yet! |
+| Ubuntu 14.04 | :interrobang: Unknown... | :trident: None yet! |
 
 Validation on SUSE operating systems:
 
-| Operating System | Success |
-| --- | :--- |
-| SUSE 12 | :heavy_multiplication_x: On the road to test... |
+| Operating System | Success | R Version |
+| --- | --- | --- |
+| SUSE 12 | :heavy_multiplication_x: On the road to test... | :100: R 3.5.0 |
 
 ## Windows Pre-Requisites
 
@@ -358,7 +358,7 @@ packages <- c("abind", "acepack", "actuar", "ada", "adabag", "ade4", "ade4TkGUI"
 "png", "poistweedie", "poLCA", "polspline", "polyclip", "polycor", 
 "polynom", "prabclus", "pracma", "praise", "PredictABEL", "prediction", 
 "prefmod", "prettyunits", "prim", "pROC", "processx", "prodlim", 
-"profdpm", "profileModel", "progress", "propagate", "proto", 
+"profdpm", "profileModel", "propagate", "proto", 
 "proxy", "pryr", "pscl", "pso", "pspline", "psych", "psychotools", 
 "psychotree", "purrr", "pvclust", "pwr", "qap", "qcc", "qgraph", 
 "QRAGadget", "qrng", "quadprog", "quantmod", "quantreg", "questionr", 
@@ -535,6 +535,7 @@ dput(packages[which(!(packages %in% rownames(installed.packages())))]) # Prints 
 ## Extra packages
 
 ```r
+devtools::install_github("r-lib/progress@a2678e8") # Progress bars with bug fix
 devtools::install_github("Laurae2/woe")
 devtools::install_github("Laurae2/xgbdl")
 devtools::install_github("Laurae2/lgbdl")
