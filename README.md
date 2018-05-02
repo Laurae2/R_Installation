@@ -8,6 +8,44 @@ Works well for Windows. Works well for Linux (Debian/Ubuntu-like).
 
 This document helps you install over 1,000 packages.
 
+Validation on Windows operating systems:
+
+| Operating System | Success |
+| --- | :--- |
+| Windows 10 (1803) | :interrobang: Unknown... |
+| Windows 10 (1709) | :heavy_check_mark: Pass! |
+| Windows 10 (1703) | :heavy_check_mark: Pass! |
+| Windows 10 (1607) | :heavy_check_mark: Pass! |
+| Windows 10 (1511) | :heavy_check_mark: Pass! |
+| Windows 10 (1507) | :heavy_check_mark: Pass! |
+| Windows Server 2016 | :heavy_check_mark: Pass! |
+| Windows Server 2012 R2 | :heavy_check_mark: Pass! |
+| Windows 8.1 | :heavy_check_mark: Pass! |
+| Windows Server 2012 | :heavy_check_mark: Pass! |
+| Windows 7 | :heavy_check_mark: Pass! |
+| Windows Server 2008 R2 | :heavy_check_mark: Pass! |
+| Windows Vista | :heavy_exclamation_mark: Not fully passing! |
+| Windows XP | :heavy_exclamation_mark: Not fully passing! |
+
+Validation on Ubuntu operating systems:
+
+| Operating System | Success |
+| --- | :--- |
+| Ubuntu 18.04 | :interrobang: Unknown... |
+| Ubuntu 17.10 | :heavy_check_mark: Pass! |
+| Ubuntu 17.04 | :heavy_check_mark: Pass! |
+| Ubuntu 16.10 | :heavy_check_mark: Pass! |
+| Ubuntu 16.04 | :heavy_check_mark: Pass! |
+| Ubuntu 15.10 | :interrobang: Unknown... |
+| Ubuntu 14.10 | :interrobang: Unknown... |
+| Ubuntu 14.04 | :interrobang: Unknown... |
+
+Validation on SUSE operating systems:
+
+| Operating System | Success |
+| --- | :--- |
+| SUSE 12 | :heavy_multiplication_x: On the road to test... |
+
 ## Windows Pre-Requisites
 
 Windows requires the following for this task:
@@ -103,6 +141,8 @@ wget https://download2.rstudio.org/rstudio-server-1.1.442-amd64.deb
 sudo gdebi rstudio-server-1.1.442-amd64.deb
 ```
 
+If you get an error on `libjq-dev`, this is normal: it is a Ubuntu 17+ exclusive package.
+
 ## Install Python (Intel Distribution)
 
 For GPU, supposes CUDA 9, CuDNN 7, and Python 3.5 (Anaconda 5.1).
@@ -167,6 +207,12 @@ Esc + : + wq! + Enter can help a lot to quit vi.
 
 ## Install lot of packages
 
+If using Linux: test Java compilation so you do not get that absurd `fatal error: jni.h: No such file or directory`:
+
+```r
+R CMD javareconf
+```
+
 DO NOT DO the following using RStudio. Please use a raw R session (RGui for Windows).
 
 Install two specific BioConductor packages:
@@ -176,9 +222,11 @@ source("http://bioconductor.org/biocLite.R")
 biocLite(c("graph", "RBGL"))
 ```
 
-Write "y" for all required prompts. Use 0-Cloud when prompted if you have no idea what you are doing to download packages.
+Accept all prompts to force compilation.
 
-Some packages might fail. Ignore.
+For everything below, accept all required prompts. Use 0-Cloud when prompted if you have no idea what you are doing to download packages.
+
+Some packages might fail. Ignore if it is not critical to your use-case.
 
 ```r
 packages <- c("abind", "acepack", "actuar", "ada", "adabag", "ade4", "ade4TkGUI", 
