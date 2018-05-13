@@ -31,7 +31,7 @@ Validation on Ubuntu operating systems:
 
 | Operating System | Success | R Version |
 | --- | --- | --- |
-| Ubuntu 18.04 | :interrobang: Unknown... | :trident: None yet! |
+| Ubuntu 18.04 | :heavy_exclamation_mark: Fails! | :100: R 3.5.0, R 3.4.4 |
 | Ubuntu 17.10 | :heavy_check_mark: Pass! | :100: R 3.5.0, R 3.4.4 |
 | Ubuntu 17.04 | :heavy_check_mark: Pass! | :100: R 3.5.0, R 3.4.4 |
 | Ubuntu 16.10 | :heavy_check_mark: Pass! | :100: R 3.5.0, R 3.4.4 |
