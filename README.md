@@ -561,13 +561,13 @@ Run in RStudio, not Rgui (the xgboost step can fail in Rgui but not in RStudio).
 If CPU, you get xgboost enhanced GLM and AVX instructions (change the compiler, commit, and AVX if needed):
 
 ```r
-xgbdl::xgb.dl(compiler = "Visual Studio 15 2017 Win64", commit = "017acf5", use_avx = TRUE, use_gpu = FALSE)
+xgbdl::xgb.dl(compiler = "Visual Studio 15 2017 Win64", commit = "3ee725e", use_avx = TRUE, use_gpu = FALSE)
 ```
 
 If GPU, you get GPU enabled xgboost, enhanced GLM, and AVX instructions (change the compiler, commit, and AVX if needed):
 
 ```r
-xgbdl::xgb.dl(compiler = "Visual Studio 14 2015 Win64", commit = "017acf5", use_avx = TRUE, use_gpu = TRUE)
+xgbdl::xgb.dl(compiler = "Visual Studio 14 2015 Win64", commit = "3ee725e", use_avx = TRUE, use_gpu = TRUE)
 ```
 
 Then run for a standard LightGBM installation along with some of my packages to make life easier (change the compiler and commit if needed):
