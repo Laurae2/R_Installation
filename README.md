@@ -1,12 +1,18 @@
 # R Installation - Windows / Debian / Ubuntu Version
 
-**Last tested : R 3.5.0, 2018/05/02 (May 02, 2018)**
+**Last tested : R 3.5.0, 2018/05/21 (May 21, 2018)**
 
 R packages for installation, the Windows / Debian / Ubuntu version.
 
 Works well for Windows. Works well for Linux (Debian/Ubuntu-like).
 
 This document helps you install over 1,000 packages.
+
+Validation on Windows Subsystem for Linux (tutorial coming soon...):
+
+| Operating System | Success | R Version |
+| --- | --- | --- |
+| Ubuntu 16.04 | :heavy_check_mark: Pass! | :100: R 3.5.0, R 3.4.4 |
 
 Validation on Windows operating systems:
 
@@ -561,19 +567,19 @@ Run in RStudio, not Rgui (the xgboost step can fail in Rgui but not in RStudio).
 If CPU, you get xgboost enhanced GLM and AVX instructions (change the compiler, commit, and AVX if needed):
 
 ```r
-xgbdl::xgb.dl(compiler = "Visual Studio 15 2017 Win64", commit = "3ee725e", use_avx = TRUE, use_gpu = FALSE)
+xgbdl::xgb.dl(compiler = "Visual Studio 15 2017 Win64", commit = "8f6aadd", use_avx = TRUE, use_gpu = FALSE)
 ```
 
 If GPU, you get GPU enabled xgboost, enhanced GLM, and AVX instructions (change the compiler, commit, and AVX if needed):
 
 ```r
-xgbdl::xgb.dl(compiler = "Visual Studio 14 2015 Win64", commit = "3ee725e", use_avx = TRUE, use_gpu = TRUE)
+xgbdl::xgb.dl(compiler = "Visual Studio 14 2015 Win64", commit = "8f6aadd", use_avx = TRUE, use_gpu = TRUE)
 ```
 
 Then run for a standard LightGBM installation along with some of my packages to make life easier (change the compiler and commit if needed):
 
 ```r
-lgbdl::lgb.dl(commit = "4967709", compiler = "vs")
+lgbdl::lgb.dl(commit = "3f54429", compiler = "vs")
 ```
 
 ```r
@@ -591,19 +597,19 @@ Run in RStudio, not Rgui (the xgboost step can fail in Rgui but not in RStudio).
 If CPU, you get xgboost enhanced GLM and AVX instructions:
 
 ```r
-xgbdl::xgb.dl(compiler = "gcc", commit = "017acf5", use_avx = TRUE, use_gpu = TRUE)
+xgbdl::xgb.dl(compiler = "gcc", commit = "8f6aadd", use_avx = TRUE, use_gpu = TRUE)
 ```
 
 If GPU, you get GPU enabled xgboost, enhanced GLM, and AVX instructions:
 
 ```r
-xgbdl::xgb.dl(compiler = "gcc", commit = "017acf5", use_avx = TRUE, use_gpu = TRUE)
+xgbdl::xgb.dl(compiler = "gcc", commit = "8f6aadd", use_avx = TRUE, use_gpu = TRUE)
 ```
 
 Then run for a standard LightGBM installation along with some of my packages to make life easier:
 
 ```r
-lgbdl::lgb.dl(commit = "4967709", compiler = "gcc")
+lgbdl::lgb.dl(commit = "3f54429", compiler = "gcc")
 devtools::install_github("Laurae2/Laurae")
 devtools::install_github("Laurae2/LauraeParallel")
 devtools::install_github("Laurae2/LauraeDS")
