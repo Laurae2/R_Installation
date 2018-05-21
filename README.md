@@ -80,6 +80,14 @@ GPU will activate the following:
 * GPU enabled Tensorflow 1.6
 * GPU enabled xgboost
 
+PATH requires the following, if assuming default installation locations:
+
+* C:\Rtools\bin
+* C:\Rtools\mingw_64\bin
+* C:\Program Files (x86)\Common Files\Oracle\Java\javapath
+* C:\Program Files\CMake\bin
+* C:\Program Files\Git\cmd
+
 ## Getting Maximum Performance in R
 
 To get the maximum performance in R (+0 to 10%, depending on the library), please change the following in the file `/etc/x64/Makeconf`:
