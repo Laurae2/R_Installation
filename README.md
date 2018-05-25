@@ -1,6 +1,6 @@
 # R Installation - Windows / Debian / Ubuntu Version
 
-**Last tested : R 3.5.0, 2018/05/25 (May 21, 2018)**
+**Last tested : R 3.5.0, 2018/05/25 (May 25, 2018)**
 
 R packages for installation, the Windows / Debian / Ubuntu version.
 
@@ -18,7 +18,7 @@ Validation on Windows operating systems:
 
 | Operating System | Success | R Version |
 | --- | --- | --- |
-| Windows 10 (1803) | :interrobang: Unknown... | :trident: None yet! |
+| Windows 10 (1803) | :heavy_check_mark: Pass! | :100: R 3.5.0, R 3.4.4 |
 | Windows 10 (1709) | :heavy_check_mark: Pass! | :100: R 3.5.0, R 3.4.4 |
 | Windows 10 (1703) | :heavy_check_mark: Pass! | :100: R 3.5.0, R 3.4.4 |
 | Windows 10 (1607) | :heavy_check_mark: Pass! | :100: R 3.5.0, R 3.4.4 |
@@ -108,6 +108,11 @@ To perform in Bash shell.
 
 ```sh
 gedit ~/.bashrc
+```
+
+Put the following in the file:
+
+```sh
 export DISPLAY="localhost:0.0"
 export JAVA_HOME=/usr/lib/jvm/java-9-openjdk-amd64
 export PATH=$JAVA_HOME/bin:$PATH
