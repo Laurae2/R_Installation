@@ -469,28 +469,41 @@ packages <- c("TAM", "tclust", "TeachingDemos", "tensor", "tensorA",
               "translations", "udunits2", "units", "uroot", "utf8", "xfun", 
               "zCompositions")
 install.packages(packages[which(!(packages %in% rownames(installed.packages())))], dependencies = TRUE, Ncpus = parallel::detectCores())
+```
 
-devtools::install_github("r-lib/progress@a2678e8")
+More R packages:
+
+```r
+devtools::install_github("r-lib/progress@a2678e8") # Progress bars with bug fix
 devtools::install_github("Laurae2/woe")
 devtools::install_github("Laurae2/xgbdl")
 devtools::install_github("Laurae2/lgbdl")
 devtools::install_github("twitter/AnomalyDetection")
-devtools::install_github("rstudio/tensorflow@a73c8d6")
-devtools::install_github("rstudio/keras@bc775ac")
-install.packages("reticulate")
-
+devtools::install_github("rstudio/tensorflow@a73c8d6") # reinstall again
+devtools::install_github("rstudio/keras@bc775ac") # reinstall again
+install.packages("reticulate") # reinstall again
 devtools::install_github("cmpolis/datacomb", subdir = "pkg", ref = "1.1.2")
+```
 
-# MODIFY THIS FILE TO ADD -O3 to CXXFLAGS: /usr/lib/R/etc/Makeconf
-xgbdl::xgb.dl(compiler = "gcc", commit = "8f6aadd", use_avx = TRUE, use_gpu = TRUE)
+Modify `/usr/lib/R/etc/Makeconf` for maximum performance for xgboost / LightGBM (+0-10% speed): change -O2 to -O3 to CXXFLAGS
+
+Installining xgboost and LightGBM:
+
+```r
+xgbdl::xgb.dl(compiler = "gcc", commit = "8f6aadd", use_avx = TRUE, use_gpu = FALSE)
 lgbdl::lgb.dl(commit = "3f54429", compiler = "gcc")
-# MODIFY THIS FILE TO PUT BACK -O2 to CXXFLAGS: /usr/lib/R/etc/Makeconf
+```
 
+Modify `/usr/lib/R/etc/Makeconf` for maximum performance for xgboost / LightGBM (+0-10% speed): change back -O3 to -O2 to CXXFLAGS
+
+Install even more packages...:
+
+```r
 devtools::install_github("Laurae2/Laurae")
 devtools::install_github("Laurae2/LauraeParallel")
 devtools::install_github("Laurae2/LauraeDS")
 devtools::install_github("Laurae2/LauraeCE")
-install.packages("https://cran.r-project.org/src/contrib/Archive/tabplot/tabplot_1.1.tar.gz", repos = NULL, type = "source")
+install.packages("https://cran.r-project.org/src/contrib/Archive/tabplot/tabplot_1.1.tar.gz", repos=NULL, type="source") # Further versions are too bad / not reliable / generated unreadable plots
 ```
 
 </p>
@@ -807,30 +820,14 @@ devtools::install_github("twitter/AnomalyDetection")
 devtools::install_github("rstudio/tensorflow@a73c8d6") # reinstall again
 devtools::install_github("rstudio/keras@bc775ac") # reinstall again
 install.packages("reticulate") # reinstall again
-```
-
-Get even more packages below:
-
-```r
 devtools::install_github("cmpolis/datacomb", subdir = "pkg", ref = "1.1.2")
-devtools::install_github("ficonsulting/RInno", build_vignettes = TRUE)
+# devtools::install_github("ficonsulting/RInno", build_vignettes = TRUE) # If you want to build R executable standalones
 ```
 
-For xgboost with CPU:
+Installining xgboost and LightGBM:
 
 ```r
 xgbdl::xgb.dl(compiler = "Visual Studio 15 2017 Win64", commit = "8f6aadd", use_avx = TRUE, use_gpu = FALSE)
-```
-
-For xgboost with GPU:
-
-```r
-xgbdl::xgb.dl(compiler = "Visual Studio 15 2017 Win64", commit = "8f6aadd", use_avx = TRUE, use_gpu = TRUE)
-```
-
-Installining now LightGBM...:
-
-```r
 lgbdl::lgb.dl(commit = "3f54429", compiler = "vs")
 ```
 
@@ -1185,29 +1182,13 @@ devtools::install_github("twitter/AnomalyDetection")
 devtools::install_github("rstudio/tensorflow@a73c8d6") # reinstall again
 devtools::install_github("rstudio/keras@bc775ac") # reinstall again
 install.packages("reticulate") # reinstall again
-```
-
-Get even more packages below:
-
-```r
 devtools::install_github("cmpolis/datacomb", subdir = "pkg", ref = "1.1.2")
 ```
 
-For xgboost with CPU:
+Installining xgboost and LightGBM:
 
 ```r
 xgbdl::xgb.dl(compiler = "gcc", commit = "8f6aadd", use_avx = TRUE, use_gpu = FALSE)
-```
-
-For xgboost with GPU:
-
-```r
-xgbdl::xgb.dl(compiler = "gcc", commit = "8f6aadd", use_avx = TRUE, use_gpu = TRUE)
-```
-
-Installining now LightGBM...:
-
-```r
 lgbdl::lgb.dl(commit = "3f54429", compiler = "gcc")
 ```
 
