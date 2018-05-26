@@ -54,7 +54,7 @@ Validation on SUSE operating systems:
 
 ## Windows Subsystem for Linux (WSL)
 
-<details><summary>REVEAL Windows Subsystem for Linux (WSL) steps</summary>
+<details><summary>:information_desk_person: CLICK THE ARROW TO REVEAL Windows Subsystem for Linux (WSL) steps</summary>
 <p>
 
 Pre-requisites: activate Windows Subsystem for Linux in Additional Features.
@@ -506,12 +506,20 @@ devtools::install_github("Laurae2/LauraeCE")
 install.packages("https://cran.r-project.org/src/contrib/Archive/tabplot/tabplot_1.1.tar.gz", repos=NULL, type="source") # Further versions are too bad / not reliable / generated unreadable plots
 ```
 
+### Step 11: I want to restart from scratch!!!
+
+Run the following as Administrator to fully wipe the Ubuntu installation:
+
+```sh
+wslconfig.exe /u Ubuntu
+```
+
 </p>
 </details>
 
 ## Windows Client / Windows Server
 
-<details><summary>REVEAL Windows Client / Server steps</summary>
+<details><summary>:information_desk_person: CLICK THE ARROW TO REVEAL Windows Client / Server steps</summary>
 <p>
 
 ### Step 1: Check hardware and software pre-requisites
@@ -869,7 +877,7 @@ print(sess.run(okay))
 
 ## Ubuntu 17.10
 
-<details><summary>REVEAL Ubuntu 17.10 steps</summary>
+<details><summary>:information_desk_person: CLICK THE ARROW TO REVEAL Ubuntu 17.10 steps</summary>
 <p>
 
 ### Step 1: Check hardware and software pre-requisites
@@ -1230,6 +1238,8 @@ print(sess.run(okay))
 
 ## Getting Maximum Performance in R
 
+### Compilation Flags
+
 To get the maximum performance in R (+0 to 10%, depending on the library), please change the following in the file `/etc/x64/Makeconf`:
 
 ```
@@ -1257,3 +1267,9 @@ If you are getting unexpected mathematical errors while working in R, reinstall 
 ```
 -O2 -msse2 -mfpmath=sse
 ```
+
+### Compiler Choice
+
+You may want to update the compiler to a more recent version to benefit from newer optimizations, especially on newer CPUs. You may also choose another compiler for performance, such as Intel Compiler.
+
+In addition, you can use a different BLAS to improve the performance of R. Intel MKL is probably the best you can get, but it is not free.
