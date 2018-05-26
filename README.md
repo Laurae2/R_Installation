@@ -206,6 +206,8 @@ wget https://download2.rstudio.org/rstudio-server-1.1.453-amd64.deb
 sudo gdebi rstudio-server-1.1.453-amd64.deb
 ```
 
+Ignore the errors "rsession: no process found" and "Couldn't find an alternative telinit implementation to spawn.".
+
 Inside `/etc/rstudio/rsession.conf`, add the following:
 
 ```sh
