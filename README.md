@@ -83,7 +83,7 @@ export DISPLAY=localhost:0.0
 
 ### Step 3: do all the Anaconda stuff required
 
-To perform in Bash shell.
+To perform in Bash shell. Add Anaconda to PATH, you will need to change it (if you have no idea what are you doing).
 
 ```sh
 curl -O https://repo.continuum.io/archive/Anaconda3-5.1.0-Linux-x86_64.sh
@@ -110,7 +110,7 @@ To perform in Bash shell.
 gedit ~/.bashrc
 ```
 
-Put the following in the file:
+Put the following in the file, change the PATH of R-lib and Anaconda accordingly!:
 
 ```sh
 export DISPLAY="localhost:0.0"
@@ -119,7 +119,7 @@ export PATH=$JAVA_HOME/bin:$PATH
 export PATH="$PATH:/usr/local/lib/R"
 export R_LIBS_USER="/mnt/e/WSL/R-lib/R-3.5.0"
 export R_HOME="/usr/local/lib/R"
-export PATH="$PATH:/path/to/anaconda3/bin"
+export PATH="$PATH:/home/Lolo/anaconda3/bin"
 ```
 
 Then reset `~/.bashrc`:
