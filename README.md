@@ -1067,7 +1067,7 @@ git checkout 8f6aadd
 cd R-package
 ```
 
-In src/Makevars.in, add `-DUSE_AVX=ON` at line 11:
+In src/install.libs.R, add `-DUSE_AVX=ON` at line 11:
 
 ```
 gedit src/Makevars.in
