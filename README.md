@@ -1,6 +1,6 @@
 # R Installation - Windows / Debian / Ubuntu Version
 
-**Last tested : R 3.5.0, 2018/05/27 (May 27, 2018)**
+**Last tested : R 3.5.0, 2018/06/23 (June 23, 2018)**
 
 R packages for installation, the Windows / Debian / Ubuntu version.
 
@@ -514,6 +514,31 @@ Run the following as Administrator to fully wipe the Ubuntu installation:
 
 ```sh
 wslconfig.exe /u Ubuntu
+```
+
+### Step 12: I want RStudio Server and Desktop Preview!!!
+
+Run the following for RStudio Desktop Preview:
+
+```sh
+sudo apt-get install libclang-3.8-dev libclang-common-3.8-dev libclang-dev libclang1-3.8 libllvm3.8 libobjc-5-dev libobjc4
+wget https://s3.amazonaws.com/rstudio-ide-build/desktop/trusty/amd64/rstudio-1.2.747-amd64.deb
+sudo gdebi rstudio-1.2.747-amd64.deb
+```
+
+Run the following for RStudio Server Preview:
+
+```sh
+sudo apt-get install libclang-3.8-dev libclang-common-3.8-dev libclang-dev libclang1-3.8 libllvm3.8 libobjc-5-dev libobjc4
+wget https://s3.amazonaws.com/rstudio-ide-build/server/trusty/amd64/rstudio-server-1.2.747-amd64.deb
+sudo gdebi rstudio-server-1.2.747-amd64.deb
+```
+
+Do not forget to set R preferences: inside `/etc/rstudio/rsession.conf`, add the following:
+
+```sh
+r-libs-user=/mnt/e/WSL/R-lib/R-3.5.0
+session-timeout-minutes=0
 ```
 
 </p>
@@ -1117,6 +1142,15 @@ Run the following as Administrator to fully wipe the Ubuntu installation:
 
 ```sh
 wslconfig.exe /u Ubuntu
+```
+
+### Can I get rid of RStudio Server / Desktop?
+
+Yes:
+
+```sh
+sudo apt-get remove rstudio-server
+sudo apt-get remove rstudio
 ```
 
 </p>
@@ -1836,6 +1870,31 @@ print(tf.__version__)
 okay = tf.constant("OKAY")
 sess = tf.Session()
 print(sess.run(okay))
+```
+
+### Step 5: I want RStudio Server and Desktop Preview!!!
+
+Run the following for RStudio Desktop Preview:
+
+```sh
+sudo apt-get install libclang-3.8-dev libclang-common-3.8-dev libclang-dev libclang1-3.8 libllvm3.8 libobjc-5-dev libobjc4
+wget https://s3.amazonaws.com/rstudio-ide-build/desktop/trusty/amd64/rstudio-1.2.747-amd64.deb
+sudo gdebi rstudio-1.2.747-amd64.deb
+```
+
+Run the following for RStudio Server Preview:
+
+```sh
+sudo apt-get install libclang-3.8-dev libclang-common-3.8-dev libclang-dev libclang1-3.8 libllvm3.8 libobjc-5-dev libobjc4
+wget https://s3.amazonaws.com/rstudio-ide-build/server/trusty/amd64/rstudio-server-1.2.747-amd64.deb
+sudo gdebi rstudio-server-1.2.747-amd64.deb
+```
+
+Do not forget to set R preferences: inside `/etc/rstudio/rsession.conf`, add the following:
+
+```sh
+r-libs-user=/mnt/e/WSL/R-lib/R-3.5.0
+session-timeout-minutes=0
 ```
 
 </p>
