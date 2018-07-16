@@ -1,6 +1,6 @@
 # R Installation - Windows / Debian / Ubuntu Version
 
-**Last tested : R 3.5.0, 2018/06/23 (June 23, 2018)**
+**Last tested : R 3.5.0, 2018/07/16 (July 16, 2018)**
 
 R packages for installation, the Windows / Debian / Ubuntu version.
 
@@ -1568,6 +1568,7 @@ Esc + : + wq! + Enter can help a lot to quit vi
 To perform in Bash shell.
 
 ```sh
+sudo apt-get install software-properties-common
 sudo add-apt-repository "deb http://cran.rstudio.com/bin/linux/ubuntu $(lsb_release -sc)/"
 gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys E084DAB9
 gpg -a --export E084DAB9 | sudo apt-key add -
