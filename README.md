@@ -52,6 +52,8 @@ Validation on SUSE operating systems:
 | --- | --- | --- |
 | SUSE 12 | :heavy_check_mark: Pass! (Not public) | :100: R 3.5.0 |
 
+The custom parts to change for your own use case are found by searching `# Change this`.
+
 ## Windows Subsystem for Linux (WSL)
 
 <details><summary>:information_desk_person: CLICK THE ARROW TO REVEAL Windows Subsystem for Linux (WSL) steps</summary>
@@ -83,7 +85,7 @@ export DISPLAY=localhost:0.0
 
 ### Step 3: do all the Anaconda stuff required
 
-To perform in Bash shell. Add Anaconda to PATH, you will need to change it (if you have no idea what are you doing).
+To perform in Bash shell. Do NOT add Anaconda to PATH, otherwise you will need to change it (if you have no idea what are you doing).
 
 ```sh
 curl -O https://repo.continuum.io/archive/Anaconda3-5.1.0-Linux-x86_64.sh
@@ -110,16 +112,15 @@ To perform in Bash shell.
 gedit ~/.bashrc
 ```
 
-Put the following in the file, change the PATH of R-lib and Anaconda accordingly!:
+Put the following in the file, change the PATH of R-lib and get rid of Anaconda if existing accordingly!:
 
 ```sh
 export DISPLAY="localhost:0.0"
 export JAVA_HOME=/usr/lib/jvm/java-9-openjdk-amd64
 export PATH=$JAVA_HOME/bin:$PATH
 export PATH="$PATH:/usr/local/lib/R"
-export R_LIBS_USER="/mnt/e/WSL/R-lib/R-3.5.0"
 export R_HOME="/usr/local/lib/R"
-export PATH="$PATH:/home/Lolo/anaconda3/bin"
+export R_LIBS_USER="/mnt/e/WSL/R-lib/R-3.5.0" # Change this
 ```
 
 Then reset `~/.bashrc`:
@@ -211,7 +212,7 @@ Ignore the errors "rsession: no process found" and "Couldn't find an alternative
 Inside `/etc/rstudio/rsession.conf`, add the following:
 
 ```sh
-r-libs-user=/mnt/e/WSL/R-lib/R-3.5.0
+r-libs-user=/mnt/e/WSL/R-lib/R-3.5.0 # Change this
 session-timeout-minutes=0
 ```
 
@@ -537,7 +538,7 @@ sudo gdebi rstudio-server-1.2.747-amd64.deb
 Do not forget to set R preferences: inside `/etc/rstudio/rsession.conf`, add the following:
 
 ```sh
-r-libs-user=/mnt/e/WSL/R-lib/R-3.5.0
+r-libs-user=/mnt/e/WSL/R-lib/R-3.5.0 # Change this
 session-timeout-minutes=0
 ```
 
@@ -616,7 +617,7 @@ Intel Compilers by default, should be in: /opt/intel/compilers_and_libraries_201
 
 ### Step 4: do all the Anaconda stuff required
 
-To perform in Bash shell. Add Anaconda to PATH, you will need to change it (if you have no idea what are you doing).
+To perform in Bash shell. Do NOT add Anaconda to PATH, otherwise you will need to change it (if you have no idea what are you doing).
 
 ```sh
 curl -O https://repo.continuum.io/archive/Anaconda3-5.1.0-Linux-x86_64.sh
@@ -650,10 +651,9 @@ export DISPLAY="localhost:0.0"
 export JAVA_HOME=/usr/lib/jvm/java-9-openjdk-amd64
 export PATH=$JAVA_HOME/bin:$PATH
 export PATH="$PATH:/usr/local/lib/R"
-export R_LIBS_USER="/mnt/e/WSL/R-lib/R-3.5.0"
+export R_LIBS_USER="/mnt/e/WSL/R-lib/R-3.5.0" # Change this
 export R_HOME="/usr/local/lib/R"
-export PATH="$PATH:/home/Lolo/anaconda3/bin"
-source /opt/intel/compilers_and_libraries_2018.2.199/linux/bin/compilervars.sh intel64
+source /opt/intel/compilers_and_libraries_2018.2.199/linux/bin/compilervars.sh intel64 # Change this
 export CC="icc"
 export CXX="icpc"
 export F77="ifort"
@@ -814,7 +814,7 @@ Ignore the errors "rsession: no process found" and "Couldn't find an alternative
 Inside `/etc/rstudio/rsession.conf`, add the following:
 
 ```sh
-r-libs-user=/mnt/e/WSL/R-lib/R-3.5.0
+r-libs-user=/mnt/e/WSL/R-lib/R-3.5.0 # Change this
 session-timeout-minutes=0
 ```
 
@@ -841,7 +841,7 @@ You can now install R packages. In a R console from Bash:
 And now the long list... if it hangs for more than 45 minutes (without anything that seem updating in your console), press Ctrl+C several times and resume from where you were interrupted (you better run block by block the code):
 
 ```r
-.libPaths("/mnt/e/WSL/R-lib/R-3.5.0")
+.libPaths("/mnt/e/WSL/R-lib/R-3.5.0") # Change this
 install.packages("devtools", dependencies = TRUE)
 install.packages("tcltk2", dependencies = TRUE)
 source("http://bioconductor.org/biocLite.R")
@@ -1894,7 +1894,7 @@ sudo gdebi rstudio-server-1.2.747-amd64.deb
 Do not forget to set R preferences: inside `/etc/rstudio/rsession.conf`, add the following:
 
 ```sh
-r-libs-user=/mnt/e/WSL/R-lib/R-3.5.0
+r-libs-user=/mnt/e/WSL/R-lib/R-3.5.0 # Change this
 session-timeout-minutes=0
 ```
 
