@@ -12,36 +12,36 @@ Validation on Windows Subsystem for Linux:
 
 | Operating System | Success | R Version |
 | --- | --- | --- |
-| Ubuntu 16.04 | :heavy_check_mark: Pass! | :100: R 3.5.0, R 3.4.4 |
+| Ubuntu 16.04 | :heavy_check_mark: Pass! | :100: R 3.5.x, R 3.4.4 |
 
 Validation on Windows operating systems:
 
 | Operating System | Success | R Version |
 | --- | --- | --- |
-| Windows 10 (1803) | :heavy_check_mark: Pass! | :100: R 3.5.0, R 3.4.4 |
-| Windows 10 (1709) | :heavy_check_mark: Pass! | :100: R 3.5.0, R 3.4.4 |
-| Windows 10 (1703) | :heavy_check_mark: Pass! | :100: R 3.5.0, R 3.4.4 |
-| Windows 10 (1607) | :heavy_check_mark: Pass! | :100: R 3.5.0, R 3.4.4 |
-| Windows 10 (1511) | :heavy_check_mark: Pass! | :100: R 3.5.0, R 3.4.4 |
-| Windows 10 (1507) | :heavy_check_mark: Pass! | :100: R 3.5.0, R 3.4.4 |
-| Windows Server 2016 | :heavy_check_mark: Pass! | :100: R 3.5.0, R 3.4.4 |
-| Windows Server 2012 R2 | :heavy_check_mark: Pass! | :100: R 3.5.0, R 3.4.4 |
-| Windows 8.1 | :heavy_check_mark: Pass! | :100: R 3.5.0, R 3.4.4 |
-| Windows Server 2012 | :heavy_check_mark: Pass! | :100: R 3.5.0, R 3.4.4 |
-| Windows 7 | :heavy_check_mark: Pass! | :100: R 3.5.0, R 3.4.4 |
-| Windows Server 2008 R2 | :heavy_check_mark: Pass! | :100: R 3.5.0, R 3.4.4 |
-| Windows Vista | :heavy_exclamation_mark: Not fully passing! | :100: R 3.5.0, R 3.4.4 |
-| Windows XP | :heavy_exclamation_mark: Not fully passing! | :100: R 3.5.0, R 3.4.4 |
+| Windows 10 (1803) | :heavy_check_mark: Pass! | :100: R 3.5.x, R 3.4.4 |
+| Windows 10 (1709) | :heavy_check_mark: Pass! | :100: R 3.5.x, R 3.4.4 |
+| Windows 10 (1703) | :heavy_check_mark: Pass! | :100: R 3.5.x, R 3.4.4 |
+| Windows 10 (1607) | :heavy_check_mark: Pass! | :100: R 3.5.x, R 3.4.4 |
+| Windows 10 (1511) | :heavy_check_mark: Pass! | :100: R 3.5.x, R 3.4.4 |
+| Windows 10 (1507) | :heavy_check_mark: Pass! | :100: R 3.5.x, R 3.4.4 |
+| Windows Server 2016 | :heavy_check_mark: Pass! | :100: R 3.5.x, R 3.4.4 |
+| Windows Server 2012 R2 | :heavy_check_mark: Pass! | :100: R 3.5.x, R 3.4.4 |
+| Windows 8.1 | :heavy_check_mark: Pass! | :100: R 3.5.x, R 3.4.4 |
+| Windows Server 2012 | :heavy_check_mark: Pass! | :100: R 3.5.x, R 3.4.4 |
+| Windows 7 | :heavy_check_mark: Pass! | :100: R 3.5.x, R 3.4.4 |
+| Windows Server 2008 R2 | :heavy_check_mark: Pass! | :100: R 3.5.x, R 3.4.4 |
+| Windows Vista | :heavy_exclamation_mark: Not fully passing! | :100: R 3.5.x, R 3.4.4 |
+| Windows XP | :heavy_exclamation_mark: Not fully passing! | :100: R 3.5.x, R 3.4.4 |
 
 Validation on Ubuntu operating systems:
 
 | Operating System | Success | R Version |
 | --- | --- | --- |
-| Ubuntu 18.04 | :heavy_exclamation_mark: Fails! | :100: R 3.5.0, R 3.4.4 |
-| Ubuntu 17.10 | :heavy_check_mark: Pass! | :100: R 3.5.0, R 3.4.4 |
-| Ubuntu 17.04 | :heavy_check_mark: Pass! | :100: R 3.5.0, R 3.4.4 |
-| Ubuntu 16.10 | :heavy_check_mark: Pass! | :100: R 3.5.0, R 3.4.4 |
-| Ubuntu 16.04 | :heavy_check_mark: Pass! | :100: R 3.5.0, R 3.4.4 |
+| Ubuntu 18.04 | :heavy_check_mark: Pass! (Not public) | :100: R 3.5.x, R 3.4.4 |
+| Ubuntu 17.10 | :heavy_check_mark: Pass! | :100: R 3.5.x, R 3.4.4 |
+| Ubuntu 17.04 | :heavy_check_mark: Pass! | :100: R 3.5.x, R 3.4.4 |
+| Ubuntu 16.10 | :heavy_check_mark: Pass! | :100: R 3.5.x, R 3.4.4 |
+| Ubuntu 16.04 | :heavy_check_mark: Pass! | :100: R 3.5.x, R 3.4.4 |
 | Ubuntu 15.10 | :interrobang: Unknown... | :trident: None yet! |
 | Ubuntu 14.10 | :interrobang: Unknown... | :trident: None yet! |
 | Ubuntu 14.04 | :interrobang: Unknown... | :trident: None yet! |
@@ -50,7 +50,7 @@ Validation on SUSE operating systems:
 
 | Operating System | Success | R Version |
 | --- | --- | --- |
-| SUSE 12 | :heavy_check_mark: Pass! (Not public) | :100: R 3.5.0 |
+| SUSE 12 | :heavy_check_mark: Pass! (Not public) | :100: R 3.5.x |
 
 The custom parts to change for your own use case are found by searching `# Change this`.
 
@@ -85,7 +85,7 @@ export DISPLAY=localhost:0.0
 
 ### Step 3: do all the Anaconda stuff required
 
-To perform in Bash shell. Do NOT add Anaconda to PATH, otherwise you will need to change it (if you have no idea what are you doing).
+To perform in Bash shell. Add Anaconda to PATH so you can do the Python-specific stuff early, we will remove it afterwards.
 
 ```sh
 curl -O https://repo.continuum.io/archive/Anaconda3-5.1.0-Linux-x86_64.sh
@@ -112,7 +112,7 @@ To perform in Bash shell.
 gedit ~/.bashrc
 ```
 
-Put the following in the file, change the PATH of R-lib and get rid of Anaconda if existing accordingly!:
+Put the following in the file, change the PATH of R-lib and get rid of Anaconda!:
 
 ```sh
 export DISPLAY="localhost:0.0"
@@ -494,7 +494,7 @@ Installining xgboost and LightGBM:
 
 ```r
 xgbdl::xgb.dl(compiler = "gcc", commit = "8f6aadd", use_avx = TRUE, use_gpu = FALSE)
-lgbdl::lgb.dl(commit = "3f54429", compiler = "gcc")
+lgbdl::lgb.dl(commit = "b419331", compiler = "gcc")
 ```
 
 Modify `/usr/lib/R/etc/Makeconf` for maximum performance for xgboost / LightGBM (+0-10% speed): change back -O3 to -O2 to CXXFLAGS
@@ -617,7 +617,7 @@ Intel Compilers by default, should be in: /opt/intel/compilers_and_libraries_201
 
 ### Step 4: do all the Anaconda stuff required
 
-To perform in Bash shell. Do NOT add Anaconda to PATH, otherwise you will need to change it (if you have no idea what are you doing).
+To perform in Bash shell. Add Anaconda to PATH so you can do the Python-specific stuff early, we will remove it afterwards.
 
 ```sh
 curl -O https://repo.continuum.io/archive/Anaconda3-5.1.0-Linux-x86_64.sh
@@ -644,7 +644,7 @@ To perform in Bash shell.
 gedit ~/.bashrc
 ```
 
-Put the following in the file, change the PATH of R-lib and Anaconda accordingly!:
+Put the following in the file, change the PATH of R-lib and get rid of Anaconda!:
 
 ```sh
 export DISPLAY="localhost:0.0"
@@ -1110,7 +1110,7 @@ For LightGBM, this also requires a specific installation in bash:
 ```
 git clone --recursive https://github.com/Microsoft/LightGBM
 cd LightGBM
-git checkout 3f54429
+git checkout b419331
 cd R-package
 ```
 
@@ -1123,7 +1123,7 @@ gedit src/install.libs.R
 Then compile LightGBM:
 
 ```
-R CMD INSTALL --build . --no-multiarch
+Rscript build_r.R
 ```
 
 Install even more packages...:
@@ -1200,7 +1200,7 @@ C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v9.0\libnvvp
 
 ### Step 2: Python packages
 
-Windows can download and install Anaconda here: https://repo.anaconda.com/archive/Anaconda3-5.1.0-Windows-x86_64.exe
+Windows can download and install Anaconda here: https://repo.anaconda.com/archive/Anaconda3-5.1.0-Windows-x86_64.exe (do not add to PATH)
 
 Run using Anaconda shell:
 
@@ -1475,7 +1475,7 @@ Installining xgboost and LightGBM:
 
 ```r
 xgbdl::xgb.dl(compiler = "Visual Studio 15 2017 Win64", commit = "8f6aadd", use_avx = TRUE, use_gpu = FALSE)
-lgbdl::lgb.dl(commit = "3f54429", compiler = "vs")
+lgbdl::lgb.dl(commit = "b419331", compiler = "vs")
 ```
 
 Install even more packages...:
@@ -1837,7 +1837,7 @@ Installining xgboost and LightGBM:
 
 ```r
 xgbdl::xgb.dl(compiler = "gcc", commit = "8f6aadd", use_avx = TRUE, use_gpu = FALSE)
-lgbdl::lgb.dl(commit = "3f54429", compiler = "gcc")
+lgbdl::lgb.dl(commit = "b419331", compiler = "gcc")
 ```
 
 Install even more packages...:
