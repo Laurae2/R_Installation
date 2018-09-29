@@ -1,6 +1,6 @@
 # R Installation - Windows / Debian / Ubuntu Version
 
-**Last tested : R 3.5.0, 2018/07/16 (July 16, 2018)**
+**Last tested : R 3.5.1, 2018/09/29 (Sept 29, 2018)**
 
 R packages for installation, the Windows / Debian / Ubuntu version.
 
