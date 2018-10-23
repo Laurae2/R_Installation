@@ -1683,7 +1683,7 @@ sudo apt-get install intel-mkl-64bit-2019.0-045
 
 ### Step 10: Download, Configure, and Compile R
 
-If you followed exactly the steps, it should work out of the box:
+If you followed exactly the steps, it should work out of the box for maximum performance R:
 
 ```sh
 wget https://cran.r-project.org/src/base/R-3/R-3.5.1.tar.gz
@@ -1985,6 +1985,131 @@ devtools::install_github("Laurae2/LauraeCE", upgrade_dependencies = FALSE)
 install.packages("https://cran.r-project.org/src/contrib/Archive/tabplot/tabplot_1.1.tar.gz", repos=NULL, type="source") # Further versions are too bad / not reliable / generated unreadable plots
 ```
 
+### Step 13: Can't believe I'm running Intel MKL in R
+
+You can run the following in R:
+
+```r
+sessionInfo()
+```
+
+This should give you MKL:
+
+```r
+> sessionInfo()
+R version 3.5.1 (2018-07-02)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: Pop!_OS 18.10
+
+Matrix products: default
+BLAS/LAPACK: /opt/intel/compilers_and_libraries_2019.0.117/linux/mkl/lib/intel64_lin/libmkl_gf_lp64.so
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=fr_FR.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=fr_FR.UTF-8    LC_MESSAGES=en_US.UTF-8   
+ [7] LC_PAPER=fr_FR.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=fr_FR.UTF-8 LC_IDENTIFICATION=C       
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+[1] compiler_3.5.1
+```
+
+You can also run the following in your `Download/R/R-3.5.1` folder:
+
+```sh
+ldd  ./lib/libR.so
+```
+
+You should get the following mentionning MKL:
+
+```sh
+laurae@laurae:~/Downloads/R/R-3.5.1$ ldd  ./lib/libR.so
+	linux-vdso.so.1 (0x00007ffdbf529000)
+	libmkl_gf_lp64.so => /opt/intel/compilers_and_libraries_2019.0.117/linux/mkl/lib/intel64_lin/libmkl_gf_lp64.so (0x00007f67db265000)
+	libmkl_sequential.so => /opt/intel/compilers_and_libraries_2019.0.117/linux/mkl/lib/intel64_lin/libmkl_sequential.so (0x00007f67d9ccd000)
+	libmkl_core.so => /opt/intel/compilers_and_libraries_2019.0.117/linux/mkl/lib/intel64_lin/libmkl_core.so (0x00007f67d5b94000)
+	libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f67d59e9000)
+	libreadline.so.7 => /lib/x86_64-linux-gnu/libreadline.so.7 (0x00007f67d57a0000)
+	libpcre.so.3 => /lib/x86_64-linux-gnu/libpcre.so.3 (0x00007f67d572a000)
+	liblzma.so.5 => /lib/x86_64-linux-gnu/liblzma.so.5 (0x00007f67d5504000)
+	libbz2.so.1.0 => /lib/x86_64-linux-gnu/libbz2.so.1.0 (0x00007f67d54f1000)
+	libz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x00007f67d52d4000)
+	librt.so.1 => /lib/x86_64-linux-gnu/librt.so.1 (0x00007f67d52ca000)
+	libdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007f67d52c4000)
+	libicuuc.so.60 => /usr/lib/x86_64-linux-gnu/libicuuc.so.60 (0x00007f67d4f0b000)
+	libicui18n.so.60 => /usr/lib/x86_64-linux-gnu/libicui18n.so.60 (0x00007f67d4a6a000)
+	libgomp.so.1 => /usr/lib/x86_64-linux-gnu/libgomp.so.1 (0x00007f67d4a39000)
+	libpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007f67d4a18000)
+	libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f67d482e000)
+	/lib64/ld-linux-x86-64.so.2 (0x00007f67dc259000)
+	libtinfo.so.6 => /lib/x86_64-linux-gnu/libtinfo.so.6 (0x00007f67d4603000)
+	libicudata.so.60 => /usr/lib/x86_64-linux-gnu/libicudata.so.60 (0x00007f67d2a58000)
+	libstdc++.so.6 => /usr/lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007f67d28ce000)
+	libgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007f67d28b4000)
+```
+
+Still not sure you are running Intel MKL? Placebo effect? Run the following:
+
+```r
+X <- matrix(rnorm(1000000), 1000, 1000)
+system.time(svd(X))
+```
+
+If you are getting under 1 second, you are not using the standard R BLAS (because you need a computer with over 7 GHz to go under 1 second with the standard R BLAS.
+
+```
+> X <- matrix(rnorm(1000000), 1000, 1000)
+> system.time(svd(X))
+   user  system elapsed 
+  0.410   0.024   0.434 
+```
+
+With standard R BLAS, speed is doomed to favor (near) perfect reproducibility:
+
+```
+> X <- matrix(rnorm(1000000), 1000, 1000)
+> system.time(svd(X))
+   user  system elapsed 
+   2.80    0.02    2.84 
+```
+
+### Step 14: Install RStudio Desktop
+
+Run the following for RStudio Desktop Preview:
+
+```sh
+sudo apt-get install libclang-3.8-dev libclang-common-3.8-dev libclang-dev libclang1-3.8 libllvm3.8 libobjc-5-dev libobjc4
+wget https://s3.amazonaws.com/rstudio-ide-build/desktop/trusty/amd64/rstudio-1.2.1070-amd64.deb
+sudo gdebi rstudio-1.2.1070-amd64.deb
+```
+
+Run the following for RStudio Server Preview:
+
+```sh
+sudo apt-get install libclang-3.8-dev libclang-common-3.8-dev libclang-dev libclang1-3.8 libllvm3.8 libobjc-5-dev libobjc4
+wget https://s3.amazonaws.com/rstudio-ide-build/server/trusty/amd64/rstudio-server-1.2.1070-amd64.deb
+sudo gdebi rstudio-server-1.2.1070-amd64.deb
+```
+
+Do not forget to set R preferences: inside `/etc/rstudio/rsession.conf`, add the following:
+
+```sh
+r-libs-user=usr/local/lib/R/library
+session-timeout-minutes=0
+```
+
+And also inside `/etc/rstudio/rserver.conf` to protect RStudio Server if required for front-facing Internet servers:
+
+```sh
+www-address=127.0.0.1
+```
+
+Then `sudo reboot` your server to make changes stick. Otherwise, they are not applied immediately.
 
 </p>
 </details>
