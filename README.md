@@ -1,6 +1,6 @@
 # R Installation - Windows / Debian / Ubuntu Version
 
-**Last tested : R 3.5.1, 2018/09/29 (Sept 29, 2018)**
+**Last tested : R 3.5.1, 2018/10/24 (Oct 24, 2018)**
 
 R packages for installation, the Windows / Debian / Ubuntu version.
 
@@ -18,6 +18,7 @@ Validation on Windows operating systems:
 
 | Operating System | Success | R Version |
 | --- | --- | --- |
+| Windows 10 (1809) | :heavy_check_mark: Pass! | :100: R 3.5.x, R 3.4.4 |
 | Windows 10 (1803) | :heavy_check_mark: Pass! | :100: R 3.5.x, R 3.4.4 |
 | Windows 10 (1709) | :heavy_check_mark: Pass! | :100: R 3.5.x, R 3.4.4 |
 | Windows 10 (1703) | :heavy_check_mark: Pass! | :100: R 3.5.x, R 3.4.4 |
@@ -37,7 +38,11 @@ Validation on Ubuntu operating systems:
 
 | Operating System | Success | R Version |
 | --- | --- | --- |
+| pop!_OS 18.10 | :heavy_check_mark: Pass! | :100: R 3.5.x |
+| Ubuntu 18.10 | :heavy_check_mark: Pass! | :100: R 3.5.x |
+| pop!_OS 18.04 | :heavy_check_mark: Pass! (Not public) | :100: R 3.5.x, R 3.4.4 |
 | Ubuntu 18.04 | :heavy_check_mark: Pass! (Not public) | :100: R 3.5.x, R 3.4.4 |
+| pop!_OS 17.10 | :heavy_check_mark: Pass! (Not public) | :100: R 3.5.x, R 3.4.4 |
 | Ubuntu 17.10 | :heavy_check_mark: Pass! | :100: R 3.5.x, R 3.4.4 |
 | Ubuntu 17.04 | :heavy_check_mark: Pass! | :100: R 3.5.x, R 3.4.4 |
 | Ubuntu 16.10 | :heavy_check_mark: Pass! | :100: R 3.5.x, R 3.4.4 |
@@ -45,6 +50,8 @@ Validation on Ubuntu operating systems:
 | Ubuntu 15.10 | :interrobang: Unknown... | :trident: None yet! |
 | Ubuntu 14.10 | :interrobang: Unknown... | :trident: None yet! |
 | Ubuntu 14.04 | :interrobang: Unknown... | :trident: None yet! |
+
+N.B: Ubuntu 18.10 and pop!_OS 18.10 requires a `gfortran` update. We provide a different way of installing R and Python for 18.10: Intel Distribution for Python, and R with Intel MKL.
 
 Validation on SUSE operating systems:
 
@@ -1510,6 +1517,474 @@ okay = tf.constant("OKAY")
 sess = tf.Session()
 print(sess.run(okay))
 ```
+
+</p>
+</details>
+
+## Ubuntu 18.10 / Pop_OS! 18.10
+
+<details><summary>:information_desk_person: CLICK THE ARROW TO REVEAL Ubuntu 18.10 / Pop_OS! 18.10 steps</summary>
+<p>
+
+This setup is for the high performance mode of R and Python. This is not recommended as a daily development driver, but as a high performance remote productive setup.
+
+### Step 1: Setup SSH
+
+```sh
+sudo passwd root
+passwd
+sudo apt-get update
+sudo apt-get install openssh-server fail2ban
+sudo gedit /etc/ssh/sshd_config => change port to 55556
+sudo systemctl restart ssh
+reboot
+```
+
+### Step 2: Unstall x2go and xfce4
+
+```sh
+sudo add-apt-repository ppa:x2go/stable
+sudo apt-get update
+sudo apt-get install x2goserver x2goserver-xsession screen
+sudo apt-get install xfce4 xfce4-goodies
+```
+
+When x2go crashes (server-sided), you can use `sudo service x2goserver restart` to restart x2go.
+
+### Step 3: Disable Network and Printer Discovery
+
+Disabling printer and network discovery can be very useful.
+
+```sh
+sudo systemctl disable avahi-daemon
+sudo systemctl stop avahi-daemon
+sudo systemctl disable cups-browsed
+sudo systemctl stop cups-browsed
+```
+
+You can do `ss -lntu` to know what ports are still in use
+
+### Step 4: Get some monitoring
+
+htop and iotop can help for troubleshooting issues...:
+
+```sh
+sudo apt-get install htop iotop
+```
+
+### Step 5: Performance mode of the processors
+
+Setup performance mode to the processors:
+
+```sh
+sudo apt-get install cpufrequtils
+echo 'GOVERNOR="performance"' | sudo tee /etc/default/cpufrequtils
+sudo systemctl disable ondemand
+```
+
+### Step 6: Customize kernel parameters to get better performance
+
+Install and launch `grub-customizer`:
+
+```sh
+sudo add-apt-repository ppa:danielrichter2007/grub-customizer
+sudo apt-get update
+sudo apt-get install grub-customizer
+sudo grub-customizer
+```
+
+Disable most Meltdown and Spectre mitigations by adding the following to kernel parameters:
+
+```sh
+pti=off spectre_v2=off spec_store_bypass_disable=off l1tf=off noibrs noibpb nopti no_stf_barrier 
+```
+
+Reboot:
+
+```sh
+sudo reboot
+```
+
+Test your computer against vulnerabilities, two should be negative (red):
+
+```sh
+cd Desktop
+wget https://raw.githubusercontent.com/speed47/spectre-meltdown-checker/master/spectre-meltdown-checker.sh
+sudo sh spectre-meltdown-checker.sh
+```
+
+### Step 7: Setup Intel Distribution for Python
+
+To setup Intel Distribution for Python, we are using Miniconda, which is a lightweight Anaconda (do yes, enter, and no for the Miniconda installation when requested):
+
+```sh
+cd Downloads
+mkdir R
+cd R
+sudo apt-get install curl
+wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+sudo bash Miniconda3-latest-Linux-x86_64.sh
+```
+
+Enable symlinks to access `conda` from anywhere (:
+
+```sh
+sudo ln -s /home/laurae/miniconda3/bin/conda /usr/bin/conda  # Change this user
+sudo ln -s /home/laurae/miniconda3/bin/activate /usr/bin/activate  # Change this user
+sudo ln -s /home/laurae/miniconda3/bin/deactivate /usr/bin/deactivate  # Change this user
+```
+
+Then we can install Intel Distribution for Python from conda:
+
+```
+sudo conda config --add channels intel
+sudo conda create -n r-tensorflow intelpython3_full python=3
+```
+
+To install keras, do the following:
+
+```sh
+source activate r-tensorflow
+sudo conda install keras
+source deactivate r-tensorflow
+```
+
+If you really want to use Anaconda, the symlink should be done the following way:
+
+```sh
+sudo ln -s /home/laurae/anaconda3/bin/conda /usr/bin/conda
+sudo ln -s /home/laurae/anaconda3/bin/activate /usr/bin/activate
+sudo ln -s /home/laurae/anaconda3/bin/deactivate /usr/bin/deactivate
+```
+
+### Step 8: Install R pre-requisites
+
+Lot of dependencies...:
+
+```sh
+sudo add-apt-repository -y ppa:opencpu/jq
+sudo add-apt-repository "deb http://ppa.launchpad.net/ubuntugis/ppa/ubuntu $(lsb_release -sc) main"
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 314DF160
+sudo apt-get update
+sudo apt-get install cmake curl libxml2-dev git gfortran libssl-dev libssh2-1-dev gdebi-core libwebp-dev libprotobuf-dev libjq-dev libpoppler-cpp-dev libcairo2-dev librsvg2-dev libv8-3.14-dev libgtk2.0-dev default-jre default-jdk libgmp3-dev libgsl-dev jags libudunits2-dev protobuf-compiler mesa-common-dev libglu1-mesa-dev coinor-libsymphony-dev libtiff5-dev tcl-dev tk-dev libmpfr-dev ggobi libgdal-dev libglpk-dev libgeos-dev libgeos++-dev netcdf-bin libfftw3-dev libopenmpi-dev bwidget mpi-default-bin libcurl4-openssl-dev libreadline-dev libbz2-dev cmake libxml2-dev git-core libssl-dev libssh2-1-dev gdebi-core libwebp-dev libprotobuf-dev libpoppler-cpp-dev libcairo2-dev librsvg2-dev libv8-3.14-dev libgtk2.0-dev default-jre default-jdk libgmp3-dev libgsl-dev jags libudunits2-dev protobuf-compiler mesa-common-dev libglu1-mesa-dev coinor-libsymphony-dev libtiff5-dev tcl-dev tk-dev libmpfr-dev ggobi libgdal-dev libglpk-dev libgeos-dev netcdf-bin libfftw3-dev libopenmpi-dev bwidget mpi-default-bin libx11-dev ratfor libproj-dev libmagick++-dev coinor-libsymphony-dev coinor-libcgl-dev libjq-dev libgdal-dev texlive-latex-base texlive-fonts-extra
+```
+
+### Step 9: Intel MKL
+
+Add Intel MKL to your Linux installation for speed:
+
+```sh
+wget https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS-2019.PUB
+sudo apt-key add GPG-PUB-KEY-INTEL-SW-PRODUCTS-2019.PUB
+sudo wget https://apt.repos.intel.com/setup/intelproducts.list -O /etc/apt/sources.list.d/intelproducts.list
+sudo apt-get update
+sudo apt-get install intel-mkl-64bit-2019.0-045
+```
+
+### Step 10: Download, Configure, and Compile R
+
+If you followed exactly the steps, it should work out of the box:
+
+```sh
+wget https://cran.r-project.org/src/base/R-3/R-3.5.1.tar.gz
+tar zxvf R-3.5.1.tar.gz
+cd R-3.5.1
+export CFLAGS="-O3 -mtune=native"
+export CXXFLAGS="-O3 -mtune=native"
+export FFLAGS="-O3 -mtune=native"
+export FCFLAGS="-O3 -mtune=native"
+source /opt/intel/mkl/bin/mklvars.sh intel64 mod lp64
+MKL=" -L$MKLROOT/lib/intel64 -Wl,--start-group -lmkl_gf_lp64 -lmkl_sequential -lmkl_core -lm -Wl,--end-group"
+./configure --enable-R-shlib --with-blas="$MKL" --with-lapack
+make -j 36 # Change this core count
+sudo make install
+```
+
+From now, make sure you always run R with sudo unless you want shared libraries... RStudio Server always does but RStudio Desktop requires to be run with sudo so you were warned!
+
+### Step 11: Setup ~/.bashrc
+
+You can change ~/.bashrc:
+
+```sh
+sudo gedit ~/.bashrc
+```
+
+Add the following:
+
+```sh
+export PATH="$PATH:/usr/local/lib/R"
+export R_HOME="/usr/local/lib/R"
+export R_LIBS_USER="usr/local/lib/R/library"
+source /opt/intel/mkl/bin/mklvars.sh intel64 mod lp64
+```
+
+### Step 12: Install a lot of R packages
+
+Run an R console using `sudo R` (or use `R` if you want to separate user libraries).
+
+Install a crazy lot of packages from R afterwards...:
+
+```r
+install.packages("devtools", dependencies = TRUE, Ncpus = parallel::detectCores())
+install.packages("tcltk2", dependencies = TRUE, Ncpus = parallel::detectCores())
+
+source("http://bioconductor.org/biocLite.R")
+biocLite(c("graph", "RBGL"))
+
+packages <- c("abind", "acepack", "actuar", "ada", "adabag", "ade4", "ade4TkGUI")
+if (length(packages[which(!(packages %in% rownames(installed.packages())))]) > 0) {install.packages(packages[which(!(packages %in% rownames(installed.packages())))], dependencies = TRUE, Ncpus = parallel::detectCores())}
+if (length(packages[which(!(packages %in% rownames(installed.packages())))]) > 0) {install.packages(packages[which(!(packages %in% rownames(installed.packages())))], dependencies = TRUE, Ncpus = parallel::detectCores())}
+
+packages <- c("adegraphics", "adehabitatLT", "adehabitatMA", "ADGofTest", "AER", 
+              "AGD", "agricolae", "AICcmodavg", "akima", "alabama", "AlgDesign", 
+              "alphahull", "alr3", "alr4", "amap", "Amelia", "anchors", "animation", 
+              "aod", "aods3", "ape", "aplpack", "argparse", "arm", "arules")
+if (length(packages[which(!(packages %in% rownames(installed.packages())))]) > 0) {install.packages(packages[which(!(packages %in% rownames(installed.packages())))], dependencies = TRUE, Ncpus = parallel::detectCores())}
+if (length(packages[which(!(packages %in% rownames(installed.packages())))]) > 0) {install.packages(packages[which(!(packages %in% rownames(installed.packages())))], dependencies = TRUE, Ncpus = parallel::detectCores())}
+
+packages <- c("arulesViz", "ascii", "assertthat", "AUC", "BaBooN", "backports", 
+              "barcode", "bartMachine", "bartMachineJARs", "base64", "base64enc", 
+              "BatchJobs", "BayesFactor", "bayesplot", "BayesX", "BayesXsrc", 
+              "BB", "BBmisc", "bbmle", "BCA", "bcp", "BDgraph", "bdsmatrix", 
+              "betareg", "BH", "BHH2", "BiasedUrn", "bibtex", "biclust", "biganalytics", 
+              "biglm", "bigmemory", "bigmemory.sri", "bigtabulate", 
+              "binda", "bindr", "bindrcpp", "binGroup", "bisoreg", "bit", "bit64", 
+              "bitops", "blme", "blob", "BMA", "boot", "bootstrap", "Boruta", 
+              "BradleyTerry2", "breakpoint", "brew", "brglm", "brnn", "broom", 
+              "BsMD", "bst", "btergm", "C50", "ca", "Cairo", "cairoDevice", 
+              "CALIBERrfimpute", "calibrator", "candisc", "caper", "car", "CARBayes", 
+              "CARBayesdata", "carData", "care", "caret", "caretEnsemble", 
+              "catdata", "caTools", "cba", "ccaPP", "cclust", "CDM", "CDVine", 
+              "cellranger", "cem", "censReg", "CEoptim", "changepoint", "checkmate", 
+              "checkpoint", "chemometrics", "chron", "circlize", "CircStats", 
+              "citr", "Ckmeans.1d.dp", "class", "classInt", "clue", "cluster", 
+              "clusterSim", "clustvarsel", "clv", "clValid", "cmaes", "cmprsk", 
+              "coda", "codetools", "coin", "colorplaner", "colorspace", "colourpicker", 
+              "combinat", "commonmark", "CompQuadForm", "compute.es", "conf.design", 
+              "config", "contfrac", "contrast", "copula", "CORElearn", "corpcor", 
+              "corrgram", "corrplot", "covr", "cowplot", "CoxBoost", "coxme", 
+              "cplm", "crayon", "crosstalk", "crossval", "crp.CSFP", "crrstep", 
+              "crs", "cshapes", "cubature", "Cubist", "curl", "cvAUC", "CVST", 
+              "cvTools", "d3heatmap", "d3Network", "DAAG", "dagitty", "data.table")
+if (length(packages[which(!(packages %in% rownames(installed.packages())))]) > 0) {install.packages(packages[which(!(packages %in% rownames(installed.packages())))], dependencies = TRUE, Ncpus = parallel::detectCores())}
+if (length(packages[which(!(packages %in% rownames(installed.packages())))]) > 0) {install.packages(packages[which(!(packages %in% rownames(installed.packages())))], dependencies = TRUE, Ncpus = parallel::detectCores())}
+
+packages <- c("data.tree", "dataframes2xls", "date", "dbConnect", 
+              "DBI", "dbscan", "ddalpha", "debugme", "Deducer", "DeducerExtras", 
+              "deepnet", "degreenet", "deldir", "dendextend", "dendroextras", 
+              "DendSer", "denstrip", "DEoptim", "DEoptimR", "depthTools", "Deriv", 
+              "desc", "descr", "DescTools", "deSolve", "Devore7", "devtools", 
+              "dfoptim", "diagram", "DiagrammeR", "DiagrammeRsvg", "DiceDesign", 
+              "DiceKriging", "DiceOptim", "dichromat", "digest", "dimRed", 
+              "diptest", "directlabels", "discretization", "DiscriMiner", "distr", 
+              "distrEx", "DistributionUtils", "diveMove", "dlm", "DMwR", "doBy", 
+              "DoE.base", "DoE.wrapper", "doMPI", "doParallel", "doRedis", 
+              "DoseFinding", "dotCall64", "downloader", "dplR", "dplyr", "drat", 
+              "DRR", "DT", "dtplyr", "dtw", "dygraphs", "dynamicTreeCut", "dynlm", 
+              "e1071", "eaf", "earth", "Ecdat", "Ecfun", "ecodist", "effects", 
+              "eha", "elasticnet", "ElemStatLearn", "ellipse", "elliptic", 
+              "emdbook", "emoa", "emulator", "energy", "ENmisc", "entropy", 
+              "EntropyExplorer", "Epi", "EpiModel", "epitools", "erer", "ergm", 
+              "ergm.count", "ergm.userterms", "eRm", "estimability", "etm", 
+              "evaluate", "evd", "expint", "ExplainPrediction", "expm", "extrafont", 
+              "extrafontdb", "extraTrees", "factoextra", "FactoMineR", "Fahrmeir", 
+              "fail", "faraway", "fAssets", "fastcluster", "fastdigest", "fastICA", 
+              "fastmatch", "fastR", "fBasics", "fCopulae", "fda", "fdrtool", 
+              "FeaLect", "feather", "FeatureHashing", "fExoticOptions", "fExtremes", 
+              "ff", "ffbase", "FFTrees", "fftw", "fGarch", "fields", "filehash", 
+              "fImport", "findpython", "fit.models", "fitdistrplus", "flare", 
+              "flashClust", "flexclust", "flexmix", "flexsurv", "FME", "FMStable", 
+              "fMultivar", "FNN", "fNonlinear", "fontcm", "fOptions", "forcats", 
+              "foreach", "forecast", "foreign", "formatR", "formattable", "Formula", 
+              "fortunes", "forward", "fpc", "fPortfolio", "fracdiff", 
+              "frbs", "fRegression", "FrF2", "FrF2.catlg128", "FSelector", 
+              "fst", "fTrading", "fts", "futile.logger", "futile.options", 
+              "future", "GA", "gam", "gamair", "GAMBoost", "gamboostLSS", "gamlss", 
+              "gamlss.data", "gamlss.dist", "gamm4", "gapminder", "gbm", "gclus", 
+              "gdata", "gdtools", "gee", "geeM", "geepack", 
+              "GeneralizedHyperbolic", "genetics", "GenSA", "geoR", "geoRglm", 
+              "geosphere", "GERGM", "getopt", "GGally", "ggcorrplot", "ggdendro", 
+              "ggeffects", "ggExtra", "ggformula", "ggfortify", "ggiraph", 
+              "ggm", "ggplot2", "ggplot2movies", "ggpubr", "ggrepel", "ggsci", 
+              "ggsignif", "ggThemeAssist", "ggthemes", "ggvis", "giphyr", "git2r", 
+              "gitgadget", "glasso", "glmmML", "glmmTMB", "glmnet", "glmulti", 
+              "GlobalOptions", "globals", "glue", "gmailr", "Gmedian", "gmm", 
+              "gmodels", "gmp", "gnm", "gof", "goftest", "googleVis", "gower", 
+              "gpairs", "GPArotation", "GPfit", "gplots", "gRbase", 
+              "gridBase", "gridExtra", "grouped", "gsl", "gss", "gstat", "gsubfn", 
+              "gtable", "gtools", "Guerry", "gWidgets", "gWidgetsRGtk2", "gWidgetstcltk", 
+              "h2o", "haplo.stats", "haven", "hdi", "heatmaply", "heplots", 
+              "hergm", "hexbin", "hglm", "hglm.data", "HH", "HiClimR", "highlight", 
+              "highr", "hmeasure", "Hmisc", "hms", "hrbrthemes", "HSAUR", "HSAUR2", 
+              "HSAUR3", "htmlTable", "htmltools", "htmlwidgets", "httpuv", 
+              "httr", "huge", "hunspell", "hwriter", "hypergeo", "ibdreg")
+if (length(packages[which(!(packages %in% rownames(installed.packages())))]) > 0) {install.packages(packages[which(!(packages %in% rownames(installed.packages())))], dependencies = TRUE, Ncpus = parallel::detectCores())}
+if (length(packages[which(!(packages %in% rownames(installed.packages())))]) > 0) {install.packages(packages[which(!(packages %in% rownames(installed.packages())))], dependencies = TRUE, Ncpus = parallel::detectCores())}
+
+packages <- c("ic.infer", "ICS", "ICSNP", "igraph", "igraphdata", "import", 
+              "imputeTS", "ineq", "influenceR", "Information", "infotheo", 
+              "inline", "inlinedocs", "intergraph", "intervals", "intsvy", 
+              "iplots", "ipred", "irace", "irlba", "irr", "isa2", "Iso", "ISOcodes", 
+              "isotone", "ISwR", "iterators", "itertools", "JavaGD", "JGR", 
+              "jomo", "jpeg", "jsonlite", "kappalab", "kdecopula", "Kendall", 
+              "keras", "kernlab", "KernSmooth", "KFAS", "kinship2", "kknn", 
+              "klaR", "kmi", "knitcitations", "knitr", "kohonen", "koRpus", 
+              "ks", "labeling", "labelled", "laeken", "LaF", "laGP", "Lahman", 
+              "lambda.r", "lars", "lasso2", "latentnet", "lattice", 
+              "latticeExtra", "lava", "lava.tobit", "lavaan", "lavaan.survey", 
+              "lawstat", "lazyeval", "LCA", "lcopula", "leaflet", "leaps", 
+              "LearnBayes", "lfda", "lfe", "lhs", "LiblineaR", "likert", "linprog", 
+              "lintr", "lisrelToR", "listenv", "lme4", "lmerTest", 
+              "lmodel2", "lmtest", "loa", "locfit", "logcondens", "LogicReg", 
+              "logistf", "logspline", "lokern", "longmemo", "loo", "lpSolve", 
+              "lpSolveAPI", "lqmm", "lsmeans", "lubridate", "MAc", "MAd", 
+              "magrittr", "mail", "manipulate", "mapdata", "mapproj", "maps", 
+              "maptools", "maptree", "markdown", "MASS", "Matching", "MatchIt", 
+              "matlab", "Matrix", "matrixcalc", "MatrixModels", 
+              "matrixStats", "maxLik", "maxlike", "MBA", "MBESS", "mboost", 
+              "mc2d", "mcclust", "mcgibbsit", "mclust", "mcmc", "MCMCglmm", 
+              "MCMCpack", "mco", "mda", "mediation", "memisc", "memoise", 
+              "MEMSS", "merTools", "MetABEL", "metafor", "Metrics", "mets", 
+              "mgcv", "mi", "mice", "miceadds", "microbenchmark", "microplot", 
+              "mime", "minerva", "miniUI", "minpack.lm", "minqa", "mirt", "mirtCAT", 
+              "misc3d", "miscTools", "missForest", "missMDA", "mitml", "mitools", 
+              "mix", "mlbench", "MLmetrics", "mlmRev", "mlogit", "mlr", "mlrMBO", 
+              "mnlogit", "mnormt", "modeest", "ModelMetrics", "modelr", "modeltools", 
+              "mondate", "monreg", "moonBook", "mosaic", "mosaicCalc", "mosaicCore", 
+              "mosaicData", "movMF", "MplusAutomation", "mpmi", "MPV", "mratios", 
+              "mRMRe", "msm", "mstate", "MSwM", "muhaz", "multcomp", "multcompView", 
+              "multicool", "multiwayvcov", "MuMIn", "munsell", "mvinfluence", 
+              "mvnormtest", "mvoutlier", "mvtnorm", "NbClust", "ncdf4", "ncvreg", 
+              "ndtv", "network", "networkD3", "networkDynamic", "networkDynamicData", 
+              "networksis", "neuralnet", "NeuralNetTools", "NHANES", "nlme", 
+              "nloptr", "NLP", "NMF", "nnet", "nnls", "nodeHarvest", "nor1mix", 
+              "norm", "nortest", "np", "numbers", "numDeriv", "nws", "nycflights13", 
+              "obliqueRF", "officer", "OpenMx", "openssl", "openxlsx", 
+              "optextras", "optimx", "optmatch", "orcutt", "ordinal", "ore", 
+              "orloca", "orloca.es", "orthopolynom", "outliers", "oz", "packrat")
+if (length(packages[which(!(packages %in% rownames(installed.packages())))]) > 0) {install.packages(packages[which(!(packages %in% rownames(installed.packages())))], dependencies = TRUE, Ncpus = parallel::detectCores())}
+if (length(packages[which(!(packages %in% rownames(installed.packages())))]) > 0) {install.packages(packages[which(!(packages %in% rownames(installed.packages())))], dependencies = TRUE, Ncpus = parallel::detectCores())}
+
+packages <- c("pageviews", "pamr", "pan", "pander", "parallelMap", "ParamHelpers", 
+              "partitions", "party", "partykit", "pastecs", "pbapply", "pbivnorm", 
+              "pbkrtest", "pbmcapply", "PBSmapping", "PBSmodelling", "pcalg", 
+              "pcaPP", "pec", "penalized", "PerformanceAnalytics", "permute", 
+              "pgirmess", "pixmap", "pkgconfig", "pkgKitten", "pkgmaker", "PKI", 
+              "PKPDmodels", "playwith", "plm", "plogr", "plot3D", "plotly", 
+              "plotmo", "plotrix", "pls", "plyr", "PMCMR", "pmml", "pmmlTransformations", 
+              "png", "poistweedie", "poLCA", "polspline", "polyclip", "polycor", 
+              "polynom", "prabclus", "pracma", "praise", "PredictABEL", "prediction", 
+              "prefmod", "prettyunits", "prim", "pROC", "processx", "prodlim", 
+              "profdpm", "profileModel", "propagate", "proto", 
+              "proxy", "pryr", "pscl", "pso", "pspline", "psych", "psychotools", 
+              "psychotree", "purrr", "pvclust", "pwr", "qap", "qcc", "qgraph", 
+              "QRAGadget", "qrng", "quadprog", "quantmod", "quantreg", "questionr", 
+              "qvcalc", "R.cache", "R.devices", "R.matlab", "R.methodsS3", 
+              "R.oo", "R.rsp", "R.utils", "R2BayesX", "R2HTML", "R2jags", 
+              "R2OpenBUGS", "R2WinBUGS", "R6", "radiant", 
+              "radiant.basics", "radiant.data", "radiant.design", "radiant.model", 
+              "radiant.multivariate", "RandomFields", "RandomFieldsUtils", 
+              "randomForest", "randomForestSRC", "randtests", "randtoolbox", 
+              "ranger", "RankAggreg", "RANN", "rappdirs", "RArcInfo", "rARPACK", 
+              "RaschSampler", "raster", "rasterVis", "rattle", "rbenchmark", 
+              "rbounds", "rbvs", "Rcgmin", "Rcmdr", "RcmdrMisc", 
+              "RcmdrPlugin.coin", "RcmdrPlugin.depthTools", "RcmdrPlugin.DoE", 
+              "RcmdrPlugin.Export", 
+              "RcmdrPlugin.FactoMineR", "RcmdrPlugin.HH", "RcmdrPlugin.IPSUR", 
+              "RcmdrPlugin.KMggplot2", "RcmdrPlugin.mosaic", "RcmdrPlugin.orloca", 
+              "RcmdrPlugin.pointG", "RcmdrPlugin.qual", "RcmdrPlugin.SLC", 
+              "RcmdrPlugin.sos", "RcmdrPlugin.steepness", "RcmdrPlugin.survival", 
+              "RcmdrPlugin.TeachingDemos", "RcmdrPlugin.UCA", "RColorBrewer", 
+              "Rcpp", "RcppArmadillo", "RcppCNPy", "RcppDE", "RcppEigen", "RcppParallel", 
+              "RcppProgress", "RcppRoll", "Rcsdp", "RCurl", "readr", "readstata13", 
+              "readxl", "recipes", "recommenderlab", "RefManageR", "registry", 
+              "relaimpo", "relations", "relevent", "reliaR", "relimp", 
+              "rem", "rematch", "reportr", "repr", "reshape", "reshape2", "reticulate", 
+              "rex", "rFerns", "rgdal", "rgenoud", "rgeos", "rgexf", "rggobi", 
+              "rgl", "Rglpk", "rglwidget", "RgoogleMaps", "RGtk2", "RGtk2Extras", 
+              "RH2", "rio", "riskRegression", "RItools", "rjags", "rJava", 
+              "RJDBC", "rjson", "RJSONIO", "rknn", "rlang", "rlecuyer", "rmarkdown", 
+              "rmeta", "Rmpfr", "Rmpi", "rms", "RMySQL", "rneos", "rngtools", 
+              "rngWELL", "robCompositions", "robust", "robustbase", "rockchalk", 
+              "ROCR", "RODBC", "Rook", "rootSolve", "rotationForest", "roxygen2", 
+              "rpanel", "rpart", "rpart.plot", "rpf", "rpivotTable", "RPostgreSQL", 
+              "rprojroot", "rrcov", "rredis", "RRF", "rrlda", "RSclient", "rsconnect", 
+              "Rserve", "RSiena", "RSKC", "rsm", "RSNNS", "Rsolnp", "RSpectra", 
+              "RSQLite", "rstan", "rstanarm", "rstantools", "rsvg", "Rsymphony", 
+              "rtiff", "Rtsne", "Rttf2pt1", "rugarch", "RUnit", "Runuran", 
+              "rversions", "rvest", "rvg", "Rvmmin", "RWeka", "RWekajars", 
+              "Ryacas", "sampleSelection", "sampling", "sandwich", "scagnostics", 
+              "scales", "scalreg", "scatterplot3d", "sda", "SEL", "selectr", 
+              "sem", "semiArtificial", "semPlot", "semTools", "sendmailR", 
+              "sendplot", "SensoMineR", "seriation", "setRNG", "sets", "sfsmisc", 
+              "sgeostat", "shape", "shapefiles", "shapes", "shiny", "shinyAce", 
+              "shinyjs", "shinystan", "shinythemes", "signal", "SimComp", "SimDesign", 
+              "simecol", "simex", "simsem", "sirt", "SIS", "sjlabelled", "sjmisc", 
+              "sjPlot", "sjstats", "SkewHyperbolic", "skmeans", "slackr", "slam", 
+              "SLC", "Sleuth2", "sm", "smbinning", "smoof", "sn", "sna", "snakecase", 
+              "snow", "SnowballC", "snowfall", "snowFT", "som", "soma", "sos", 
+              "sourcetools", "sp", "spacetime", "spam", "SparseGrid", 
+              "sparseLDA", "SparseM", "sparsio", "spatial", "spatstat", "spatstat.data", 
+              "spatstat.utils", "spc", "spd", "spdep", "speedglm", "sphet", 
+              "splancs", "splm", "spls", "sqldf", "sROC", "stabledist", "stabs", 
+              "StanHeaders", "startupmsg", "StatMatch", "statmod", "statnet", 
+              "statnet.common", "steepness", "stepPlr", "stinepack", "stringdist", 
+              "stringi", "stringr", "strucchange", "subselect", "subsemble", 
+              "sudoku", "SuperLearner", "superpc", "SuppDists", "survey", "survival", 
+              "svd", "svglite", "svGUI", "svUnit", "svyPVpack", "SwarmSVM", 
+              "systemfit", "tables", "tabplot", "tabplotd3")
+if (length(packages[which(!(packages %in% rownames(installed.packages())))]) > 0) {install.packages(packages[which(!(packages %in% rownames(installed.packages())))], dependencies = TRUE, Ncpus = parallel::detectCores())}
+if (length(packages[which(!(packages %in% rownames(installed.packages())))]) > 0) {install.packages(packages[which(!(packages %in% rownames(installed.packages())))], dependencies = TRUE, Ncpus = parallel::detectCores())}
+
+packages <- c("TAM", "tclust", "TeachingDemos", "tensor", "tensorA", 
+              "tensorflow", "tergm", "testit", "testthat", "texreg", "tfestimators", 
+              "tfruns", "tgp", "TH.data", "threejs", "tibble", "tidyr", "tidyselect", 
+              "tikzDevice", "timeDate", "timereg", "timeSeries", "tis", "tkrplot", 
+              "tm", "tmap", "TMB", "tmvtnorm", "tnam", "tree", 
+              "trimcluster", "tripack", "truncdist", "truncnorm", "truncreg", 
+              "trust", "TSA", "tseries", "tsna", "TSP", "TTR", 
+              "tufte", "tuneR", "tweedie", "ucminf", "uniReg", "unmarked", 
+              "urca", "uuid", "V8", "VarianceGamma", "vars", "vcd", "vcdExtra", 
+              "Vdgraph", "vegan", "verification", "VGAM", "VGAMdata", "VIM", 
+              "VIMGUI", "VineCopula", "vioplot", "viridis", "viridisLite", 
+              "visNetwork", "vtreat", "wavelets", "waveslim", "wbstats", "webp", 
+              "webshot", "WhatIf", "whisker", "whoami", "withr", "woe", 
+              "wordcloud", "WrightMap", "WriteXLS", "wskm", "wsrf", "xergm", 
+              "xergm.common", "xkcd", "XLConnect", "XLConnectJars", "XML", 
+              "xml2", "xtable", "xts", "YaleToolkit", "yaml", "yarrr", "zeallot", 
+              "Zelig", "zip", "zipcode", "zoo", "ztable", "getPass", 
+              "miniCRAN", "NMOF", "odbc", "recosystem", "rgeoapi", "smooth", "stR", 
+              "Boom", "BoomSpikeSlab", "bsts", "CausalImpact", "cli", "ClusterR", 
+              "emmeans", "FD", "fromo", "gdalUtils", "geojson", "geojsonio", 
+              "geojsonlint", "geometry", "ggridges", "inum", "jqr", 
+              "jsonvalidate", "libcoin", "magic", "manipulateWidget", "mapview", 
+              "moments", "NADA", "OceanView", "OpenImageR", "osmar", "pillar", 
+              "plot3Drgl", "protolite", "rmapshaper", 
+              "satellite", "sf", "spData", "SQUAREM", "tiff", "tmaptools", 
+              "udunits2", "units", "uroot", "utf8", "xfun", 
+              "zCompositions")
+if (length(packages[which(!(packages %in% rownames(installed.packages())))]) > 0) {install.packages(packages[which(!(packages %in% rownames(installed.packages())))], dependencies = TRUE, Ncpus = parallel::detectCores())}
+if (length(packages[which(!(packages %in% rownames(installed.packages())))]) > 0) {install.packages(packages[which(!(packages %in% rownames(installed.packages())))], dependencies = TRUE, Ncpus = parallel::detectCores())}
+
+devtools::install_github("r-lib/progress@54a14f5", upgrade_dependencies = FALSE)
+devtools::install_github("elbamos/largeVis", upgrade_dependencies = FALSE)
+devtools::install_github("Laurae2/woe", upgrade_dependencies = FALSE)
+devtools::install_github("Laurae2/xgbdl", upgrade_dependencies = FALSE)
+devtools::install_github("Laurae2/lgbdl", upgrade_dependencies = FALSE)
+devtools::install_github("twitter/AnomalyDetection", upgrade_dependencies = FALSE)
+devtools::install_github("cmpolis/datacomb", subdir = "pkg", ref = "1.1.2", upgrade_dependencies = FALSE)
+
+xgbdl::xgb.dl(compiler = "gcc", commit = "e26b5d6", use_avx = FALSE, use_gpu = FALSE)
+lgbdl::lgb.dl(commit = "3ad9cba", compiler = "gcc", cores = 1)
+
+devtools::install_github("Laurae2/Laurae", upgrade_dependencies = FALSE)
+devtools::install_github("Laurae2/LauraeParallel", upgrade_dependencies = FALSE)
+devtools::install_github("Laurae2/LauraeDS", upgrade_dependencies = FALSE)
+devtools::install_github("Laurae2/LauraeCE", upgrade_dependencies = FALSE)
+install.packages("https://cran.r-project.org/src/contrib/Archive/tabplot/tabplot_1.1.tar.gz", repos=NULL, type="source") # Further versions are too bad / not reliable / generated unreadable plots
+```
+
 
 </p>
 </details>
