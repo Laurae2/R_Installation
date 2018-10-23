@@ -2060,7 +2060,7 @@ X <- matrix(rnorm(1000000), 1000, 1000)
 system.time(svd(X))
 ```
 
-If you are getting under 1 second, you are not using the standard R BLAS (because you need a computer with over 7 GHz to go under 1 second with the standard R BLAS.
+If you are getting under 1 second, you are not using the standard R BLAS (because you need a computer with over 7 GHz to go under 1 second with the standard R BLAS). Here is MKL (OpenBLAS fares similarly):
 
 ```
 > X <- matrix(rnorm(1000000), 1000, 1000)
@@ -2110,6 +2110,20 @@ www-address=127.0.0.1
 ```
 
 Then `sudo reboot` your server to make changes stick. Otherwise, they are not applied immediately.
+
+### Step 15: Unhappy with R or Intel MKL
+
+Uninstall R and keep libraries, by running the following from Downloads/R/R-3.5.1 (where you ran `sudo make install`):
+
+```
+sudo make uninstall
+```
+
+Get rid definitely of all packages and of the R folder if you want:
+
+```sh
+sudo rm -rf usr/local/lib/R
+```
 
 </p>
 </details>
