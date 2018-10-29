@@ -1,6 +1,6 @@
 # R Installation - Windows / Debian / Ubuntu Version
 
-**Last tested : R 3.5.1, 2018/10/24 (Oct 24, 2018)**
+**Last tested : R 3.5.1, 2018/10/29 (Oct 29, 2018)**
 
 R packages for installation, the Windows / Debian / Ubuntu version.
 
@@ -2062,7 +2062,7 @@ system.time(svd(X))
 
 If you are getting under 1 second, you are not using the standard R BLAS (because you need a computer with over 7 GHz to go under 1 second with the standard R BLAS). Here is MKL (OpenBLAS fares similarly):
 
-```
+```r
 > X <- matrix(rnorm(1000000), 1000, 1000)
 > system.time(svd(X))
    user  system elapsed 
@@ -2071,7 +2071,7 @@ If you are getting under 1 second, you are not using the standard R BLAS (becaus
 
 With standard R BLAS, speed is doomed to favor (near) perfect reproducibility:
 
-```
+```r
 > X <- matrix(rnorm(1000000), 1000, 1000)
 > system.time(svd(X))
    user  system elapsed 
@@ -2096,14 +2096,14 @@ wget https://s3.amazonaws.com/rstudio-ide-build/server/trusty/amd64/rstudio-serv
 sudo gdebi rstudio-server-1.2.1070-amd64.deb
 ```
 
-Do not forget to set R preferences: inside `/etc/rstudio/rsession.conf`, add the following:
+Do not forget to set R preferences (`sudo nano /etc/rstudio/rsession.conf`): inside `/etc/rstudio/rsession.conf`, add the following:
 
 ```sh
 r-libs-user=usr/local/lib/R/library
 session-timeout-minutes=0
 ```
 
-And also inside `/etc/rstudio/rserver.conf` to protect RStudio Server if required for front-facing Internet servers:
+And also inside `/etc/rstudio/rserver.conf` to protect RStudio Server (`sudo nano /etc/rstudio/rserver.conf`) if required for front-facing Internet servers:
 
 ```sh
 www-address=127.0.0.1
@@ -2129,7 +2129,7 @@ sudo rm -rf usr/local/lib/R
 
 ### Step 16: Best VNC for remote control
 
-Unhappy with x2go crashing on Windows? Use VNC!
+Unhappy with x2go crashing on Windows? Use VNC! It works very well even for very high latency (>300ms) low bandwidth (<1Mbps) networks/routing through Internet. Setup with SSH port forwarding obviously to not give out your passwords in clear text!
 
 TigerVNC, this is the BEST solution:
 
