@@ -2083,7 +2083,7 @@ With standard R BLAS, speed is doomed to favor (near) perfect reproducibility:
 Run the following for RStudio Desktop Preview:
 
 ```sh
-sudo apt-get install libclang-3.8-dev libclang-common-3.8-dev libclang-dev libclang1-3.8 libllvm3.8 libobjc-5-dev libobjc4
+sudo apt-get install lib32gcc1 lib32stdc++6 libc6-i386 libclang-7-dev libclang-common-7-dev libclang-dev libclang1-7 libgc1c2 libobjc-8-dev libobjc4
 wget https://s3.amazonaws.com/rstudio-ide-build/desktop/trusty/amd64/rstudio-1.2.1070-amd64.deb
 sudo gdebi rstudio-1.2.1070-amd64.deb
 ```
@@ -2091,7 +2091,7 @@ sudo gdebi rstudio-1.2.1070-amd64.deb
 Run the following for RStudio Server Preview:
 
 ```sh
-sudo apt-get install libclang-3.8-dev libclang-common-3.8-dev libclang-dev libclang1-3.8 libllvm3.8 libobjc-5-dev libobjc4
+sudo apt-get install lib32gcc1 lib32stdc++6 libc6-i386 libclang-7-dev libclang-common-7-dev libclang-dev libclang1-7 libgc1c2 libobjc-8-dev libobjc4
 wget https://s3.amazonaws.com/rstudio-ide-build/server/trusty/amd64/rstudio-server-1.2.1070-amd64.deb
 sudo gdebi rstudio-server-1.2.1070-amd64.deb
 ```
@@ -2109,7 +2109,9 @@ And also inside `/etc/rstudio/rserver.conf` to protect RStudio Server if require
 www-address=127.0.0.1
 ```
 
-Then `sudo reboot` your server to make changes stick. Otherwise, they are not applied immediately.
+Then `sudo reboot` your server to make all the changes stick forever. Otherwise, they are not applied immediately.
+
+Now, you can use RStudio Server from your own desktop using a SSH tunnel and port forwarding to 8787.
 
 ### Step 15: Unhappy with R or Intel MKL
 
@@ -2124,6 +2126,40 @@ Get rid definitely of all packages and of the R folder if you want:
 ```sh
 sudo rm -rf usr/local/lib/R
 ```
+
+### Step 16: Best VNC for remote control
+
+Unhappy with x2go crashing on Windows? Use VNC!
+
+TigerVNC, this is the BEST solution:
+
+```sh
+sudo apt-get install tigervnc-standalone-server
+```
+
+Using `nano ~/.vnc/xstartup` (Ctrl+X + y + Enter to exit once done), insert the following:
+
+```sh
+#!/bin/bash
+xrdb $HOME/.Xresources
+autocutsel -fork
+startxfce4 &
+```
+
+Allow rights on the newly created file...:
+
+```
+sudo chmod +x ~/.vnc/xstartup
+```
+
+Edit VNC configuration file using `sudo nano /etc/vnc.conf` and add:
+
+```
+$localhost = "yes";
+$depth = "16";
+```
+
+Now you can run `vncserver` from your user, and connect to VNC using a SSH tunnel with port forwarding to port 5901!
 
 </p>
 </details>
