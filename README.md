@@ -1,6 +1,6 @@
 # R Installation - Windows / Debian / Ubuntu Version
 
-**Last tested : R 3.5.1, 2018/10/29 (Oct 29, 2018)**
+**Last tested : R 3.5.1, 2018/12/01 (Dec 01, 2018)**
 
 R packages for installation, the Windows / Debian / Ubuntu version.
 
@@ -1535,7 +1535,7 @@ sudo passwd root
 passwd
 sudo apt-get update
 sudo apt-get install openssh-server fail2ban
-sudo gedit /etc/ssh/sshd_config => change port to 55556
+sudo gedit /etc/ssh/sshd_config => change port to anything you want
 sudo systemctl restart ssh
 reboot
 ```
@@ -1613,7 +1613,7 @@ wget https://raw.githubusercontent.com/speed47/spectre-meltdown-checker/master/s
 sudo sh spectre-meltdown-checker.sh
 ```
 
-### Step 7: Setup Intel Distribution for Python
+### Step 7: Setup Python (Intel Distribution for Python)
 
 To setup Intel Distribution for Python, we are using Miniconda, which is a lightweight Anaconda (do yes, enter, and no for the Miniconda installation when requested):
 
@@ -1623,7 +1623,7 @@ mkdir R
 cd R
 sudo apt-get install curl
 wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
-sudo bash Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh
 ```
 
 Enable symlinks to access `conda` from anywhere (:
@@ -1637,24 +1637,83 @@ sudo ln -s /home/laurae/miniconda3/bin/deactivate /usr/bin/deactivate  # Change 
 Then we can install Intel Distribution for Python from conda:
 
 ```
-sudo conda config --add channels intel
-sudo conda create -n r-tensorflow intelpython3_full python=3
+conda config --add channels intel
+conda create -n r-tensorflow intelpython3_full
 ```
 
 To install keras, do the following:
 
 ```sh
-source activate r-tensorflow
-sudo conda install keras
-source deactivate r-tensorflow
+conda activate r-tensorflow
+conda install keras
+conda deactivate
 ```
 
-If you really want to use Anaconda, the symlink should be done the following way:
+Unhappy with the environment? Uninstall it:
 
 ```sh
-sudo ln -s /home/laurae/anaconda3/bin/conda /usr/bin/conda
-sudo ln -s /home/laurae/anaconda3/bin/activate /usr/bin/activate
-sudo ln -s /home/laurae/anaconda3/bin/deactivate /usr/bin/deactivate
+conda remove --name r-tensorflow --all
+```
+
+Unhappy with Intel Python? Remove the channel:
+
+```sh
+conda config --remove channels intel
+```
+
+Want to destroy Conda fully? Open a console and run the following:
+
+```sh
+rm -rf miniconda
+rm -rf ./condarc
+```
+
+### Step 7 Alternative: Setup Python (Conda)
+
+To setup Conda for Python, we are using Miniconda, which is a lightweight Anaconda (do yes, enter, and no for the Miniconda installation when requested):
+
+```sh
+cd Downloads
+mkdir R
+cd R
+sudo apt-get install curl
+wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh
+```
+
+Enable symlinks to access `conda` from anywhere (:
+
+```sh
+sudo ln -s /home/laurae/miniconda3/bin/conda /usr/bin/conda  # Change this user
+sudo ln -s /home/laurae/miniconda3/bin/activate /usr/bin/activate  # Change this user
+sudo ln -s /home/laurae/miniconda3/bin/deactivate /usr/bin/deactivate  # Change this user
+```
+
+Then we can install Tensorflow and all Anaconda packages from conda:
+
+```
+conda create -n r-tensorflow anaconda tensorflow keras spyder scikit-learn=0.20
+```
+
+To install keras, do the following:
+
+```sh
+conda activate r-tensorflow
+conda install keras
+conda deactivate
+```
+
+Unhappy with the environment? Uninstall it:
+
+```sh
+conda remove --name r-tensorflow --all
+```
+
+Want to destroy Conda fully? Open a console and run the following:
+
+```sh
+rm -rf miniconda
+rm -rf ./condarc
 ```
 
 ### Step 8: Install R pre-requisites
