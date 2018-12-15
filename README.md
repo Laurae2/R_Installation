@@ -1,6 +1,6 @@
 # R Installation - Windows / Debian / Ubuntu Version
 
-**Last tested : R 3.5.1, 2018/12/01 (Dec 01, 2018)**
+**Last tested : R 3.5.1, 2018/12/15 (Dec 15, 2018)**
 
 R packages for installation, the Windows / Debian / Ubuntu version.
 
@@ -12,6 +12,7 @@ Validation on Windows Subsystem for Linux:
 
 | Operating System | Success | R Version |
 | --- | --- | --- |
+| Ubuntu 18.04 | :heavy_check_mark: Pass! | :100: R 3.5.x, R 3.4.4 |
 | Ubuntu 16.04 | :heavy_check_mark: Pass! | :100: R 3.5.x, R 3.4.4 |
 
 Validation on Windows operating systems:
@@ -51,7 +52,7 @@ Validation on Ubuntu operating systems:
 | Ubuntu 14.10 | :interrobang: Unknown... | :trident: None yet! |
 | Ubuntu 14.04 | :interrobang: Unknown... | :trident: None yet! |
 
-N.B: Ubuntu 18.10 and pop!_OS 18.10 requires a `gfortran` update. We provide a different way of installing R and Python for 18.10: Intel Distribution for Python, and R with Intel MKL.
+N.B: Ubuntu 18.10 and pop!_OS 18.10 requires a `gfortran` update. We provide a different way of installing R and Python for 18.10: Intel Distribution for Python, and R with Intel MKL. We also provide GPU steps for Ubuntu 18.10 and pop!_OS 18.10.
 
 Validation on SUSE operating systems:
 
@@ -1644,9 +1645,9 @@ conda create -n r-tensorflow intelpython3_full
 To install keras, do the following:
 
 ```sh
-conda activate r-tensorflow
+source activate r-tensorflow
 conda install keras
-conda deactivate
+source deactivate
 ```
 
 Unhappy with the environment? Uninstall it:
@@ -1698,9 +1699,9 @@ conda create -n r-tensorflow anaconda tensorflow keras spyder scikit-learn=0.20
 To install keras, do the following:
 
 ```sh
-conda activate r-tensorflow
+source activate r-tensorflow
 conda install keras
-conda deactivate
+source deactivate
 ```
 
 Unhappy with the environment? Uninstall it:
@@ -2034,8 +2035,8 @@ devtools::install_github("Laurae2/lgbdl", upgrade_dependencies = FALSE)
 devtools::install_github("twitter/AnomalyDetection", upgrade_dependencies = FALSE)
 devtools::install_github("cmpolis/datacomb", subdir = "pkg", ref = "1.1.2", upgrade_dependencies = FALSE)
 
-xgbdl::xgb.dl(compiler = "gcc", commit = "e26b5d6", use_avx = FALSE, use_gpu = FALSE)
-lgbdl::lgb.dl(commit = "3ad9cba", compiler = "gcc", cores = 1)
+xgbdl::xgb.dl(compiler = "gcc", commit = "a2dc929", use_avx = FALSE, use_gpu = FALSE)
+lgbdl::lgb.dl(commit = "78c2b76", compiler = "gcc", cores = 1)
 
 devtools::install_github("Laurae2/Laurae", upgrade_dependencies = FALSE)
 devtools::install_github("Laurae2/LauraeParallel", upgrade_dependencies = FALSE)
@@ -2220,391 +2221,122 @@ $depth = "16";
 
 Now you can run `vncserver` from your user, and connect to VNC using a SSH tunnel with port forwarding to port 5901!
 
-</p>
-</details>
+### Step 17: Add GPU (NVIDIA) support (pop_OS! only)
 
-## Ubuntu 17.10
+We will be using System76's repositories to install GPU support for NVIDIA.
 
-<details><summary>:information_desk_person: CLICK THE ARROW TO REVEAL Ubuntu 17.10 steps</summary>
-<p>
+#### Step 17.1: General Setup for NVIDIA and OpenCL
 
-### Step 1: Check hardware and software pre-requisites
-
-To perform in Bash shell.
+Run the following:
 
 ```sh
-sudo apt update
-sudo apt upgrade
-sudo apt-get install openjdk-9-jre-headless
-```
-
-### Step 2: Python packages
-
-Linux can download and install Anaconda using the following:
-
-```r
-curl -O https://repo.continuum.io/archive/Anaconda3-5.1.0-Linux-x86_64.sh
-bash Anaconda3-5.1.0-Linux-x86_64.sh
-```
-
-Run using Anaconda shell:
-
-```py
-conda update conda
-conda create -n r-tensorflow anaconda
-source activate r-tensorflow
-pip install --upgrade pip
-pip install --ignore-installed --upgrade tensorflow==1.6.0
-pip install h5py requests pyyaml Pillow
-pip install keras==2.1.5
-```
-
-If `activate r-tensorflow` fails, run `source activate r-tensorflow`.
-
-Jupyter Notebook IP casting can be defined using the following in Linux:
-
-```py
-jupyter notebook --generate-config
-vi ./.jupyter/jupyter_notebook_config.py
-```
-
-Then, modify c.NotebookApp.ip = '0.0.0.0' to allow accessing Jupyter Notebook from anywhere (not recommended in Internet).
-
-Esc + : + wq! + Enter can help a lot to quit vi
-
-### Step 3: Use precompiled R
-
-To perform in Bash shell.
-
-```sh
-sudo apt-get install software-properties-common
-sudo add-apt-repository "deb http://cran.rstudio.com/bin/linux/ubuntu $(lsb_release -sc)/"
-gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys E084DAB9
-gpg -a --export E084DAB9 | sudo apt-key add -
+sudo apt-add-repository -y ppa:system76-dev/stable
 sudo apt-get update
+sudo apt-get install -y system76-driver
+sudo apt-get install system76-driver-nvidia
+sudo apt-get install system76-cuda-10.0
+sudo apt-get install system76-cudnn-10.0
+sudo apt-get install g++-6
+sudo apt-get install ocl-icd-opencl-dev
+sudo apt-get install opencl-headers clinfo
+sudo apt-get install nvidia-opencl-icd
+sudo apt-get install libnvidia-compute-410
 ```
+
+Add the following to ~/.bashrc using `sudo nano ~/.bashrc`:
 
 ```sh
-sudo apt-get install r-base
-sudo apt-get install r-cran-rmpi
-sudo apt-get install cmake libcurl4-gnutls-dev libcurl4-openssl-dev libxml2-dev git-core libssl-dev libssh2-1-dev gdebi-core openjdk-9-jre-headless libwebp-dev libprotobuf-dev libjq-dev libpoppler-cpp-dev libcairo2-dev librsvg2-dev libv8-3.14-dev libgtk2.0-dev default-jre default-jdk libgmp3-dev libgsl-dev jags libudunits2-dev protobuf-compiler mesa-common-dev libglu1-mesa-dev coinor-libsymphony-dev libtiff5-dev tcl-dev tk-dev libmpfr-dev ggobi libgdal-dev libglpk-dev libgeos-dev netcdf-bin libfftw3-dev libopenmpi-dev bwidget mpi-default-bin
+CUDA_HOME="/usr/lib/cuda"
+export PATH="$PATH:/usr/lib/cuda/bin:/usr/lib/x86_64-linux-gnu"
 ```
 
-And add RStudio Server:
+Download NCCL: https://developer.nvidia.com/nccl - we will assume it is nccl-repo-ubuntu1804-2.3.7-ga-cuda10.0_1-1_amd64.deb. Run the following:
 
 ```sh
-wget https://download2.rstudio.org/rstudio-server-1.1.442-amd64.deb
-sudo gdebi rstudio-server-1.1.442-amd64.deb
+sudo dpkg -i nccl-repo-ubuntu1804-2.3.7-ga-cuda10.0_1-1_amd64.deb
 ```
 
-### Step 4: add R packages
+It will tell you the command to run to add the key for the repository:
 
-If you get an error on `libjq-dev`, this is normal: it is a Ubuntu 17+ exclusive package.
+```sh
+sudo apt-key add /var/nccl-repo-2.3.7-ga-cuda10.0/7fa2af80.pub
+```
 
-From an R console (non RStudio), run the following:
+Run the following once done:
+
+```sh
+sudo dpkg -i nccl-repo-ubuntu1804-2.3.7-ga-cuda10.0_1-1_amd64.deb
+sudo apt-get update
+sudo apt-get install libnccl2 libnccl-dev
+```
+
+#### Step 17.2: Add Monitoring
+
+Use the following to add monitoring for GPUs:
+
+```sh
+mkdir nvtop
+cd nvtop
+git clone https://github.com/Syllo/nvtop.git
+mkdir -p nvtop/build
+cd nvtop/build
+cmake .. -DNVML_RETRIEVE_HEADER_ONLINE=True -DCMAKE_BUILD_TYPE=Release
+make
+sudo make install
+```
+
+You can run the monitoring using `nvtop`.
+
+#### Step 17.3: Add GPU support for some R packages
+
+In R, run the following to install gpuR, xgboost (with NCCL), and LightGBM with GPU support:
 
 ```r
-install.packages("devtools", dependencies = TRUE, Ncpus = parallel::detectCores())
-install.packages("tcltk2", dependencies = TRUE, Ncpus = parallel::detectCores())
-
-source("http://bioconductor.org/biocLite.R")
-biocLite(c("graph", "RBGL"))
-
-packages <- c("abind", "acepack", "actuar", "ada", "adabag", "ade4", "ade4TkGUI", 
-"adegraphics", "adehabitatLT", "adehabitatMA", "ADGofTest", "AER", 
-"AGD", "agricolae", "AICcmodavg", "akima", "alabama", "AlgDesign", 
-"alphahull", "alr3", "alr4", "amap", "Amelia", "anchors", "animation", 
-"aod", "aods3", "ape", "aplpack", "argparse", "arm", "arules", 
-"arulesViz", "ascii", "assertthat", "AUC", "BaBooN", "backports", 
-"barcode", "bartMachine", "bartMachineJARs", "base64", "base64enc", 
-"BatchJobs", "BayesFactor", "bayesplot", "BayesX", "BayesXsrc", 
-"BB", "BBmisc", "bbmle", "BCA", "bcp", "BDgraph", "bdsmatrix", 
-"betareg", "BH", "BHH2", "BiasedUrn", "bibtex", "biclust", "biganalytics", 
-"biglm", "bigmemory", "bigmemory.sri", "bigRR", "bigtabulate", 
-"binda", "bindr", "bindrcpp", "binGroup", "bisoreg", "bit", "bit64", 
-"bitops", "blme", "blob", "BMA", "boot", "bootstrap", "Boruta", 
-"BradleyTerry2", "breakpoint", "brew", "brglm", "brnn", "broom", 
-"BsMD", "bst", "btergm", "C50", "ca", "Cairo", "cairoDevice", 
-"CALIBERrfimpute", "calibrator", "candisc", "caper", "car", "CARBayes", 
-"CARBayesdata", "carData", "care", "caret", "caretEnsemble", 
-"catdata", "caTools", "cba", "ccaPP", "cclust", "CDM", "CDVine", 
-"cellranger", "cem", "censReg", "CEoptim", "changepoint", "checkmate", 
-"checkpoint", "chemometrics", "chron", "circlize", "CircStats", 
-"citr", "Ckmeans.1d.dp", "class", "classInt", "clue", "cluster", 
-"clusterSim", "clustvarsel", "clv", "clValid", "cmaes", "cmprsk", 
-"coda", "codetools", "coin", "colorplaner", "colorspace", "colourpicker", 
-"combinat", "commonmark", "CompQuadForm", "compute.es", "conf.design", 
-"config", "contfrac", "contrast", "copula", "CORElearn", "corpcor", 
-"corrgram", "corrplot", "covr", "cowplot", "CoxBoost", "coxme", 
-"cplm", "crayon", "crosstalk", "crossval", "crp.CSFP", "crrstep", 
-"crs", "cshapes", "cubature", "Cubist", "curl", "cvAUC", "CVST", 
-"cvTools", "d3heatmap", "d3Network", "DAAG", "dagitty", "data.table", 
-"data.tree", "DatABEL", "dataframes2xls", "date", "dbConnect", 
-"DBI", "dbscan", "ddalpha", "debugme", "Deducer", "DeducerExtras", 
-"deepnet", "degreenet", "deldir", "dendextend", "dendroextras", 
-"DendSer", "denstrip", "DEoptim", "DEoptimR", "depthTools", "Deriv", 
-"desc", "descr", "DescTools", "deSolve", "Devore7", "devtools", 
-"dfoptim", "diagram", "DiagrammeR", "DiagrammeRsvg", "DiceDesign", 
-"DiceKriging", "DiceOptim", "dichromat", "digest", "dimRed", 
-"diptest", "directlabels", "discretization", "DiscriMiner", "distr", 
-"distrEx", "DistributionUtils", "diveMove", "dlm", "DMwR", "doBy", 
-"DoE.base", "DoE.wrapper", "doMPI", "doParallel", "doRedis", 
-"DoseFinding", "dotCall64", "downloader", "dplR", "dplyr", "drat", 
-"DRR", "DT", "dtplyr", "dtw", "dygraphs", "dynamicTreeCut", "dynlm", 
-"e1071", "eaf", "earth", "Ecdat", "Ecfun", "ecodist", "effects", 
-"eha", "elasticnet", "ElemStatLearn", "ellipse", "elliptic", 
-"elmNN", "emdbook", "emoa", "emulator", "energy", "ENmisc", "entropy", 
-"EntropyExplorer", "Epi", "EpiModel", "epitools", "erer", "ergm", 
-"ergm.count", "ergm.userterms", "eRm", "estimability", "etm", 
-"evaluate", "evd", "expint", "ExplainPrediction", "expm", "extrafont", 
-"extrafontdb", "extraTrees", "factoextra", "FactoMineR", "Fahrmeir", 
-"fail", "faraway", "fAssets", "fastcluster", "fastdigest", "fastICA", 
-"fastmatch", "fastR", "fBasics", "fCopulae", "fda", "fdrtool", 
-"FeaLect", "feather", "FeatureHashing", "fExoticOptions", "fExtremes", 
-"ff", "ffbase", "FFTrees", "fftw", "fGarch", "fields", "filehash", 
-"fImport", "findpython", "fit.models", "fitdistrplus", "flare", 
-"flashClust", "flexclust", "flexmix", "flexsurv", "FME", "FMStable", 
-"fMultivar", "FNN", "fNonlinear", "fontcm", "fOptions", "forcats", 
-"foreach", "forecast", "foreign", "formatR", "formattable", "Formula", 
-"fortunes", "forward", "fpc", "fPortfolio", "fracdiff", "FRB", 
-"frbs", "fRegression", "FrF2", "FrF2.catlg128", "FSelector", 
-"fst", "fTrading", "fts", "futile.logger", "futile.options", 
-"future", "GA", "gam", "gamair", "GAMBoost", "gamboostLSS", "gamlss", 
-"gamlss.data", "gamlss.dist", "gamm4", "gapminder", "gbm", "gclus", 
-"gdata", "gdtools", "gee", "geeM", "geepack", "GenABEL", "GenABEL.data", 
-"GeneralizedHyperbolic", "genetics", "GenSA", "geoR", "geoRglm", 
-"geosphere", "GERGM", "getopt", "GGally", "ggcorrplot", "ggdendro", 
-"ggeffects", "ggExtra", "ggformula", "ggfortify", "ggiraph", 
-"ggm", "ggplot2", "ggplot2movies", "ggpubr", "ggrepel", "ggsci", 
-"ggsignif", "ggThemeAssist", "ggthemes", "ggvis", "giphyr", "git2r", 
-"gitgadget", "glasso", "glmmML", "glmmTMB", "glmnet", "glmulti", 
-"GlobalOptions", "globals", "glue", "gmailr", "Gmedian", "gmm", 
-"gmodels", "gmp", "gnm", "gof", "goftest", "googleVis", "gower", 
-"gpairs", "GPArotation", "GPfit", "gplots", "gRbase", "GREA", 
-"gridBase", "gridExtra", "grouped", "gsl", "gss", "gstat", "gsubfn", 
-"gtable", "gtools", "Guerry", "gWidgets", "gWidgetsRGtk2", "gWidgetstcltk", 
-"h2o", "haplo.stats", "haven", "hdi", "heatmaply", "heplots", 
-"hergm", "hexbin", "hglm", "hglm.data", "HH", "HiClimR", "highlight", 
-"highr", "hmeasure", "Hmisc", "hms", "hrbrthemes", "HSAUR", "HSAUR2", 
-"HSAUR3", "htmlTable", "htmltools", "htmlwidgets", "httpuv", 
-"httr", "huge", "hunspell", "hwriter", "hypergeo", "ibdreg", 
-"ic.infer", "ICS", "ICSNP", "igraph", "igraphdata", "import", 
-"imputeTS", "ineq", "influenceR", "Information", "infotheo", 
-"inline", "inlinedocs", "intergraph", "intervals", "intsvy", 
-"iplots", "ipred", "irace", "irlba", "irr", "isa2", "Iso", "ISOcodes", 
-"isotone", "ISwR", "iterators", "itertools", "JavaGD", "JGR", 
-"jomo", "jpeg", "jsonlite", "kappalab", "kdecopula", "Kendall", 
-"keras", "kernlab", "KernSmooth", "KFAS", "kinship2", "kknn", 
-"klaR", "kmi", "knitcitations", "knitr", "kohonen", "koRpus", 
-"ks", "labeling", "labelled", "laeken", "LaF", "laGP", "Lahman", 
-"lambda.r", "largeVis", "lars", "lasso2", "latentnet", "lattice", 
-"latticeExtra", "lava", "lava.tobit", "lavaan", "lavaan.survey", 
-"lawstat", "lazyeval", "LCA", "lcopula", "leaflet", "leaps", 
-"LearnBayes", "lfda", "lfe", "lhs", "LiblineaR", "likert", "linprog", 
-"lintr", "lisrelToR", "listenv", "littleboxes", "lme4", "lmerTest", 
-"lmodel2", "lmtest", "loa", "locfit", "logcondens", "LogicReg", 
-"logistf", "logspline", "lokern", "longmemo", "loo", "lpSolve", 
-"lpSolveAPI", "lqa", "lqmm", "lsmeans", "lubridate", "MAc", "MAd", 
-"magrittr", "mail", "manipulate", "mapdata", "mapproj", "maps", 
-"maptools", "maptree", "markdown", "MASS", "Matching", "MatchIt", 
-"mathgraph", "matlab", "Matrix", "matrixcalc", "MatrixModels", 
-"matrixStats", "maxLik", "maxlike", "MBA", "MBESS", "mboost", 
-"mc2d", "mcclust", "mcgibbsit", "mclust", "mcmc", "MCMCglmm", 
-"MCMCpack", "mco", "mda", "MDSGUI", "mediation", "memisc", "memoise", 
-"MEMSS", "merTools", "MetABEL", "metafor", "Metrics", "mets", 
-"mgcv", "mi", "mice", "miceadds", "microbenchmark", "microplot", 
-"mime", "minerva", "miniUI", "minpack.lm", "minqa", "mirt", "mirtCAT", 
-"misc3d", "miscTools", "missForest", "missMDA", "mitml", "mitools", 
-"mix", "mlbench", "MLmetrics", "mlmRev", "mlogit", "mlr", "mlrMBO", 
-"mnlogit", "mnormt", "modeest", "ModelMetrics", "modelr", "modeltools", 
-"mondate", "monreg", "moonBook", "mosaic", "mosaicCalc", "mosaicCore", 
-"mosaicData", "movMF", "MplusAutomation", "mpmi", "MPV", "mratios", 
-"mRMRe", "msm", "mstate", "MSwM", "muhaz", "multcomp", "multcompView", 
-"multicool", "multiwayvcov", "MuMIn", "munsell", "mvinfluence", 
-"mvnormtest", "mvoutlier", "mvtnorm", "NbClust", "ncdf4", "ncvreg", 
-"ndtv", "network", "networkD3", "networkDynamic", "networkDynamicData", 
-"networksis", "neuralnet", "NeuralNetTools", "NHANES", "nlme", 
-"nloptr", "NLP", "NMF", "nnet", "nnls", "nodeHarvest", "nor1mix", 
-"norm", "nortest", "np", "numbers", "numDeriv", "nws", "nycflights13", 
-"obliqueRF", "odfWeave", "officer", "OpenMx", "openssl", "openxlsx", 
-"optextras", "optimx", "optmatch", "orcutt", "ordinal", "ore", 
-"orloca", "orloca.es", "orthopolynom", "outliers", "oz", "packrat", 
-"pageviews", "pamr", "pan", "pander", "parallelMap", "ParamHelpers", 
-"partitions", "party", "partykit", "pastecs", "pbapply", "pbivnorm", 
-"pbkrtest", "pbmcapply", "PBSmapping", "PBSmodelling", "pcalg", 
-"pcaPP", "pec", "penalized", "PerformanceAnalytics", "permute", 
-"pgirmess", "pixmap", "pkgconfig", "pkgKitten", "pkgmaker", "PKI", 
-"PKPDmodels", "playwith", "plm", "plogr", "plot3D", "plotly", 
-"plotmo", "plotrix", "pls", "plyr", "PMCMR", "pmml", "pmmlTransformations", 
-"png", "poistweedie", "poLCA", "polspline", "polyclip", "polycor", 
-"polynom", "prabclus", "pracma", "praise", "PredictABEL", "prediction", 
-"prefmod", "prettyunits", "prim", "pROC", "processx", "prodlim", 
-"profdpm", "profileModel", "propagate", "proto", 
-"proxy", "pryr", "pscl", "pso", "pspline", "psych", "psychotools", 
-"psychotree", "purrr", "pvclust", "pwr", "qap", "qcc", "qgraph", 
-"QRAGadget", "qrng", "quadprog", "quantmod", "quantreg", "questionr", 
-"qvcalc", "R.cache", "R.devices", "R.matlab", "R.methodsS3", 
-"R.oo", "R.rsp", "R.utils", "R2BayesX", "R2Cuba", "R2HTML", "R2jags", 
-"R2OpenBUGS", "R2PPT", "R2wd", "R2WinBUGS", "R6", "radiant", 
-"radiant.basics", "radiant.data", "radiant.design", "radiant.model", 
-"radiant.multivariate", "RandomFields", "RandomFieldsUtils", 
-"randomForest", "randomForestSRC", "randtests", "randtoolbox", 
-"ranger", "RankAggreg", "RANN", "rappdirs", "RArcInfo", "rARPACK", 
-"RaschSampler", "raster", "rasterVis", "rattle", "rbenchmark", 
-"rbounds", "rbvs", "Rcgmin", "Rcmdr", "RcmdrMisc", "RcmdrPlugin.BCA", 
-"RcmdrPlugin.coin", "RcmdrPlugin.depthTools", "RcmdrPlugin.DoE", 
-"RcmdrPlugin.doex", "RcmdrPlugin.epack", "RcmdrPlugin.Export", 
-"RcmdrPlugin.FactoMineR", "RcmdrPlugin.HH", "RcmdrPlugin.IPSUR", 
-"RcmdrPlugin.KMggplot2", "RcmdrPlugin.mosaic", "RcmdrPlugin.orloca", 
-"RcmdrPlugin.pointG", "RcmdrPlugin.qual", "RcmdrPlugin.SLC", 
-"RcmdrPlugin.sos", "RcmdrPlugin.steepness", "RcmdrPlugin.survival", 
-"RcmdrPlugin.TeachingDemos", "RcmdrPlugin.UCA", "RColorBrewer", 
-"Rcpp", "RcppArmadillo", "RcppCNPy", "RcppDE", "RcppEigen", "RcppParallel", 
-"RcppProgress", "RcppRoll", "Rcsdp", "RCurl", "readr", "readstata13", 
-"readxl", "recipes", "recommenderlab", "ref", "RefManageR", "registry", 
-"relaimpo", "relations", "relax", "relevent", "reliaR", "relimp", 
-"rem", "rematch", "reportr", "repr", "reshape", "reshape2", "reticulate", 
-"rex", "rFerns", "rgdal", "rgenoud", "rgeos", "rgexf", "rggobi", 
-"rgl", "Rglpk", "rglwidget", "RgoogleMaps", "RGtk2", "RGtk2Extras", 
-"RH2", "rio", "riskRegression", "RItools", "rjags", "rJava", 
-"RJDBC", "rjson", "RJSONIO", "rknn", "rlang", "rlecuyer", "rmarkdown", 
-"rmeta", "Rmpfr", "Rmpi", "rms", "RMySQL", "rneos", "rngtools", 
-"rngWELL", "robCompositions", "robust", "robustbase", "rockchalk", 
-"ROCR", "RODBC", "Rook", "rootSolve", "rotationForest", "roxygen2", 
-"rpanel", "rpart", "rpart.plot", "rpf", "rpivotTable", "RPostgreSQL", 
-"rprojroot", "rrcov", "rredis", "RRF", "rrlda", "RSclient", "rsconnect", 
-"Rserve", "RSiena", "RSKC", "rsm", "RSNNS", "Rsolnp", "RSpectra", 
-"RSQLite", "rstan", "rstanarm", "rstantools", "rsvg", "Rsymphony", 
-"rtiff", "Rtsne", "Rttf2pt1", "rugarch", "RUnit", "Runuran", 
-"rversions", "rvest", "rvg", "Rvmmin", "RWeka", "RWekajars", 
-"Ryacas", "sampleSelection", "sampling", "sandwich", "scagnostics", 
-"scales", "scalreg", "scatterplot3d", "sda", "SEL", "selectr", 
-"sem", "semiArtificial", "semPlot", "semTools", "sendmailR", 
-"sendplot", "SensoMineR", "seriation", "setRNG", "sets", "sfsmisc", 
-"sgeostat", "shape", "shapefiles", "shapes", "shiny", "shinyAce", 
-"shinyjs", "shinystan", "shinythemes", "signal", "SimComp", "SimDesign", 
-"simecol", "simex", "simsem", "sirt", "SIS", "sjlabelled", "sjmisc", 
-"sjPlot", "sjstats", "SkewHyperbolic", "skmeans", "slackr", "slam", 
-"SLC", "Sleuth2", "sm", "smbinning", "smoof", "sn", "sna", "snakecase", 
-"snow", "SnowballC", "snowfall", "snowFT", "som", "soma", "sos", 
-"sourcetools", "sp", "spacetime", "spam", "sparcl", "SparseGrid", 
-"sparseLDA", "SparseM", "sparsio", "spatial", "spatstat", "spatstat.data", 
-"spatstat.utils", "spc", "spd", "spdep", "speedglm", "sphet", 
-"splancs", "splm", "spls", "sqldf", "sROC", "stabledist", "stabs", 
-"StanHeaders", "startupmsg", "StatMatch", "statmod", "statnet", 
-"statnet.common", "steepness", "stepPlr", "stinepack", "stringdist", 
-"stringi", "stringr", "strucchange", "subselect", "subsemble", 
-"sudoku", "SuperLearner", "superpc", "SuppDists", "survey", "survival", 
-"svd", "svglite", "svGUI", "svUnit", "svyPVpack", "SwarmSVM", 
-"SweaveListingUtils", "systemfit", "tables", "tabplot", "tabplotd3", 
-"TAM", "tclust", "TeachingDemos", "tensor", "tensorA", 
-"tensorflow", "tergm", "testit", "testthat", "texreg", "tfestimators", 
-"tfruns", "tgp", "TH.data", "threejs", "tibble", "tidyr", "tidyselect", 
-"tikzDevice", "timeDate", "timereg", "timeSeries", "tis", "tkrplot", 
-"tm", "tmap", "TMB", "tmvtnorm", "tnam", "TransferEntropy", "tree", 
-"trimcluster", "tripack", "truncdist", "truncnorm", "truncreg", 
-"trust", "TSA", "tseries", "tseriesEntropy", "tsna", "TSP", "TTR", 
-"tufte", "tuneR", "tweedie", "ucminf", "uniReg", "unmarked", 
-"urca", "uuid", "V8", "VarianceGamma", "vars", "vcd", "vcdExtra", 
-"Vdgraph", "vegan", "verification", "VGAM", "VGAMdata", "VIM", 
-"VIMGUI", "VineCopula", "vioplot", "viridis", "viridisLite", 
-"visNetwork", "vtreat", "wavelets", "waveslim", "wbstats", "webp", 
-"webshot", "WGCNA", "WhatIf", "whisker", "whoami", "withr", "woe", 
-"wordcloud", "WrightMap", "WriteXLS", "wskm", "wsrf", "xergm", 
-"xergm.common", "xkcd", "XLConnect", "XLConnectJars", "XML", 
-"xml2", "xtable", "xts", "YaleToolkit", "yaml", "yarrr", "zeallot", 
-"Zelig", "zip", "zipcode", "zoo", "ztable", "getPass", "lineprof", 
-"mapmate", "miniCRAN", "NMOF", "odbc", "recosystem", "redpen", 
-"rgeoapi", "rgp", "rgpui", "RSAP", "scrypt", "smooth", "stR", 
-"Boom", "BoomSpikeSlab", "bsts", "CausalImpact", "cli", "ClusterR", 
-"emmeans", "FD", "fromo", "gdalUtils", "geojson", "geojsonio", 
-"geojsonlint", "geometry", "ggridges", "installr", "inum", "jqr", 
-"jsonvalidate", "libcoin", "magic", "manipulateWidget", "mapview", 
-"moments", "NADA", "OceanView", "OpenImageR", "osmar", "pillar", 
-"plot3Drgl", "protolite", "ReporteRs", "ReporteRsjars", "rmapshaper", 
-"satellite", "sf", "spData", "SQUAREM", "tiff", "tmaptools", 
-"translations", "udunits2", "units", "uroot", "utf8", "xfun", 
-"zCompositions")
-install.packages(packages[which(!(packages %in% rownames(installed.packages())))], dependencies = TRUE, Ncpus = parallel::detectCores())
+devtools::install_github("cdeterman/gpuR@cuda")
+xgbdl::xgb.dl(compiler = "gcc", commit = "a2dc929", use_avx = FALSE, use_gpu = TRUE, CUDA = list("/usr/lib/cuda", "/usr/bin/gcc-6", "/usr/bin/g++-6"), NCCL = "/usr/lib/x86_64-linux-gnu")
+lgbdl::lgb.dl(commit = "78c2b76", compiler = "gcc", use_gpu = TRUE)
 ```
 
-More R packages:
+#### Step 17.4: Add GPU support for some Python packages
 
-```r
-devtools::install_github("r-lib/progress@a2678e8") # Progress bars with bug fix
-devtools::install_github("Laurae2/woe")
-devtools::install_github("Laurae2/xgbdl")
-devtools::install_github("Laurae2/lgbdl")
-devtools::install_github("twitter/AnomalyDetection")
-devtools::install_github("rstudio/tensorflow@a73c8d6") # reinstall again
-devtools::install_github("rstudio/keras@bc775ac") # reinstall again
-install.packages("reticulate") # reinstall again
-devtools::install_github("cmpolis/datacomb", subdir = "pkg", ref = "1.1.2")
+In a command line, run the following to add Tensorflow with GPU support:
+
+```py
+conda install tensorflow-gpu
 ```
 
-Installining xgboost and LightGBM:
+#### Step 17.5: Test GPU support for CLI (CUDA + OpenCL)
 
-```r
-xgbdl::xgb.dl(compiler = "gcc", commit = "8f6aadd", use_avx = TRUE, use_gpu = FALSE)
-lgbdl::lgb.dl(commit = "b419331", compiler = "gcc")
+In a command line:
+
+```sh
+nvidia-smi
+nvcc --version
+clinfo
 ```
 
-Install even more packages...:
+If you are unlucky and it does not work, run the following to get rid of the open source Nouveau drivers in Ubuntu:
 
-```r
-devtools::install_github("Laurae2/Laurae")
-devtools::install_github("Laurae2/LauraeParallel")
-devtools::install_github("Laurae2/LauraeDS")
-devtools::install_github("Laurae2/LauraeCE")
-install.packages("https://cran.r-project.org/src/contrib/Archive/tabplot/tabplot_1.1.tar.gz", repos=NULL, type="source") # Further versions are too bad / not reliable / generated unreadable plots
+```
+sudo bash -c "echo blacklist nouveau > /etc/modprobe.d/blacklist-nvidia-nouveau.conf"
+sudo bash -c "echo options nouveau modeset=0 >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf"
+cat /etc/modprobe.d/blacklist-nvidia-nouveau.conf
+sudo update-initramfs -u
+sudo reboot
 ```
 
-Confirm Tensorflow works:
+#### Step 17.6: Test Tensorflow from R
+
+Run from R:
 
 ```r
 library(reticulate)
-use_condaenv("r-tensorflow")
-reticulate::py_module_available("tensorflow")
+use_condaenv(condaenv = "r-tensorflow", required = TRUE)
+
 library(tensorflow)
 sess <- tf$Session()
-hello <- tf$constant("OKAY")
+hello <- tf$constant('Hello, TensorFlow!')
 sess$run(hello)
-```
-
-If not, the error lies here to run in Python:
-
-```py
-python
-import tensorflow as tf
-print(tf.__version__)
-okay = tf.constant("OKAY")
-sess = tf.Session()
-print(sess.run(okay))
-```
-
-### Step 5: I want RStudio Server and Desktop Preview!!!
-
-Run the following for RStudio Desktop Preview:
-
-```sh
-sudo apt-get install libclang-3.8-dev libclang-common-3.8-dev libclang-dev libclang1-3.8 libllvm3.8 libobjc-5-dev libobjc4
-wget https://s3.amazonaws.com/rstudio-ide-build/desktop/trusty/amd64/rstudio-1.2.747-amd64.deb
-sudo gdebi rstudio-1.2.747-amd64.deb
-```
-
-Run the following for RStudio Server Preview:
-
-```sh
-sudo apt-get install libclang-3.8-dev libclang-common-3.8-dev libclang-dev libclang1-3.8 libllvm3.8 libobjc-5-dev libobjc4
-wget https://s3.amazonaws.com/rstudio-ide-build/server/trusty/amd64/rstudio-server-1.2.747-amd64.deb
-sudo gdebi rstudio-server-1.2.747-amd64.deb
-```
-
-Do not forget to set R preferences: inside `/etc/rstudio/rsession.conf`, add the following:
-
-```sh
-r-libs-user=/mnt/e/WSL/R-lib/R-3.5.0 # Change this
-session-timeout-minutes=0
 ```
 
 </p>
@@ -2648,7 +2380,7 @@ You may want to update the compiler to a more recent version to benefit from new
 
 In addition, you can use a different BLAS to improve the performance of R. Intel MKL is probably the best you can get, but it is not "free".
 
-Please have a read if you intend to use Intel Compilers. Intel Compilers vs gcc: https://sites.google.com/view/lauraepp/intel-compiler (tl;dr: do not waste all those hours trying it, the benefit is very small unless you are running a very CPU-limited machine such as a laptop)
+Please have a read if you intend to use Intel Compilers. Intel Compilers vs gcc: https://sites.google.com/view/lauraepp/benchmarks/intel-compiler-may-2018 (tl;dr: do not waste all those hours trying it, the benefit is very small unless you are running a very CPU-limited machine such as a laptop)
 
 I provide below the list of compiler flags with Intel Compilers to use:
 
