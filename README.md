@@ -2250,7 +2250,7 @@ CUDA_HOME="/usr/lib/cuda"
 export PATH="$PATH:/usr/lib/cuda/bin:/usr/lib/x86_64-linux-gnu"
 ```
 
-Download NCCL: https://developer.nvidia.com/nccl - we will assume it is nccl-repo-ubuntu1804-2.3.7-ga-cuda10.0_1-1_amd64.deb. Run the following:
+If you are using multiple NVIDIA GPUs, download NCCL: https://developer.nvidia.com/nccl - we will assume it is nccl-repo-ubuntu1804-2.3.7-ga-cuda10.0_1-1_amd64.deb. Run the following:
 
 ```sh
 sudo dpkg -i nccl-repo-ubuntu1804-2.3.7-ga-cuda10.0_1-1_amd64.deb
@@ -2289,12 +2289,18 @@ You can run the monitoring using `nvtop`.
 
 #### Step 17.3: Add GPU support for some R packages
 
-In R, run the following to install gpuR, xgboost (with NCCL), and LightGBM with GPU support:
+In R, run the following to install gpuR, xgboost (without NCCL, check below with NCCL), and LightGBM with GPU support:
 
 ```r
 devtools::install_github("cdeterman/gpuR@cuda")
-xgbdl::xgb.dl(compiler = "gcc", commit = "a2dc929", use_avx = FALSE, use_gpu = TRUE, CUDA = list("/usr/lib/cuda", "/usr/bin/gcc-6", "/usr/bin/g++-6"), NCCL = "/usr/lib/x86_64-linux-gnu")
+xgbdl::xgb.dl(compiler = "gcc", commit = "a2dc929", use_avx = FALSE, use_gpu = TRUE, CUDA = list("/usr/lib/cuda", "/usr/bin/gcc-6", "/usr/bin/g++-6"))
 lgbdl::lgb.dl(commit = "78c2b76", compiler = "gcc", use_gpu = TRUE)
+```
+
+If you are using multiple GPUs, you can install xgboost with NCCL to support multiple GPUs:
+
+```r
+xgbdl::xgb.dl(compiler = "gcc", commit = "a2dc929", use_avx = FALSE, use_gpu = TRUE, CUDA = list("/usr/lib/cuda", "/usr/bin/gcc-6", "/usr/bin/g++-6"), NCCL = "/usr/lib/x86_64-linux-gnu")
 ```
 
 #### Step 17.4: Add GPU support for some Python packages
