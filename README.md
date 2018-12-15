@@ -2325,7 +2325,25 @@ sudo update-initramfs -u
 sudo reboot
 ```
 
-#### Step 17.6: Test Tensorflow from R
+#### Step 17.6: Test gpuR
+
+Run from R:
+
+```r
+library(gpuR)
+
+detectGPUs()
+listContexts()
+
+set.seed(11111)
+gpuA <- gpuMatrix(rnorm(262144), nrow = 512, ncol = 512)
+gpuB <- gpuA %*% gpuA
+as.numeric(gpuB[1, 1]) == (32.51897782759634 + 7.105427e-15)
+```
+
+You should get `TRUE` at the end. If not, you should adjust the approximation for the comparison (use `all.equal`?).
+
+#### Step 17.7: Test GPU Tensorflow from R
 
 Run from R:
 
@@ -2338,6 +2356,96 @@ sess <- tf$Session()
 hello <- tf$constant('Hello, TensorFlow!')
 sess$run(hello)
 ```
+
+#### Step 17.8: Test GPU xgboost from R
+
+Run from R, requires 4GB:
+
+```r
+library(xgboost)
+
+set.seed(1)
+N <- 500000
+p <- 100
+pp <- 25
+X <- matrix(runif(N * p), ncol = p)
+betas <- 2 * runif(pp) - 1
+sel <- sort(sample(p, pp))
+m <- X[, sel] %*% betas - 1 + rnorm(N)
+y <- rbinom(N, 1, plogis(m))
+
+tr <- sample.int(N, N * 0.90)
+
+trainer <- function(n_cpus, n_gpus, n_iterations) {
+  
+  dtrain <- xgb.DMatrix(X[tr,], label = y[tr])
+  dtest <- xgb.DMatrix(X[-tr,], label = y[-tr])
+  wl <- list(test = dtest)
+  
+  if (n_gpus == 0) {
+    
+    pt <- proc.time()
+    model <- xgb.train(list(objective = "reg:logistic", eval_metric = "logloss", subsample = 0.8, nthread = n_cpus, eta = 0.10,
+                            max_bin = 64, tree_method = "hist"),
+                       dtrain, watchlist = wl, nrounds = n_iterations)
+    my_time <- proc.time() - pt
+    
+  } else {
+    
+    pt <- proc.time()
+    model <- xgb.train(list(objective = "reg:logistic", eval_metric = "logloss", subsample = 0.8, nthread = n_cpus, eta = 0.10,
+                            max_bin = 64, tree_method = "gpu_hist", n_gpus = n_gpus),
+                       dtrain, watchlist = wl, nrounds = n_iterations)
+    my_time <- proc.time() - pt
+    
+  }
+  
+  rm(model, dtrain, dtest)
+  gc(verbose = FALSE)
+  
+  return(my_time)
+  
+}
+
+trainer(1, 1, 50)
+trainer(1, 0, 50)
+```
+
+#### Step 17.9: Test GPU LightGBM from R
+
+Run from R:
+
+```r
+library(lightgbm)
+data(agaricus.train, package = "lightgbm")
+train <- agaricus.train
+train$data[, 1] <- 1:6513
+dtrain <- lgb.Dataset(train$data, label = train$label)
+data(agaricus.test, package = "lightgbm")
+test <- agaricus.test
+dtest <- lgb.Dataset.create.valid(dtrain, test$data, label = test$label)
+valids <- list(test = dtest)
+
+params <- list(objective = "regression",
+               metric = "rmse",
+               device = "gpu",
+               gpu_platform_id = 0,
+               gpu_device_id = 0,
+               nthread = 1,
+               boost_from_average = FALSE,
+               num_tree_per_iteration = 10,
+               max_bin = 32)
+model <- lgb.train(params,
+                   dtrain,
+                   2,
+                   valids,
+                   min_data = 1,
+                   learning_rate = 1,
+                   early_stopping_rounds = 10)
+
+```
+
+If it crashes, try to play around `gpu_platform_id` and `gpu_device_id`.
 
 </p>
 </details>
