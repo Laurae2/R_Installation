@@ -501,8 +501,8 @@ Modify `/usr/lib/R/etc/Makeconf` for maximum performance for xgboost / LightGBM 
 Installining xgboost and LightGBM:
 
 ```r
-xgbdl::xgb.dl(compiler = "gcc", commit = "8f6aadd", use_avx = TRUE, use_gpu = FALSE)
-lgbdl::lgb.dl(commit = "b419331", compiler = "gcc")
+xgbdl::xgb.dl(compiler = "gcc", commit = "a2dc929", use_avx = TRUE, use_gpu = FALSE)
+lgbdl::lgb.dl(commit = "cba8244", compiler = "gcc")
 ```
 
 Modify `/usr/lib/R/etc/Makeconf` for maximum performance for xgboost / LightGBM (+0-10% speed): change back -O3 to -O2 to CXXFLAGS
@@ -1482,8 +1482,8 @@ devtools::install_github("cmpolis/datacomb", subdir = "pkg", ref = "1.1.2")
 Installining xgboost and LightGBM:
 
 ```r
-xgbdl::xgb.dl(compiler = "Visual Studio 15 2017 Win64", commit = "8f6aadd", use_avx = TRUE, use_gpu = FALSE)
-lgbdl::lgb.dl(commit = "b419331", compiler = "vs")
+xgbdl::xgb.dl(compiler = "Visual Studio 15 2017 Win64", commit = "a2dc929", use_avx = TRUE, use_gpu = FALSE)
+lgbdl::lgb.dl(commit = "cba8244", compiler = "vs")
 ```
 
 Install even more packages...:
@@ -1819,8 +1819,8 @@ packages <- c("arulesViz", "ascii", "assertthat", "AUC", "BaBooN", "backports",
               "cellranger", "cem", "censReg", "CEoptim", "changepoint", "checkmate", 
               "checkpoint", "chemometrics", "chron", "circlize", "CircStats", 
               "citr", "Ckmeans.1d.dp", "class", "classInt", "clue", "cluster", 
-              "clusterSim", "clustvarsel", "clv", "clValid", "cmaes", "cmprsk", 
-              "coda", "codetools", "coin", "colorplaner", "colorspace", "colourpicker", 
+              "clustvarsel", "clv", "clValid", "cmaes", "cmprsk", 
+              "coda", "codetools", "coin", "colorspace", "colourpicker", 
               "combinat", "commonmark", "CompQuadForm", "compute.es", "conf.design", 
               "config", "contfrac", "contrast", "copula", "CORElearn", "corpcor", 
               "corrgram", "corrplot", "covr", "cowplot", "CoxBoost", "coxme", 
@@ -1910,7 +1910,7 @@ packages <- c("ic.infer", "ICS", "ICSNP", "igraph", "igraphdata", "import",
               "mime", "minerva", "miniUI", "minpack.lm", "minqa", "mirt", "mirtCAT", 
               "misc3d", "miscTools", "missForest", "missMDA", "mitml", "mitools", 
               "mix", "mlbench", "MLmetrics", "mlmRev", "mlogit", "mlr", "mlrMBO", 
-              "mnlogit", "mnormt", "modeest", "ModelMetrics", "modelr", "modeltools", 
+              "mnlogit", "mnormt", "ModelMetrics", "modelr", "modeltools", 
               "mondate", "monreg", "moonBook", "mosaic", "mosaicCalc", "mosaicCore", 
               "mosaicData", "movMF", "MplusAutomation", "mpmi", "MPV", "mratios", 
               "mRMRe", "msm", "mstate", "MSwM", "muhaz", "multcomp", "multcompView", 
@@ -2036,7 +2036,7 @@ devtools::install_github("twitter/AnomalyDetection", upgrade_dependencies = FALS
 devtools::install_github("cmpolis/datacomb", subdir = "pkg", ref = "1.1.2", upgrade_dependencies = FALSE)
 
 xgbdl::xgb.dl(compiler = "gcc", commit = "a2dc929", use_avx = FALSE, use_gpu = FALSE)
-lgbdl::lgb.dl(commit = "78c2b76", compiler = "gcc", cores = 1)
+lgbdl::lgb.dl(commit = "cba8244", compiler = "gcc", cores = 1)
 
 devtools::install_github("Laurae2/Laurae", upgrade_dependencies = FALSE)
 devtools::install_github("Laurae2/LauraeParallel", upgrade_dependencies = FALSE)
@@ -2294,7 +2294,7 @@ In R, run the following to install gpuR, xgboost (without NCCL, check below with
 ```r
 devtools::install_github("cdeterman/gpuR@cuda")
 xgbdl::xgb.dl(compiler = "gcc", commit = "a2dc929", use_avx = FALSE, use_gpu = TRUE, CUDA = list("/usr/lib/cuda", "/usr/bin/gcc-6", "/usr/bin/g++-6"))
-lgbdl::lgb.dl(commit = "78c2b76", compiler = "gcc", use_gpu = TRUE)
+lgbdl::lgb.dl(commit = "cba8244", compiler = "gcc", use_gpu = TRUE)
 ```
 
 If you are using multiple GPUs, you can install xgboost with NCCL to support multiple GPUs:
