@@ -1602,6 +1602,12 @@ Disable most Meltdown and Spectre mitigations by adding the following to kernel 
 pti=off spectre_v2=off spec_store_bypass_disable=off l1tf=off noibrs noibpb nopti no_stf_barrier 
 ```
 
+Edit `/etc/sysctl.conf` and add the following at the bottom to disable ASLR:
+
+```sh
+kernel.randomize_va_space=0
+```
+
 Reboot:
 
 ```sh
