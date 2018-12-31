@@ -1,6 +1,6 @@
 # R Installation - Windows / Debian / Ubuntu Version
 
-**Last tested : R 3.5.1, 2018/12/15 (Dec 15, 2018)**
+**Last tested : R 3.5.2, 2018/12/31 (Dec 31, 2018)**
 
 R packages for installation, the Windows / Debian / Ubuntu version.
 
@@ -1529,6 +1529,8 @@ print(sess.run(okay))
 
 This setup is for the high performance mode of R and Python. This is not recommended as a daily development driver, but as a high performance remote productive setup.
 
+We use the R 3.5.2 instead of R 3.5.1 build.
+
 ### Step 1: Setup SSH
 
 ```sh
@@ -1746,13 +1748,13 @@ sudo apt-get install intel-mkl-64bit-2019.0-045
 If you followed exactly the steps, it should work out of the box for maximum performance R:
 
 ```sh
-wget https://cran.r-project.org/src/base/R-3/R-3.5.1.tar.gz
-tar zxvf R-3.5.1.tar.gz
-cd R-3.5.1
-export CFLAGS="-O3 -mtune=native"
-export CXXFLAGS="-O3 -mtune=native"
-export FFLAGS="-O3 -mtune=native"
-export FCFLAGS="-O3 -mtune=native"
+wget https://cran.r-project.org/src/base/R-3/R-3.5.2.tar.gz
+tar zxvf R-3.5.2.tar.gz
+cd R-3.5.2
+export CFLAGS="-O3 -mtune=native -fno-stack-protector"
+export CXXFLAGS="-O3 -mtune=native -fno-stack-protector"
+export FFLAGS="-O3 -mtune=native -fno-stack-protector"
+export FCFLAGS="-O3 -mtune=native -fno-stack-protector"
 source /opt/intel/mkl/bin/mklvars.sh intel64 mod lp64
 MKL=" -L$MKLROOT/lib/intel64 -Wl,--start-group -lmkl_gf_lp64 -lmkl_sequential -lmkl_core -lm -Wl,--end-group"
 ./configure --enable-R-shlib --with-blas="$MKL" --with-lapack
@@ -2056,8 +2058,26 @@ sessionInfo()
 This should give you MKL:
 
 ```r
+R version 3.5.2 (2018-12-20) -- "Eggshell Igloo"
+Copyright (C) 2018 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
 > sessionInfo()
-R version 3.5.1 (2018-07-02)
+R version 3.5.2 (2018-12-20)
 Platform: x86_64-pc-linux-gnu (64-bit)
 Running under: Pop!_OS 18.10
 
@@ -2076,41 +2096,42 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 loaded via a namespace (and not attached):
-[1] compiler_3.5.1
+[1] compiler_3.5.2
 ```
 
-You can also run the following in your `Download/R/R-3.5.1` folder:
+You can also run the following in your `Download/R/R-3.5.2` folder:
 
 ```sh
-ldd  ./lib/libR.so
+ldd ./lib/libR.so
 ```
 
 You should get the following mentionning MKL:
 
 ```sh
-laurae@laurae:~/Downloads/R/R-3.5.1$ ldd  ./lib/libR.so
-	linux-vdso.so.1 (0x00007ffdbf529000)
-	libmkl_gf_lp64.so => /opt/intel/compilers_and_libraries_2019.0.117/linux/mkl/lib/intel64_lin/libmkl_gf_lp64.so (0x00007f67db265000)
-	libmkl_sequential.so => /opt/intel/compilers_and_libraries_2019.0.117/linux/mkl/lib/intel64_lin/libmkl_sequential.so (0x00007f67d9ccd000)
-	libmkl_core.so => /opt/intel/compilers_and_libraries_2019.0.117/linux/mkl/lib/intel64_lin/libmkl_core.so (0x00007f67d5b94000)
-	libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f67d59e9000)
-	libreadline.so.7 => /lib/x86_64-linux-gnu/libreadline.so.7 (0x00007f67d57a0000)
-	libpcre.so.3 => /lib/x86_64-linux-gnu/libpcre.so.3 (0x00007f67d572a000)
-	liblzma.so.5 => /lib/x86_64-linux-gnu/liblzma.so.5 (0x00007f67d5504000)
-	libbz2.so.1.0 => /lib/x86_64-linux-gnu/libbz2.so.1.0 (0x00007f67d54f1000)
-	libz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x00007f67d52d4000)
-	librt.so.1 => /lib/x86_64-linux-gnu/librt.so.1 (0x00007f67d52ca000)
-	libdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007f67d52c4000)
-	libicuuc.so.60 => /usr/lib/x86_64-linux-gnu/libicuuc.so.60 (0x00007f67d4f0b000)
-	libicui18n.so.60 => /usr/lib/x86_64-linux-gnu/libicui18n.so.60 (0x00007f67d4a6a000)
-	libgomp.so.1 => /usr/lib/x86_64-linux-gnu/libgomp.so.1 (0x00007f67d4a39000)
-	libpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007f67d4a18000)
-	libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f67d482e000)
-	/lib64/ld-linux-x86-64.so.2 (0x00007f67dc259000)
-	libtinfo.so.6 => /lib/x86_64-linux-gnu/libtinfo.so.6 (0x00007f67d4603000)
-	libicudata.so.60 => /usr/lib/x86_64-linux-gnu/libicudata.so.60 (0x00007f67d2a58000)
-	libstdc++.so.6 => /usr/lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007f67d28ce000)
-	libgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007f67d28b4000)
+laurae@laurae:~/Downloads/R/R-3.5.2$ ldd ./lib/libR.so
+	linux-vdso.so.1 (0x00007fff67559000)
+	libmkl_gf_lp64.so => /opt/intel/compilers_and_libraries_2019.0.117/linux/mkl/lib/intel64_lin/libmkl_gf_lp64.so (0x00007fb28ffa3000)
+	libmkl_sequential.so => /opt/intel/compilers_and_libraries_2019.0.117/linux/mkl/lib/intel64_lin/libmkl_sequential.so (0x00007fb28ea0b000)
+	libmkl_core.so => /opt/intel/compilers_and_libraries_2019.0.117/linux/mkl/lib/intel64_lin/libmkl_core.so (0x00007fb28a8d2000)
+	libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007fb28a71e000)
+	libreadline.so.7 => /lib/x86_64-linux-gnu/libreadline.so.7 (0x00007fb28a4d5000)
+	libpcre.so.3 => /lib/x86_64-linux-gnu/libpcre.so.3 (0x00007fb28a45f000)
+	liblzma.so.5 => /lib/x86_64-linux-gnu/liblzma.so.5 (0x00007fb28a239000)
+	libbz2.so.1.0 => /lib/x86_64-linux-gnu/libbz2.so.1.0 (0x00007fb28a226000)
+	libz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x00007fb28a009000)
+	librt.so.1 => /lib/x86_64-linux-gnu/librt.so.1 (0x00007fb289fff000)
+	libdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007fb289ff9000)
+	libicuuc.so.60 => /usr/lib/x86_64-linux-gnu/libicuuc.so.60 (0x00007fb289c40000)
+	libicui18n.so.60 => /usr/lib/x86_64-linux-gnu/libicui18n.so.60 (0x00007fb28979f000)
+	libgomp.so.1 => /usr/lib/x86_64-linux-gnu/libgomp.so.1 (0x00007fb28976e000)
+	libpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007fb28974d000)
+	libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fb289563000)
+	/lib64/ld-linux-x86-64.so.2 (0x00007fb290f91000)
+	libtinfo.so.6 => /lib/x86_64-linux-gnu/libtinfo.so.6 (0x00007fb289338000)
+	libicudata.so.60 => /usr/lib/x86_64-linux-gnu/libicudata.so.60 (0x00007fb28778d000)
+	libstdc++.so.6 => /usr/lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007fb287603000)
+	libgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007fb2875e9000)
+
 ```
 
 Still not sure you are running Intel MKL? Placebo effect? Run the following:
@@ -2138,7 +2159,7 @@ With standard R BLAS, speed is doomed to favor (near) perfect reproducibility:
    2.80    0.02    2.84 
 ```
 
-### Step 14: Install RStudio Desktop
+### Step 14: Install RStudio
 
 Run the following for RStudio Desktop Preview:
 
@@ -2175,7 +2196,7 @@ Now, you can use RStudio Server from your own desktop using a SSH tunnel and por
 
 ### Step 15: Unhappy with R or Intel MKL
 
-Uninstall R and keep libraries, by running the following from Downloads/R/R-3.5.1 (where you ran `sudo make install`):
+Uninstall R and keep libraries, by running the following from Downloads/R/R-3.5.2 (where you ran `sudo make install`):
 
 ```
 sudo make uninstall
@@ -2241,7 +2262,15 @@ sudo apt-get install ocl-icd-opencl-dev
 sudo apt-get install opencl-headers clinfo
 sudo apt-get install nvidia-opencl-icd
 sudo apt-get install libnvidia-compute-410
+sudo apt-get install gcc-8-offload-nvptx
 ```
+
+It allows to:
+
+* Install NVIDIA drivers + CUDA + CuDNN
+* Install the gcc required by NVIDIA (so you do not need to hack `$CUDA_HOME/include/host_config.h`), you can use by calling `gcc-6` instead of `gcc`
+* OpenCL headers
+* gcc GPU offloading for NVIDIA GPUs (might crash with very strange error... it would be very rare you need it anyways)
 
 Add the following to ~/.bashrc using `sudo nano ~/.bashrc`:
 
