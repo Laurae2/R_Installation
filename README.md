@@ -1,6 +1,6 @@
 # R Installation - Windows / Debian / Ubuntu Version
 
-**Last tested : R 3.5.2, 2018/12/31 (Dec 31, 2018)**
+**Last tested : R 3.5.2, 2019/01/27 (27 Jan, 2019)**
 
 R packages for installation, the Windows / Debian / Ubuntu version.
 
@@ -494,6 +494,7 @@ devtools::install_github("rstudio/tensorflow@a73c8d6") # reinstall again
 devtools::install_github("rstudio/keras@bc775ac") # reinstall again
 install.packages("reticulate") # reinstall again
 devtools::install_github("cmpolis/datacomb", subdir = "pkg", ref = "1.1.2")
+devtools::install_github("wrathematics/float", upgrade_dependencies = FALSE)
 ```
 
 Modify `/usr/lib/R/etc/Makeconf` for maximum performance for xgboost / LightGBM (+0-10% speed): change -O2 to -O3 to CXXFLAGS
@@ -1089,6 +1090,7 @@ devtools::install_github("rstudio/tensorflow@a73c8d6") # reinstall again
 devtools::install_github("rstudio/keras@bc775ac") # reinstall again
 install.packages("reticulate") # reinstall again
 devtools::install_github("cmpolis/datacomb", subdir = "pkg", ref = "1.1.2")
+devtools::install_github("wrathematics/float", upgrade_dependencies = FALSE)
 ```
 
 Installing xgboost is specific to be done in bash:
@@ -1476,6 +1478,7 @@ devtools::install_github("rstudio/tensorflow@a73c8d6") # reinstall again
 devtools::install_github("rstudio/keras@bc775ac") # reinstall again
 install.packages("reticulate") # reinstall again
 devtools::install_github("cmpolis/datacomb", subdir = "pkg", ref = "1.1.2")
+devtools::install_github("wrathematics/float", upgrade_dependencies = FALSE)
 # devtools::install_github("ficonsulting/RInno", build_vignettes = TRUE) # If you want to build R executable standalones
 ```
 
@@ -1757,10 +1760,10 @@ If you followed exactly the steps, it should work out of the box for maximum per
 wget https://cran.r-project.org/src/base/R-3/R-3.5.2.tar.gz
 tar zxvf R-3.5.2.tar.gz
 cd R-3.5.2
-export CFLAGS="-O3 -mtune=native -fno-stack-protector"
-export CXXFLAGS="-O3 -mtune=native -fno-stack-protector"
-export FFLAGS="-O3 -mtune=native -fno-stack-protector"
-export FCFLAGS="-O3 -mtune=native -fno-stack-protector"
+export CFLAGS="-O3 -g -mtune=native -fno-stack-protector"
+export CXXFLAGS="-O3 -g -mtune=native -fno-stack-protector"
+export FFLAGS="-O3 -g -mtune=native -fno-stack-protector"
+export FCFLAGS="-O3 -g -mtune=native -fno-stack-protector"
 source /opt/intel/mkl/bin/mklvars.sh intel64 mod lp64
 MKL=" -L$MKLROOT/lib/intel64 -Wl,--start-group -lmkl_gf_lp64 -lmkl_sequential -lmkl_core -lm -Wl,--end-group"
 ./configure --enable-R-shlib --with-blas="$MKL" --with-lapack
@@ -2042,6 +2045,7 @@ devtools::install_github("Laurae2/xgbdl", upgrade_dependencies = FALSE)
 devtools::install_github("Laurae2/lgbdl", upgrade_dependencies = FALSE)
 devtools::install_github("twitter/AnomalyDetection", upgrade_dependencies = FALSE)
 devtools::install_github("cmpolis/datacomb", subdir = "pkg", ref = "1.1.2", upgrade_dependencies = FALSE)
+devtools::install_github("wrathematics/float", upgrade_dependencies = FALSE)
 
 xgbdl::xgb.dl(compiler = "gcc", commit = "a2dc929", use_avx = FALSE, use_gpu = FALSE)
 lgbdl::lgb.dl(commit = "cba8244", compiler = "gcc", cores = 1)
