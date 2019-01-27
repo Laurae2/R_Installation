@@ -504,8 +504,8 @@ Modify `/usr/lib/R/etc/Makeconf` for maximum performance for xgboost / LightGBM 
 Installining xgboost and LightGBM:
 
 ```r
-xgbdl::xgb.dl(compiler = "gcc", commit = "a2dc929", use_avx = TRUE, use_gpu = FALSE)
-lgbdl::lgb.dl(commit = "cba8244", compiler = "gcc")
+xgbdl::xgb.dl(compiler = "gcc", commit = "4fac987", use_avx = TRUE, use_gpu = FALSE)
+lgbdl::lgb.dl(commit = "f9a1465", compiler = "gcc")
 ```
 
 Modify `/usr/lib/R/etc/Makeconf` for maximum performance for xgboost / LightGBM (+0-10% speed): change back -O3 to -O2 to CXXFLAGS
@@ -1102,7 +1102,7 @@ Installing xgboost is specific to be done in bash:
 ```
 git clone --recursive https://github.com/dmlc/xgboost
 cd xgboost
-git checkout 8f6aadd
+git checkout 4fac987
 cd R-package
 ```
 
@@ -1124,7 +1124,7 @@ For LightGBM, this also requires a specific installation in bash:
 ```
 git clone --recursive https://github.com/Microsoft/LightGBM
 cd LightGBM
-git checkout b419331
+git checkout f9a1465
 cd R-package
 ```
 
@@ -1490,8 +1490,8 @@ devtools::install_github("wrathematics/float", upgrade_dependencies = FALSE)
 Installining xgboost and LightGBM:
 
 ```r
-xgbdl::xgb.dl(compiler = "Visual Studio 15 2017 Win64", commit = "a2dc929", use_avx = TRUE, use_gpu = FALSE)
-lgbdl::lgb.dl(commit = "cba8244", compiler = "vs")
+xgbdl::xgb.dl(compiler = "Visual Studio 15 2017 Win64", commit = "4fac987", use_avx = TRUE, use_gpu = FALSE)
+lgbdl::lgb.dl(commit = "f9a1465", compiler = "vs")
 ```
 
 Install even more packages...:
@@ -2053,8 +2053,8 @@ devtools::install_github("twitter/AnomalyDetection", upgrade_dependencies = FALS
 devtools::install_github("cmpolis/datacomb", subdir = "pkg", ref = "1.1.2", upgrade_dependencies = FALSE)
 devtools::install_github("wrathematics/float", upgrade_dependencies = FALSE)
 
-xgbdl::xgb.dl(compiler = "gcc", commit = "a2dc929", use_avx = FALSE, use_gpu = FALSE)
-lgbdl::lgb.dl(commit = "cba8244", compiler = "gcc", cores = 1)
+xgbdl::xgb.dl(compiler = "gcc", commit = "4fac987", use_avx = FALSE, use_gpu = FALSE)
+lgbdl::lgb.dl(commit = "f9a1465", compiler = "gcc", cores = 1)
 
 devtools::install_github("Laurae2/Laurae", upgrade_dependencies = FALSE)
 devtools::install_github("Laurae2/LauraeParallel", upgrade_dependencies = FALSE)
@@ -2338,14 +2338,14 @@ In R, run the following to install gpuR, xgboost (without NCCL, check below with
 
 ```r
 devtools::install_github("cdeterman/gpuR@cuda")
-xgbdl::xgb.dl(compiler = "gcc", commit = "a2dc929", use_avx = FALSE, use_gpu = TRUE, CUDA = list("/usr/lib/cuda", "/usr/bin/gcc-6", "/usr/bin/g++-6"))
-lgbdl::lgb.dl(commit = "cba8244", compiler = "gcc", use_gpu = TRUE)
+xgbdl::xgb.dl(compiler = "gcc", commit = "4fac987", use_avx = FALSE, use_gpu = TRUE, CUDA = list("/usr/lib/cuda", "/usr/bin/gcc-6", "/usr/bin/g++-6"))
+lgbdl::lgb.dl(commit = "f9a1465", compiler = "gcc", use_gpu = TRUE)
 ```
 
 If you are using multiple GPUs, you can install xgboost with NCCL to support multiple GPUs:
 
 ```r
-xgbdl::xgb.dl(compiler = "gcc", commit = "a2dc929", use_avx = FALSE, use_gpu = TRUE, CUDA = list("/usr/lib/cuda", "/usr/bin/gcc-6", "/usr/bin/g++-6"), NCCL = "/usr/lib/x86_64-linux-gnu")
+xgbdl::xgb.dl(compiler = "gcc", commit = "4fac987", use_avx = FALSE, use_gpu = TRUE, CUDA = list("/usr/lib/cuda", "/usr/bin/gcc-6", "/usr/bin/g++-6"), NCCL = "/usr/lib/x86_64-linux-gnu")
 ```
 
 #### Step 17.4: Add GPU support for some Python packages
