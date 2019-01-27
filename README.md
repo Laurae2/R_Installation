@@ -249,8 +249,10 @@ And now the long list...:
 ```r
 install.packages("devtools", dependencies = TRUE, Ncpus = parallel::detectCores())
 install.packages("tcltk2", dependencies = TRUE, Ncpus = parallel::detectCores())
-source("http://bioconductor.org/biocLite.R")
-biocLite(c("graph", "RBGL"))
+
+install.packages("BiocManager")
+BiocManager::install()
+BiocManager::install(c("graph", "RBGL"))
 
 packages <- c("abind", "acepack", "actuar", "ada", "adabag", "ade4", "ade4TkGUI")
 install.packages(packages[which(!(packages %in% rownames(installed.packages())))], dependencies = TRUE, Ncpus = parallel::detectCores())
@@ -853,8 +855,10 @@ And now the long list... if it hangs for more than 45 minutes (without anything 
 .libPaths("/mnt/e/WSL/R-lib/R-3.5.0") # Change this
 install.packages("devtools", dependencies = TRUE)
 install.packages("tcltk2", dependencies = TRUE)
-source("http://bioconductor.org/biocLite.R")
-biocLite(c("graph", "RBGL"))
+
+install.packages("BiocManager")
+BiocManager::install()
+BiocManager::install(c("graph", "RBGL"))
 
 devtools::install_github("davidcsterratt/geometry@d5c98e7", subdir = "pkg")
 packages <- c("abind", "acepack", "actuar", "ada", "adabag", "ade4", "ade4TkGUI")
@@ -1245,8 +1249,9 @@ From an R console (non RStudio), run the following:
 install.packages("devtools", dependencies = TRUE, Ncpus = parallel::detectCores())
 install.packages("tcltk2", dependencies = TRUE, Ncpus = parallel::detectCores())
 
-source("http://bioconductor.org/biocLite.R")
-biocLite(c("graph", "RBGL"))
+install.packages("BiocManager")
+BiocManager::install()
+BiocManager::install(c("graph", "RBGL"))
 
 packages <- c("abind", "acepack", "actuar", "ada", "adabag", "ade4", "ade4TkGUI", 
 "adegraphics", "adehabitatLT", "adehabitatMA", "ADGofTest", "AER", 
@@ -1800,8 +1805,9 @@ Install a crazy lot of packages from R afterwards...:
 install.packages("devtools", dependencies = TRUE, Ncpus = parallel::detectCores())
 install.packages("tcltk2", dependencies = TRUE, Ncpus = parallel::detectCores())
 
-source("http://bioconductor.org/biocLite.R")
-biocLite(c("graph", "RBGL"))
+install.packages("BiocManager")
+BiocManager::install()
+BiocManager::install(c("graph", "RBGL"))
 
 packages <- c("abind", "acepack", "actuar", "ada", "adabag", "ade4", "ade4TkGUI")
 if (length(packages[which(!(packages %in% rownames(installed.packages())))]) > 0) {install.packages(packages[which(!(packages %in% rownames(installed.packages())))], dependencies = TRUE, Ncpus = parallel::detectCores())}
